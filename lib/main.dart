@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'config/theme/app_theme.dart';
 
 void main() async {
+  // ensure that the flutter tree is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  // ensure that the firebase app is initialized
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // run app
   runApp(const MyApp());
 }
@@ -30,8 +39,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: 
-            Text("Home Page"),
+        child: Text("Home Page"),
       ),
     );
   }
