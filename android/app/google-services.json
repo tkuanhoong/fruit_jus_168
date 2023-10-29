@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "77799352598",
+    "project_id": "jus-168",
+    "storage_bucket": "jus-168.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77799352598:android:7e784e05c8650a6b124837",
+        "android_client_info": {
+          "package_name": "com.example.fruit_jus_168"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDSUB3rV5Xb6UkY0CBLQXVPDtIx9eurFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
