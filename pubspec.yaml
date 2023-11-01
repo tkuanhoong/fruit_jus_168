@@ -51,6 +51,8 @@ dependencies:
   firebase_messaging: ^14.7.2
   # remote database
   cloud_firestore: ^4.12.1
+  # comparing objects
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
