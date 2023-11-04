@@ -66,5 +66,6 @@ final GoRouter router = GoRouter(
         return const MyHomePage(title: 'Login Page Demo');
       },
     ),
+    GoRoute(
   ],
 );
