@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fruit_jus_168/config/routes/app_router.dart';
-import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
-import 'package:go_router/go_router.dart';
 import 'firebase_options.dart';
 import 'config/theme/app_theme.dart';
 
