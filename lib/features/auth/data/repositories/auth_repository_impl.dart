@@ -1,10 +1,15 @@
+import 'package:fruit_jus_168/features/auth/data/datasources/auth_api_service.dart';
+import 'package:fruit_jus_168/features/auth/data/models/user.dart';
 import 'package:fruit_jus_168/features/auth/domain/entities/user.dart';
 import 'package:fruit_jus_168/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
+  final AuthApiService _authApiService;
+
+  AuthRepositoryImpl(this._authApiService);
+
   @override
-  Future<void> saveUserProfile(UserEntity user) async {
-    // TODO: implement saveUserProfile
-    print(user);
+  Future<void> saveUserInfo(UserEntity user) async {
+    await _authApiService.storeUserInfo(UserModel.fromEntity(user));
   }
 }

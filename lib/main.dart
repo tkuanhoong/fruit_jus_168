@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:fruit_jus_168/config/routes/app_router.dart';
-import 'firebase_options.dart';
+import 'package:fruit_jus_168/core/utility/blocs_wrapper.dart';
+import 'package:fruit_jus_168/core/utility/initialize_app_settings.dart';
 import 'config/theme/app_theme.dart';
 
-void main() async {
-  // ensure that the flutter tree is initialized
-  WidgetsFlutterBinding.ensureInitialized();
-  // ensure that the firebase app is initialized
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+Future<void> main() async {
+  await initializeAppSettings();
   // run app
   runApp(const MyApp());
 }
@@ -22,11 +16,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: theme(),
-      title: '168 Jus',
-      routerConfig: router,
+    return BlocsWrapper(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: theme(),
+        title: '168 Jus',
+        routerConfig: router,
+      ),
     );
   }
 }

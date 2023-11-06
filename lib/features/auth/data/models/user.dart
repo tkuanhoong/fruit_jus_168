@@ -4,11 +4,11 @@ import 'package:fruit_jus_168/features/auth/domain/entities/user.dart';
 
 class UserModel extends UserEntity {
   const UserModel({
-    String? id,
-    String? fullName,
-    String? emailAddress,
-    String? phoneNumber,
-    DateTime? dateOfBirth,
+    super.id,
+    super.fullName,
+    super.emailAddress,
+    super.phoneNumber,
+    super.dateOfBirth,
   });
 
   // Fetching data from Firebase
@@ -69,11 +69,13 @@ class UserModel extends UserEntity {
       UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   // Convert UserEntity to UserModel
-  factory UserModel.fromEntity(UserEntity entity) => UserModel(
-        id: entity.id,
-        fullName: entity.fullName,
-        emailAddress: entity.emailAddress,
-        phoneNumber: entity.phoneNumber,
-        dateOfBirth: entity.dateOfBirth,
-      );
+  factory UserModel.fromEntity(UserEntity entity) {
+    return UserModel(
+      id: entity.id,
+      fullName: entity.fullName,
+      emailAddress: entity.emailAddress,
+      phoneNumber: entity.phoneNumber,
+      dateOfBirth: entity.dateOfBirth,
+    );
+  }
 }
