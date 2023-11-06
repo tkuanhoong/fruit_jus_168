@@ -29,13 +29,13 @@ class CustomTextField extends StatelessWidget {
         readOnly: readOnly,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           prefixIcon: Icon(prefixIcon),
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey),
+          hintStyle: const TextStyle(color: Colors.grey),
           labelText: labelText,
-          labelStyle: TextStyle(color: Colors.grey),
-          floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
+          labelStyle: const TextStyle(color: Colors.grey),
+          floatingLabelStyle: const TextStyle(color: AppColors.primaryColor),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
           ),

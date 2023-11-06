@@ -5,26 +5,21 @@ import 'package:intl/intl.dart';
 
 class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  const RegisterForm({super.key, required this.formKey});
+  final TextEditingController fullNameController;
+  final TextEditingController emailController;
+  final TextEditingController dobController;
+  const RegisterForm(
+      {super.key,
+      required this.formKey,
+      required this.fullNameController,
+      required this.emailController,
+      required this.dobController});
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-
-  @override
-  void dispose() {
-    // dispose all controllers
-    fullNameController.dispose();
-    emailController.dispose();
-    dobController.dispose();
-    super.dispose();
-  }
-
   void displayDatePicker() async {
     // set 100 years date range
     const dateRange = 36500;
@@ -36,7 +31,7 @@ class _RegisterFormState extends State<RegisterForm> {
         lastDate: now);
     if (dob != null) {
       setState(() {
-        dobController.text = DateFormat('dd-MM-yyyy').format(dob);
+        widget.dobController.text = DateFormat('dd-MM-yyyy').format(dob);
       });
     }
   }
@@ -49,18 +44,18 @@ class _RegisterFormState extends State<RegisterForm> {
         children: [
           const SizedBox(height: 30),
           CustomTextField(
-            controller: fullNameController,
+            controller: widget.fullNameController,
             labelText: 'Full Name',
             prefixIcon: Icons.face,
             validator: TextFieldValidator.fullName,
           ),
           CustomTextField(
-              controller: emailController,
+              controller: widget.emailController,
               labelText: 'Email Address',
               prefixIcon: Icons.email_outlined,
               validator: TextFieldValidator.emailAddress),
           CustomTextField(
-            controller: dobController,
+            controller: widget.dobController,
             onTap: displayDatePicker,
             labelText: "Date of Birth",
             readOnly: true,
