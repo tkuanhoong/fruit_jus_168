@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
+import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
 import 'package:fruit_jus_168/main.dart';
 import 'package:go_router/go_router.dart';
@@ -66,6 +67,16 @@ final GoRouter router = GoRouter(
       path: '/login',
       builder: (context, state) {
         return const LoginPage();
+      },
+    ),
+    GoRoute(
+      name: AppRouterConstants.otpRouteName,
+      path: '/otp/:phoneNumber/:verificationId',
+      builder: (context, state) {
+        final phoneNumber = state.pathParameters['phoneNumber']!;
+        final verificationId = state.pathParameters['verificationId']!;
+        return OtpPage(
+            phoneNumber: phoneNumber, verificationId: verificationId);
       },
     ),
     GoRoute(

@@ -20,21 +20,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       : super(AuthInitial()) {
     on<SaveUserInfo>(onSaveUserInfo);
     //////
-    on<AuthOtpRequested>(verifyPhone);
+    on<AuthOtpRequested>(sendOtp);
 
     // After receiving the otp, When user clicks on verify otp button then this event will be fired
     on<AuthOtpPendingVerified>(verifyOTP);
 
     // When the firebase sends the code to the user's phone, this event will be fired
-    // on<AuthOtpSent>((event, emit) =>
-    //     emit(AuthCodeSentState(verificationId: event.verificationId)));
+    on<AuthOtpSent>((event, emit) =>
+        emit(AuthCodeSentState(verificationId: event.verificationId)));
 
     // When any error occurs while sending otp to the user's phone, this event will be fired
     // on<AuthOtpFailed>(
     //     (event, emit) => emit(AuthVerifyFailure(error: event.error)));
 
     // When the otp verification is successful, this event will be fired
-    // on<AuthVerified>(_loginWithCredential);
+    // on<AuthVerified>(loginWithCredential);
   }
   Future<void> onSaveUserInfo(
       SaveUserInfo event, Emitter<AuthState> emit) async {
@@ -53,12 +53,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   /////////////////////////////////
-  FutureOr<void> verifyPhone(
+  FutureOr<void> sendOtp(
       AuthOtpRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
 
     try {
-      await _verifyPhoneUseCase(params: event.phoneNumber);
+      await _verifyPhoneUseCase(params: {
+        'phoneNumber': event.phoneNumber,
+        'verificationCompleted': () {
+          emit(AuthCodeVerifiedState());
+        },
+        'verificationFailed': (error) {
+          emit(AuthVerifyFailure(error: error.toString()));
+        },
+        'codeSent': (verificationId, token) {
+          add(AuthOtpSent(
+            verificationId: verificationId,
+            token: token,
+          ));
+        },
+      });
     } catch (e) {
       emit(AuthVerifyFailure(error: e.toString()));
     }
@@ -80,7 +94,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> verifyOTP(
       AuthOtpPendingVerified event, Emitter<AuthState> emit) async {
     try {
-      emit(AuthLoadingState());
       await _verifyOtpUseCase(params: event.otpCodeReceived);
       emit(AuthCodeSentState(verificationId: event.verificationId));
     } catch (e) {

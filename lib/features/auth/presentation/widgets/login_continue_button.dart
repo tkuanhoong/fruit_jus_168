@@ -13,13 +13,7 @@ class LoginContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthCodeSentState) {
-          print('codesent');
-          context.pushNamed(AppRouterConstants.otpRouteName);
-        }
-      },
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthLoadingState) {
           return Center(

@@ -5,21 +5,21 @@ class _AuthService implements AuthApiService {
   final FirebaseFirestore _db;
   _AuthService(this._auth, this._db);
   @override
-  Future<void> verifyPhone(String phoneNumber) async {
-    print("verifiy phone");
-    print(phoneNumber);
+  Future<void> verifyPhone(Map<String, dynamic> data) async {
     await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
+      phoneNumber: data['phoneNumber'],
       timeout: const Duration(minutes: 2),
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await _auth.signInWithCredential(credential).then(
-              (value) => print('Logged In Successfully'),
-            );
+        await _auth.signInWithCredential(credential);
+        data['verificationCompleted']();
+
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        data['verificationFailed'](e.message);
       },
-      codeSent: (String verificationId, int? resendToken) {},
+      codeSent: (String verificationId, int? resendToken) {
+        data['codeSent'](verificationId, resendToken);
+      },
       codeAutoRetrievalTimeout: (String verificationId) {
         print('TimeOut');
       },

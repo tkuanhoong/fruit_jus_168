@@ -7,7 +7,7 @@ part 'auth_service.dart';
 abstract class AuthApiService {
   factory AuthApiService(FirebaseAuth auth, FirebaseFirestore db) =
       _AuthService;
-  Future<void> verifyPhone(String phoneNumber);
+  Future<void> verifyPhone(Map<String, dynamic>phoneNumber);
   Future<void> storeUserInfo(UserModel user);
   Future<void> verifyOtp(String verificationId, String smsCode);
 }

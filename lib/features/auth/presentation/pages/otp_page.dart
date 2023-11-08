@@ -151,7 +151,9 @@ class _OtpPage extends State<OtpPage> {
                       ),
                     ),
                     onPressed: () => setState(() {
-                      bool _validOtp = otpController.text.trim().length == 6;
+                      setState(() {
+                      _validOtp = otpController.text.trim().length == 6;  
+                      });
                       if (_validOtp == true) {
                         _verifyOtp(context: context);
                       } else {

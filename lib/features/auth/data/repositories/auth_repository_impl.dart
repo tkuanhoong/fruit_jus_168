@@ -15,8 +15,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> verifyPhone(String phoneNumber) async {
-    await _authApiService.verifyPhone(phoneNumber);
+  Future<void> verifyPhone(Map<String, dynamic> data) async {
+    await _authApiService.verifyPhone(data);
   }
 
   @override
