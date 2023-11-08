@@ -1,15 +1,40 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fruit_jus_168/features/auth/domain/entities/user.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/save_user_info.dart';
+import 'package:fruit_jus_168/features/auth/domain/usecases/verify_otp.dart';
+import 'package:fruit_jus_168/features/auth/domain/usecases/verify_phone.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SaveUserInfoUseCase _saveUserInfoUseCase;
-  AuthBloc(this._saveUserInfoUseCase) : super(AuthInitial()) {
+  final VerifyPhoneUseCase _verifyPhoneUseCase;
+  final VerifyOtpUseCase _verifyOtpUseCase;
+  AuthBloc(this._saveUserInfoUseCase, this._verifyPhoneUseCase,
+      this._verifyOtpUseCase)
+      : super(AuthInitial()) {
     on<SaveUserInfo>(onSaveUserInfo);
+    //////
+    on<AuthOtpRequested>(verifyPhone);
+
+    // After receiving the otp, When user clicks on verify otp button then this event will be fired
+    on<AuthOtpPendingVerified>(verifyOTP);
+
+    // When the firebase sends the code to the user's phone, this event will be fired
+    // on<AuthOtpSent>((event, emit) =>
+    //     emit(AuthCodeSentState(verificationId: event.verificationId)));
+
+    // When any error occurs while sending otp to the user's phone, this event will be fired
+    // on<AuthOtpFailed>(
+    //     (event, emit) => emit(AuthVerifyFailure(error: event.error)));
+
+    // When the otp verification is successful, this event will be fired
+    // on<AuthVerified>(_loginWithCredential);
   }
   Future<void> onSaveUserInfo(
       SaveUserInfo event, Emitter<AuthState> emit) async {
@@ -25,5 +50,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(UserInfoSavedFailed(e.toString()));
     }
+  }
+
+  /////////////////////////////////
+  FutureOr<void> verifyPhone(
+      AuthOtpRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+
+    try {
+      await _verifyPhoneUseCase(params: event.phoneNumber);
+    } catch (e) {
+      emit(AuthVerifyFailure(error: e.toString()));
+    }
+  }
+
+  /////////////////////////////////
+  // FutureOr<void> onOtpRequested(
+  //     AuthOtpRequested event, Emitter<AuthState> emit) async {
+  //   emit(AuthLoadingState());
+
+  //   try {
+  //     await _verifyPhoneUseCase(params: event.phoneNumber);
+  //   } catch (e) {
+  //     emit(AuthVerifyFailure(error: e.toString()));
+  //   }
+  // }
+
+/////////////////////////////////////////////////////////////////////
+  FutureOr<void> verifyOTP(
+      AuthOtpPendingVerified event, Emitter<AuthState> emit) async {
+    try {
+      emit(AuthLoadingState());
+      await _verifyOtpUseCase(params: event.otpCodeReceived);
+      emit(AuthCodeSentState(verificationId: event.verificationId));
+    } catch (e) {
+      emit(AuthVerifyFailure(error: e.toString()));
+    }
+    ;
   }
 }

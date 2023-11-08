@@ -5,6 +5,8 @@ import 'package:fruit_jus_168/features/auth/data/datasources/auth_api_service.da
 import 'package:fruit_jus_168/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:fruit_jus_168/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/save_user_info.dart';
+import 'package:fruit_jus_168/features/auth/domain/usecases/verify_otp.dart';
+import 'package:fruit_jus_168/features/auth/domain/usecases/verify_phone.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -23,12 +25,14 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<FirebaseStorage>(storage);
 
   // Dependencies
-  sl.registerSingleton<AuthApiService>(AuthApiService(sl()));
+  sl.registerSingleton<AuthApiService>(AuthApiService(sl(), sl()));
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl(sl()));
 
   // Usecases
   sl.registerSingleton<SaveUserInfoUseCase>(SaveUserInfoUseCase(sl()));
+  sl.registerSingleton<VerifyPhoneUseCase>(VerifyPhoneUseCase(sl()));
+  sl.registerSingleton<VerifyOtpUseCase>(VerifyOtpUseCase(sl()));
 
   // Blocs
-  sl.registerFactory<AuthBloc>(() => AuthBloc(sl()));
+  sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl()));
 }

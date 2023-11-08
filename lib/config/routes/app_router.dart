@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
+import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
 import 'package:fruit_jus_168/main.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/login',
   routes: <RouteBase>[
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -64,7 +65,7 @@ final GoRouter router = GoRouter(
       name: AppRouterConstants.loginRouteName,
       path: '/login',
       builder: (context, state) {
-        return const MyHomePage(title: 'Login Page Demo');
+        return const LoginPage();
       },
     ),
     GoRoute(
