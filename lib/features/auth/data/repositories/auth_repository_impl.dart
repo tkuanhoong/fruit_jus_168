@@ -20,7 +20,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> verifyOtp(String verificationId, String smsCode) async {
+  Future<void> verifyOtp(
+      {required String verificationId, required String smsCode}) async {
     await _authApiService.verifyOtp(verificationId, smsCode);
   }
 }

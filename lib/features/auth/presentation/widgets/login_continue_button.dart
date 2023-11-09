@@ -1,16 +1,18 @@
-// import 'dart:html';
-// import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginContinueButton extends StatelessWidget {
   final TextEditingController phoneController;
-  const LoginContinueButton({required this.phoneController, super.key});
+  final GlobalKey<FormState> loginformKey;
 
+  const LoginContinueButton({
+    Key? key,
+    required this.loginformKey,
+    required this.phoneController,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -32,10 +34,13 @@ class LoginContinueButton extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                String phoneNumber = "+60" + phoneController.text;
-                context
-                    .read<AuthBloc>()
-                    .add(AuthOtpRequested(phoneNumber: phoneNumber));
+                if (loginformKey.currentState!.validate()) {
+                  String phoneNumber = "+60" + phoneController.text;
+                  context
+                      .read<AuthBloc>()
+                      .add(AuthOtpRequested(phoneNumber: phoneNumber));
+                  log('code sent successfully');
+                }
               },
               child: const Text(
                 'Continue',

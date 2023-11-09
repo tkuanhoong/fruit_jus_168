@@ -1,10 +1,12 @@
 part of 'auth_bloc.dart';
 
 abstract class AuthState extends Equatable {
-  const AuthState();
+  //listen to auth state changes
+  final User? firebaseUser;
+  const AuthState({this.firebaseUser});
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [firebaseUser];
 }
 //////////////////////////////////////////////////////
 
@@ -30,29 +32,19 @@ class AuthCodeSentState extends AuthState {
   });
   @override
   List<Object> get props => [verificationId];
-
-  @override
-  String toString() =>
-      'PhoneAuthCodeSentSuccess(verificationId: $verificationId)';
 }
 
-class AuthCodeVerifiedState extends AuthState {}
+class AuthCodeVerifiedState extends AuthState {
+  const AuthCodeVerifiedState({User? firebaseUser});
+}
 
 class AuthErrorState extends AuthState {
   final String error;
   const AuthErrorState(this.error);
+  @override
+  List<Object> get props => [error];
 }
 
-/////////////////////////////////////////////////////////////////
-/// User is verified and logged in
-class AuthLoggedInState extends AuthState {
-  final User firebaseUser;
-  const AuthLoggedInState(this.firebaseUser);
-}
-
-class AuthLoggedOutState extends AuthState {}
-
-////////////////////////////////////////////////////////////////
 class AuthVerifyFailure extends AuthState {
   final String error;
 

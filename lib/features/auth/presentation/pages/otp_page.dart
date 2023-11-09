@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +23,8 @@ class _OtpPage extends State<OtpPage> {
   bool? _validOtp;
   Timer? _timer;
   late final String _phoneNumber;
+  late final String verificationId = widget.verificationId;
+  final GlobalKey<FormState> _otpformKey = GlobalKey<FormState>();
 
   void startTimer() {
     _secondsToResendOTP = 60;
@@ -50,20 +53,16 @@ class _OtpPage extends State<OtpPage> {
 
   void _verifyOtp({required BuildContext context}) {
     context.read<AuthBloc>().add(AuthOtpPendingVerified(
-        otpCodeReceived: _otp!, verificationId: widget.verificationId));
+        otpCodeReceived: _otp!, verificationId: verificationId));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (_, state) {
-        if (state is AuthVerified) {
+        if (state is AuthCodeVerifiedState) {
           _timer!.cancel();
-          context.go('/home');
-        }
-        if (state is AuthCodeSentState) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('OTP Sent')));
+          context.goNamed(AppRouterConstants.homeRouteName);
         }
         if (state is AuthVerifyFailure) {
           ScaffoldMessenger.of(context)
@@ -74,12 +73,6 @@ class _OtpPage extends State<OtpPage> {
         //appbar with title centered
         appBar: AppBar(
           //back button
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
           centerTitle: true,
           title: const Text(
             'SMS Confirmation',
@@ -104,36 +97,48 @@ class _OtpPage extends State<OtpPage> {
                 ),
               ),
               ////////////////////////////////////////////Textfield for OTP
-              Padding(
-                padding: EdgeInsets.only(top: 50, left: 25, right: 25),
-                child: TextField(
-                  controller: otpController,
-                  maxLength: 6,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 178, 223, 105),
+              Form(
+                key: _otpformKey,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50, left: 25, right: 25),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter OTP';
+                      } else if (value.length < 6) {
+                        return 'Please enter a valid OTP';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    controller: otpController,
+                    maxLength: 6,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 178, 223, 105),
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30),
+                        ),
                       ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
+                      prefixIcon: Icon(Icons.lock_clock_outlined),
+                      counterText: '',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30),
+                        ),
                       ),
-                    ),
-                    prefixIcon: Icon(Icons.lock_clock_outlined),
-                    counterText: '',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
+                      //input hint text
+                      hintText: 'Enter your OTP Code Here',
+                      hintStyle: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'sans-serif',
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 192, 192, 192),
                       ),
-                    ),
-                    //input hint text
-                    hintText: 'Enter your OTP Code Here',
-                    hintStyle: TextStyle(
-                      fontSize: 13,
-                      fontFamily: 'sans-serif',
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 192, 192, 192),
                     ),
                   ),
                 ),
@@ -150,19 +155,21 @@ class _OtpPage extends State<OtpPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    onPressed: () => setState(() {
-                      setState(() {
-                      _validOtp = otpController.text.trim().length == 6;  
-                      });
-                      if (_validOtp == true) {
-                        _verifyOtp(context: context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text('Please fill out all 6 numbers.')));
+                    onPressed: () {
+                      if (_otpformKey.currentState!.validate()) {
+                        setState(
+                          () {
+                            setState(() {
+                              _validOtp = otpController.text.trim().length == 6;
+                            });
+                            if (_validOtp == true) {
+                              _otp = otpController.text.trim();
+                              _verifyOtp(context: context);
+                            }
+                          },
+                        );
                       }
-                    }),
+                    },
                     child: const Text(
                       'Submit',
                       style: TextStyle(
@@ -192,10 +199,11 @@ class _OtpPage extends State<OtpPage> {
                     ),
                     TextButton(
                         onPressed: () {
+                          String phoneNumber = "+60" + _phoneNumber;
                           startTimer();
                           context
                               .read<AuthBloc>()
-                              .add(AuthOtpRequested(phoneNumber: _phoneNumber));
+                              .add(AuthOtpRequested(phoneNumber: phoneNumber));
                         },
                         child: const Text('Resend OTP')),
                   ],

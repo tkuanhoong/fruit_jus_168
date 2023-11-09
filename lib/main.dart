@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/config/routes/app_router.dart';
+import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/utility/blocs_wrapper.dart';
 import 'package:fruit_jus_168/core/utility/initialize_app_settings.dart';
+import 'package:fruit_jus_168/core/utility/injection_container.dart';
+import 'package:go_router/go_router.dart';
 import 'config/theme/app_theme.dart';
 
 Future<void> main() async {
@@ -21,7 +26,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: theme(),
         title: '168 Jus',
-        routerConfig: router,
+        routerConfig: AppRouter(sl()).router,
       ),
     );
   }
@@ -40,6 +45,12 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(title),
+            ElevatedButton(
+                onPressed: () async {
+                  context.goNamed(AppRouterConstants.loginRouteName);
+                  await FirebaseAuth.instance.signOut();
+                },
+                child: Text("Sign Out"))
           ],
         ),
       ),

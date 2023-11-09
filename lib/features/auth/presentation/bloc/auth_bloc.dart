@@ -60,9 +60,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _verifyPhoneUseCase(params: {
         'phoneNumber': event.phoneNumber,
-        'verificationCompleted': () {
-          emit(AuthCodeVerifiedState());
-        },
         'verificationFailed': (error) {
           emit(AuthVerifyFailure(error: error.toString()));
         },
@@ -78,27 +75,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /////////////////////////////////
-  // FutureOr<void> onOtpRequested(
-  //     AuthOtpRequested event, Emitter<AuthState> emit) async {
-  //   emit(AuthLoadingState());
-
-  //   try {
-  //     await _verifyPhoneUseCase(params: event.phoneNumber);
-  //   } catch (e) {
-  //     emit(AuthVerifyFailure(error: e.toString()));
-  //   }
-  // }
-
-/////////////////////////////////////////////////////////////////////
   FutureOr<void> verifyOTP(
       AuthOtpPendingVerified event, Emitter<AuthState> emit) async {
     try {
-      await _verifyOtpUseCase(params: event.otpCodeReceived);
-      emit(AuthCodeSentState(verificationId: event.verificationId));
+      await _verifyOtpUseCase(params: {
+        'verificationId': event.verificationId,
+        'smsCode': event.otpCodeReceived,
+      });
+      emit(AuthCodeVerifiedState(
+          firebaseUser: FirebaseAuth.instance.currentUser));
     } catch (e) {
       emit(AuthVerifyFailure(error: e.toString()));
     }
-    ;
   }
 }

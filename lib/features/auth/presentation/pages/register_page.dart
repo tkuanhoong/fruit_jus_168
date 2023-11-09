@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -38,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 fullName: fullNameController.text,
                 email: emailController.text,
                 dateOfBirth: DateFormat('dd-MM-yyyy').parse(dobController.text),
-                phoneNumber: '+60123456789'),
+                phoneNumber: FirebaseAuth.instance.currentUser!.phoneNumber!),
           );
     } else {
       // Clear previous snackbar

@@ -15,14 +15,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPage extends State<LoginPage> {
   final TextEditingController phoneController = TextEditingController();
+  final GlobalKey<FormState> _loginformKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthCodeSentState) {
-          print('codesent');
-          context.goNamed(AppRouterConstants.otpRouteName, pathParameters: {
+          context.pushNamed(AppRouterConstants.otpRouteName, pathParameters: {
             'phoneNumber': phoneController.text,
             'verificationId': state.verificationId
           });
@@ -66,9 +66,15 @@ class _LoginPage extends State<LoginPage> {
                   ),
                 ),
                 //text field for phone number
-                login_textfield(phoneController: phoneController),
+                LoginTextFormField(
+                  phoneController: phoneController,
+                  loginformKey: _loginformKey,
+                ),
                 //Continue button
-                LoginContinueButton(phoneController: phoneController),
+                LoginContinueButton(
+                  phoneController: phoneController,
+                  loginformKey: _loginformKey,
+                ),
                 //a "By continuing, you agree to our Terms of Service and Privacy Policy" text at bottom of the page
                 Padding(
                   padding: EdgeInsets.only(top: 220, left: 25, right: 25),

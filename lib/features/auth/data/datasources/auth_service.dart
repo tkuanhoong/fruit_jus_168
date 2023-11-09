@@ -4,6 +4,7 @@ class _AuthService implements AuthApiService {
   final FirebaseAuth _auth;
   final FirebaseFirestore _db;
   _AuthService(this._auth, this._db);
+
   @override
   Future<void> verifyPhone(Map<String, dynamic> data) async {
     await _auth.verifyPhoneNumber(
@@ -12,7 +13,6 @@ class _AuthService implements AuthApiService {
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _auth.signInWithCredential(credential);
         data['verificationCompleted']();
-
       },
       verificationFailed: (FirebaseAuthException e) {
         data['verificationFailed'](e.message);
@@ -29,9 +29,11 @@ class _AuthService implements AuthApiService {
   @override
   Future<void> storeUserInfo(UserModel user) async {
     try {
-      DocumentReference userRef = _db.collection("users").doc();
+      await _auth.currentUser!.updateDisplayName(user.fullName);
+      DocumentReference userRef =
+          _db.collection("users").doc(_auth.currentUser!.uid);
       // set the generated id to user id
-      user = user.copyWith(id: userRef.id);
+      user = user.copyWith(id: _auth.currentUser!.uid);
       await userRef.set(user.toMap());
     } catch (e) {
       throw Exception(e.toString());
@@ -44,8 +46,6 @@ class _AuthService implements AuthApiService {
       verificationId: verificationId,
       smsCode: smsCode,
     );
-    await _auth
-        .signInWithCredential(credential)
-        .then((value) => print('User Login In Successful'));
+    await _auth.signInWithCredential(credential);
   }
 }
