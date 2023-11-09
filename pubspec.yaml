@@ -57,6 +57,9 @@ dependencies:
   email_validator: ^2.1.17
   # format date
   intl: ^0.18.1
+  #slider homepage
+  carousel_slider: ^4.2.1
+
 
 dev_dependencies:
   flutter_test:

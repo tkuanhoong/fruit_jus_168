@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
+import 'package:fruit_jus_168/screens/home_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
@@ -26,7 +27,7 @@ final GoRouter router = GoRouter(
           path: '/',
           pageBuilder: (context, state) {
             return const NoTransitionPage(
-              child: MyHomePage(title: 'Home Page Demo'),
+              child: HomePage(title: 'Home Page Demo'),
             );
           },
         ),
