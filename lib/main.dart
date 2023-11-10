@@ -5,7 +5,6 @@ import 'package:fruit_jus_168/config/routes/app_router.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/utility/blocs_wrapper.dart';
 import 'package:fruit_jus_168/core/utility/initialize_app_settings.dart';
-import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:go_router/go_router.dart';
 import 'config/theme/app_theme.dart';
 
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: theme(),
         title: '168 Jus',
-        routerConfig: AppRouter(sl()).router,
+        routerConfig: router,
       ),
     );
   }

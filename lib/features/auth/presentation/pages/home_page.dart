@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/widgets/home_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -104,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               Text(
-                "${getGreeting()}, Testing!",
+                "${getGreeting()}, ${context.read<AuthBloc>().state.firebaseUser!.displayName!.split(' ')[0]}!",
                 style:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
@@ -139,106 +141,109 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               const SizedBox(height: 5),
-              Stack(alignment: Alignment.center, children: [
-                Container(
-                  width: 400,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(12), // Optional: Rounded corners
-                  ),
-                ),
-                Positioned(
-                  top: 30,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 400,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          12), // Optional: Rounded corners
                     ),
-                    color: Colors.grey,
-                    elevation: 4,
-                    child: Container(
-                      width: 370,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                  ),
+                  Positioned(
+                    top: 30,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      padding: const EdgeInsets.all(5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Our Driver Will Deliver Your Order To',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.green,
-                                size: 20,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Set Your Address',
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              side: const BorderSide(
-                                  color: Colors.green, width: 1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              fixedSize: const Size(300, 30),
+                      color: Colors.grey,
+                      elevation: 4,
+                      child: Container(
+                        width: 370,
+                        height: 170,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: const EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Our Driver Will Deliver Your Order To',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.bold),
                             ),
-                            child: const Text('Order Now'),
-                          )
-                        ],
+                            const SizedBox(height: 10),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.green,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  'Set Your Address',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                side: const BorderSide(
+                                    color: Colors.green, width: 1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                fixedSize: const Size(300, 30),
+                              ),
+                              child: const Text('Order Now'),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 10,
-                  left: 80,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 10),
-                      backgroundColor: Colors.green[400],
-                      foregroundColor: Colors.white,
+                  Positioned(
+                    top: 10,
+                    left: 80,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 10),
+                        backgroundColor: Colors.green[400],
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Delivery'),
                     ),
-                    child: const Text('Delivery'),
                   ),
-                ),
-                Positioned(
-                  top: 10,
-                  left: 180,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your action here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 10),
+                  Positioned(
+                    top: 10,
+                    left: 180,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Add your action here
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 10),
+                      ),
+                      child: const Text('Pickup'),
                     ),
-                    child: const Text('Pickup'),
                   ),
-                ),
-              ])
+                ],
+              ),
             ],
           ),
         ),

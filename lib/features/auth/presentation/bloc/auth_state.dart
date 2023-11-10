@@ -8,12 +8,13 @@ abstract class AuthState extends Equatable {
   @override
   List<Object?> get props => [firebaseUser];
 }
-//////////////////////////////////////////////////////
 
 final class AuthInitial extends AuthState {}
-//////////////////////////////////////////////////////
 
-final class UserInfoSavedSuccess extends AuthState {}
+final class UserInfoSavedSuccess extends AuthState {
+  const UserInfoSavedSuccess({User? firebaseUser})
+      : super(firebaseUser: firebaseUser);
+}
 
 final class UserInfoSavedFailed extends AuthState {
   final String message;
@@ -22,7 +23,6 @@ final class UserInfoSavedFailed extends AuthState {
   List<Object> get props => [message];
 }
 
-//////////////////////////////////////////////////////
 class AuthLoadingState extends AuthState {}
 
 class AuthCodeSentState extends AuthState {
@@ -35,7 +35,8 @@ class AuthCodeSentState extends AuthState {
 }
 
 class AuthCodeVerifiedState extends AuthState {
-  const AuthCodeVerifiedState({User? firebaseUser});
+  const AuthCodeVerifiedState({User? firebaseUser})
+      : super(firebaseUser: firebaseUser);
 }
 
 class AuthErrorState extends AuthState {
@@ -56,3 +57,5 @@ class AuthVerifyFailure extends AuthState {
   @override
   String toString() => 'PhoneAuthVerifyFailure(error: $error)';
 }
+
+class LoggedOut extends AuthState {}
