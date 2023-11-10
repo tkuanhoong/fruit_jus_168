@@ -8,7 +8,7 @@ import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
 import 'package:fruit_jus_168/main.dart';
-import 'package:fruit_jus_168/screens/home_page.dart';
+import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 // _rootNavigatorKey will help us in all of the routes that are not suppose to have the persistent BottomNavigationBar

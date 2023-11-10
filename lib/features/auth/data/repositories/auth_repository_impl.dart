@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_jus_168/features/auth/data/datasources/auth_api_service.dart';
 import 'package:fruit_jus_168/features/auth/data/models/user.dart';
 import 'package:fruit_jus_168/features/auth/domain/entities/user.dart';
