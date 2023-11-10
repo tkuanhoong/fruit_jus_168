@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.person_add,
-                                      size: 25,
+                                      size: 20,
                                       color: Colors.black,
                                     ),
                                     SizedBox(width: 5),
@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.local_drink,
-                                      size: 25,
+                                      size: 20,
                                       color: Colors.black,
                                     ),
                                     SizedBox(width: 5),
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Text(
                                           '0/10',
-                                          style: TextStyle(fontSize: 15),
+                                          style: TextStyle(fontSize: 8),
                                         ),
                                       ],
                                     ),
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.star,
-                                      size: 25,
+                                      size: 20,
                                       color: Colors.black,
                                     ),
                                     SizedBox(width: 5),
@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Text(
                                           '1pts',
-                                          style: TextStyle(fontSize: 15),
+                                          style: TextStyle(fontSize: 8),
                                         ),
                                       ],
                                     ),
