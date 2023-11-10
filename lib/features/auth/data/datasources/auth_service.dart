@@ -48,4 +48,9 @@ class _AuthService implements AuthApiService {
     );
     await _auth.signInWithCredential(credential);
   }
+
+  @override
+  Future<void> logOut() async {
+    await _auth.signOut();
+  }
 }

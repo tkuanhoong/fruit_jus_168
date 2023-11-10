@@ -23,4 +23,9 @@ class AuthRepositoryImpl implements AuthRepository {
       {required String verificationId, required String smsCode}) async {
     await _authApiService.verifyOtp(verificationId, smsCode);
   }
+
+  @override
+  Future<void> logOut() async {
+    await _authApiService.logOut();
+  }
 }

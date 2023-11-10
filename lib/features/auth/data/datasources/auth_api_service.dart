@@ -12,4 +12,5 @@ abstract class AuthApiService {
   Future<void> verifyPhone(Map<String, dynamic> phoneNumber);
   Future<void> storeUserInfo(UserModel user);
   Future<void> verifyOtp(String verificationId, String smsCode);
+  Future<void> logOut();
 }

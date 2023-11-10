@@ -64,3 +64,5 @@ class AuthVerified extends AuthEvent {
   final AuthCredential credential;
   const AuthVerified({required this.credential});
 }
+
+class LogOutRequested extends AuthEvent {}

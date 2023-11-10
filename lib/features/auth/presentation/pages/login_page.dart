@@ -55,7 +55,7 @@ class _LoginPage extends State<LoginPage> {
             child: Column(
               children: [
                 //brand logo
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
                     child: Image(
@@ -76,7 +76,7 @@ class _LoginPage extends State<LoginPage> {
                   loginformKey: _loginformKey,
                 ),
                 //a "By continuing, you agree to our Terms of Service and Privacy Policy" text at bottom of the page
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(top: 220, left: 25, right: 25),
                   child: Text(
                     'By continuing, you agree to our Terms of Service and Privacy Policy',
