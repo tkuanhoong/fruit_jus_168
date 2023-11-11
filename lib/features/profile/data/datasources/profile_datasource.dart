@@ -51,11 +51,18 @@ class FirebaseProfileDataSource implements ProfileDataSource {
             .doc(user.uid) // Use the UID of the current user
             .get();
 
-        String avatarURLInFirestore = snapshot.data()!['avatarURL'];
-
-        if (avatarURLInFirestore != null) {
+        // String avatarURLInFirestore = snapshot.data()?['avatarURL'];
+        if (snapshot.exists &&
+            snapshot.data() != null &&
+            snapshot.data()!['avatarURL'] != null) {
+          String avatarURLInFirestore = snapshot.data()!['avatarURL'];
           await storage.refFromURL(avatarURLInFirestore).delete();
+          // Check if the avatarURL in Firestore is not the same as user.photoURL
+          // if (user.photoURL != null && user.photoURL != avatarURLInFirestore) {
+          //   await storage.refFromURL(avatarURLInFirestore).delete();
+          // }
         }
+
         // Upload image to Firebase Storage
         String fileName =
             'avatars/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg';
