@@ -6,9 +6,11 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fruit_jus_168/features/profile/presentation/pages/profile_page.dart';
 
 // _rootNavigatorKey will help us in all of the routes that are not suppose to have the persistent BottomNavigationBar
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -67,7 +69,7 @@ final router = GoRouter(
           path: '/account',
           pageBuilder: (context, state) {
             return const NoTransitionPage(
-              child: MyHomePage(title: 'Account Page Demo'),
+              child: ProfilePage(profile: null),
             );
           },
         ),
@@ -95,6 +97,14 @@ final router = GoRouter(
       path: '/register',
       builder: (context, state) {
         return const RegisterPage();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.editProfileRouteName,
+      path: '/edit-profile',
+      builder: (context, state) {
+        return const EditProfilePage(profile: null);
       },
     ),
   ],

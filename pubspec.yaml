@@ -59,6 +59,8 @@ dependencies:
   intl: ^0.18.1
   #slider homepage
   carousel_slider: ^4.2.1
+  # image_picker - for uploading image from phone
+  image_picker: ^0.8.3
 
 
 dev_dependencies:

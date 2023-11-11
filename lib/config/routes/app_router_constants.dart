@@ -6,4 +6,5 @@ class AppRouterConstants {
   static const String rewardsRouteName = "rewards";
   static const String accountRouteName = "account";
   static const String otpRouteName = "otp";
+  static const String editProfileRouteName = "edit-profile";
 }
