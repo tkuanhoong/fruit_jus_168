@@ -47,7 +47,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               final controllerEmail =
                   TextEditingController(text: state.profile.emailAddress ?? '');
               final controllerdateOfBirth = getCustomFormattedDateTime(
-                  state.profile.dateOfBirth!.toIso8601String(), 'yyyy-MM-dd');
+                  state.profile.dateOfBirth!.toIso8601String(),
+                  'dd - MM - yyyy');
               final controllerPhoneNum =
                   TextEditingController(text: state.profile.phoneNumber);
 
@@ -172,7 +173,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     .update({
                                   "fullName": controllerName.text,
                                 }).then((value) {
-                                  controllerName.text = '';
+                                  //controllerName.text = '';
                                 });
                                 _showMyDialog();
                               },
