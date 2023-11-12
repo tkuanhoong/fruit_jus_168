@@ -11,6 +11,7 @@ import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.da
 
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.profile});
@@ -45,11 +46,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   TextEditingController(text: state.profile.fullName ?? '');
               final controllerEmail =
                   TextEditingController(text: state.profile.emailAddress ?? '');
-              final controllerdateOfBirth = TextEditingController(
-                  text: state.profile.dateOfBirth?.toIso8601String());
-
+              final controllerdateOfBirth = getCustomFormattedDateTime(
+                  state.profile.dateOfBirth!.toIso8601String(), 'yyyy-MM-dd');
               final controllerPhoneNum =
                   TextEditingController(text: state.profile.phoneNumber);
+
               return SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.all(30.0),
@@ -130,7 +131,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           const SizedBox(height: 15.0),
                           TextFormField(
                             readOnly: true,
-                            controller: controllerdateOfBirth,
+                            initialValue: controllerdateOfBirth,
                             decoration: InputDecoration(
                               labelText: 'Birthday',
                               border: OutlineInputBorder(
@@ -235,5 +236,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         );
       },
     );
+  }
+
+  //Function Format Date
+  String getCustomFormattedDateTime(String givenDateTime, String dateFormat) {
+    // dateFormat = 'MM/dd/yy';
+    final DateTime docDateTime = DateTime.parse(givenDateTime);
+    return DateFormat(dateFormat).format(docDateTime);
   }
 }
