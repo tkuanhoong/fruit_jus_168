@@ -230,7 +230,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onPressed: () {
                 context.goNamed(AppRouterConstants.accountRouteName);
                 BlocProvider.of<ProfileBloc>(context).add(LoadProfile());
-                ;
               },
             ),
           ],
