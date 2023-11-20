@@ -6,13 +6,15 @@ class UserEntity extends Equatable {
   final String? emailAddress;
   final String? phoneNumber;
   final DateTime? dateOfBirth;
+  final String? userReferralCode;
 
   const UserEntity(
       {this.id,
       this.fullName,
       this.emailAddress,
       this.phoneNumber,
-      this.dateOfBirth});
+      this.dateOfBirth,
+      this.userReferralCode, });
 
   @override
   List<Object?> get props {
@@ -22,6 +24,7 @@ class UserEntity extends Equatable {
       emailAddress,
       phoneNumber,
       dateOfBirth,
+      userReferralCode
     ];
   }
 
