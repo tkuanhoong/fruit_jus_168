@@ -191,6 +191,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       trailing: const Icon(Icons.chevron_right_rounded),
                       onTap: () {
                         // Handle the action on tapping "Invite Your Friends"
+                        GoRouter.of(context).push('/referral-code');
                       },
                     ),
                     Container(

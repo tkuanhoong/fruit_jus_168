@@ -61,7 +61,7 @@ dependencies:
   carousel_slider: ^4.2.1
   # image_picker - for uploading image from phone
   image_picker: ^0.8.3
-
+flutter/services.dart: ^0.10.5
 
 dev_dependencies:
   flutter_test:

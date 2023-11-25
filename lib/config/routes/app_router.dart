@@ -7,6 +7,8 @@ import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
+import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+
 import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
@@ -105,6 +107,14 @@ final router = GoRouter(
       path: '/edit-profile',
       builder: (context, state) {
         return const EditProfilePage(profile: null);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.referralCodePageRouteName,
+      path: '/referral-code',
+      builder: (context, state) {
+        return const ReferralCodePage(profile: null);
       },
     ),
   ],

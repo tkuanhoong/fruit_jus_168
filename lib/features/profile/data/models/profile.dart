@@ -9,6 +9,7 @@ class ProfileModel extends ProfileEntity {
     super.emailAddress,
     super.phoneNumber,
     super.dateOfBirth,
+    super.userReferralCode,
     super.avatarURL,
   });
 
@@ -19,6 +20,7 @@ class ProfileModel extends ProfileEntity {
     String? emailAddress,
     String? phoneNumber,
     DateTime? dateOfBirth,
+    String? userReferralCode,
     String? avatarURL,
   }) {
     return ProfileModel(
@@ -27,6 +29,7 @@ class ProfileModel extends ProfileEntity {
       emailAddress: emailAddress ?? this.emailAddress,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      userReferralCode: userReferralCode ?? this.userReferralCode,
       avatarURL: avatarURL ?? this.avatarURL,
     );
   }
@@ -39,6 +42,7 @@ class ProfileModel extends ProfileEntity {
       'emailAddress': emailAddress,
       'phoneNumber': phoneNumber,
       'dateOfBirth': dateOfBirth?.millisecondsSinceEpoch,
+      'userRefferalCode': userReferralCode,
       'avatarURL': avatarURL,
     };
   }
@@ -55,6 +59,9 @@ class ProfileModel extends ProfileEntity {
           map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
       dateOfBirth: map['dateOfBirth'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['dateOfBirth'] as int)
+          : null,
+      userReferralCode: map['userRefferalCode'] != null
+          ? map['userRefferalCode'] as String
           : null,
       avatarURL: map['avatarURL'] != null ? map['avatarURL'] as String : null,
     );
@@ -75,6 +82,7 @@ class ProfileModel extends ProfileEntity {
       emailAddress: entity.emailAddress,
       phoneNumber: entity.phoneNumber,
       dateOfBirth: entity.dateOfBirth,
+      userReferralCode: entity.userReferralCode,
       avatarURL: entity.avatarURL,
     );
   }
@@ -86,6 +94,7 @@ class ProfileModel extends ProfileEntity {
       emailAddress: emailAddress,
       phoneNumber: phoneNumber,
       dateOfBirth: dateOfBirth,
+      userReferralCode: userReferralCode,
       avatarURL: avatarURL,
     );
   }
