@@ -488,22 +488,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
-  scrollable_list_tabview:
-    dependency: "direct main"
-    description:
-      name: scrollable_list_tabview
-      sha256: dd3c34abb8739cc35b0cc34a3b99591a1943dbf3999cc2467d5346888530feaa
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0-nullsafety"
-  scrollable_positioned_list:
-    dependency: transitive
-    description:
-      name: scrollable_positioned_list
-      sha256: "9566352ab9ba05794ee6c8864f154afba5d36c5637d0e3e32c615ba4ceb92772"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.3"
   sky_engine:
     dependency: transitive
     description: flutter
