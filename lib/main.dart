@@ -44,12 +44,6 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(title),
-            ElevatedButton(
-                onPressed: () async {
-                  context.goNamed(AppRouterConstants.loginRouteName);
-                  await FirebaseAuth.instance.signOut();
-                },
-                child: Text("Sign Out"))
           ],
         ),
       ),
