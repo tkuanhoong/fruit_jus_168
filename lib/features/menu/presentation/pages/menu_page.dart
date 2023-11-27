@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/config/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -40,78 +45,71 @@ class _MenuPageState extends State<MenuPage> {
           : AppBar(
               backgroundColor: Colors.grey,
               title: Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
-                child: SearchAnchor(
-                  builder: (BuildContext context, SearchController controller) {
-                    return SearchBar(
-                      constraints: BoxConstraints.tight(Size(maxWidth, 40)),
-                      controller: controller,
-                      padding: const MaterialStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: TextField(
+                        readOnly: true,
+                        onTap: () => context
+                            .pushNamed(AppRouterConstants.searchRouteName),
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                          hintText: 'Search',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 10),
+                        ),
                       ),
-                      onTap: () {
-                        controller.openView();
-                      },
-                      onChanged: (_) {
-                        controller.openView();
-                      },
-                      leading: const Icon(Icons.search, color: Colors.black),
-                    );
-                  },
-                  suggestionsBuilder: (
-                    BuildContext context,
-                    SearchController controller,
-                  ) {
-                    return List<ListTile>.generate(
-                      5,
-                      (int index) {
-                        final String item = 'item $index';
-                        return ListTile(title: Text(item), onTap: () {});
-                      },
-                    );
-                  },
+                    ),
+                  ],
                 ),
               ),
             ),
       body: Column(children: [
-        Container(
-          decoration: BoxDecoration(color: Colors.red),
-          child: Row(children: [
-            SizedBox(
-              width: screenWidth * 0.2,
-              height: MediaQuery.sizeOf(context).height - 151,
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(color: Colors.red),
+            child: Row(children: [
+              Flexible(
+                flex: 1,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                  ),
+                  itemCount: 10,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      margin: const EdgeInsets.all(10),
+                      color: Colors.amber,
+                      child: const Text('data'),
+                    );
+                  },
                 ),
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: EdgeInsets.all(10),
-                    color: Colors.amber,
-                    child: Text('data'),
-                  );
-                },
               ),
-            ),
-            SizedBox(
-              width: screenWidth * 0.8,
-              height: MediaQuery.sizeOf(context).height - 151,
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+              Flexible(
+                flex: 4,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  itemCount: 10,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      margin: const EdgeInsets.all(10),
+                      color: Colors.amber,
+                      child: const Text('data'),
+                    );
+                  },
                 ),
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: EdgeInsets.all(10),
-                    color: Colors.amber,
-                    child: Text('data'),
-                  );
-                },
               ),
-            ),
-          ]),
+            ]),
+          ),
         )
       ]),
     );
