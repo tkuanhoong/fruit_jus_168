@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/features/menu_details/data/datasource/beverage_datasource.dart';
-import 'package:fruit_jus_168/features/menu/data/repositories/beverage_repository_impl.dart';
+import 'package:fruit_jus_168/features/menu_details/data/repository/beverage_repository_impl.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_description.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_item.dart';
 import 'package:fruit_jus_168/features/menu_details/domain/entities/beverage.dart';
