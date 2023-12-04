@@ -10,11 +10,14 @@ import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
-
 import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/profile_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/add_address_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/address_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/edit_address_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/open_map_page.dart';
 
 // _rootNavigatorKey will help us in all of the routes that are not suppose to have the persistent BottomNavigationBar
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -127,6 +130,49 @@ final router = GoRouter(
         return const NoTransitionPage(
           child: BeverageDetailsPage(beverage: null),
         );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.addressRouteName,
+      path: '/address',
+      builder: (context, state) {
+        return const AddressPage();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.openMapRouteName,
+      path: '/open-map',
+      builder: (context, state) {
+        return const OpenMapPage();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.addAddressRouteName,
+      path: '/add-address/:streetName/:city/:postalCode/:state/:country',
+      builder: (context, state) {
+        final streetName = state.pathParameters['streetName'];
+        final city = state.pathParameters['city'];
+        final postalCode = state.pathParameters['postalCode'];
+        final state_ = state.pathParameters['state'];
+        final country = state.pathParameters['country'];
+        return AddAddressPage(
+          streetName: streetName,
+          city: city,
+          postalCode: postalCode,
+          state_: state_,
+          country: country,
+        );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.editAddressRouteName,
+      path: '/edit-address',
+      builder: (context, state) {
+        return const EditAddressPage();
       },
     ),
   ],

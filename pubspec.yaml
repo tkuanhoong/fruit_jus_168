@@ -60,6 +60,11 @@ dependencies:
   carousel_slider: ^4.2.1
   # image_picker - for uploading image from phone
   image_picker: ^0.8.3
+  permission_handler: ^11.0.1
+  location: ^5.0.3
+  google_maps_flutter: ^2.5.0
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
 flutter/services.dart: ^0.10.5
 
 dev_dependencies:

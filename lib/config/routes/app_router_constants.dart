@@ -10,4 +10,8 @@ class AppRouterConstants {
   static const String referralCodePageRouteName = "referral-code";
   static const String searchRouteName = "search";
   static const String beverageDetailsRouteName = 'beverage-details';
+  static const String addressRouteName = "address";
+  static const String openMapRouteName = "open-map";
+  static const String addAddressRouteName = "add-address";
+  static const String editAddressRouteName = "edit-address";
 }

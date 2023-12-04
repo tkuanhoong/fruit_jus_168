@@ -1,6 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fruit_jus_168/features/address/data/datasources/address_datasource.dart';
+import 'package:fruit_jus_168/features/address/data/repositories/address_repository_impl.dart';
+import 'package:fruit_jus_168/features/address/domain/repositories/address_repository.dart';
+import 'package:fruit_jus_168/features/address/domain/usecases/add_address.dart';
+import 'package:fruit_jus_168/features/address/domain/usecases/delete_address.dart';
+import 'package:fruit_jus_168/features/address/domain/usecases/edit_address.dart';
+import 'package:fruit_jus_168/features/address/domain/usecases/get_address.dart';
+import 'package:fruit_jus_168/features/address/domain/usecases/get_addresses.dart';
+import 'package:fruit_jus_168/features/address/domain/usecases/update_default_address.dart';
+import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.dart';
 import 'package:fruit_jus_168/features/auth/data/datasources/auth_api_service.dart';
 import 'package:fruit_jus_168/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:fruit_jus_168/features/auth/domain/repositories/auth_repository.dart';
@@ -32,12 +42,17 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<FirebaseStorage>(storage);
   sl.registerSingleton<ProfileDataSource>(
       FirebaseProfileDataSource(firestore: sl(), storage: sl()));
+  sl.registerSingleton<AddressDataSource>(
+      FirebaseAddressDataSource(firestore: sl()));
 
   // Dependencies
   sl.registerSingleton<AuthApiService>(AuthApiService(sl(), sl()));
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl(sl()));
   sl.registerSingleton<ProfileRepository>(
     ProfileRepositoryImpl(profileDataSource: sl()),
+  );
+  sl.registerSingleton<AddressRepository>(
+    AddressRepositoryImpl(addressDataSource: sl()),
   );
 
   // Usecases
@@ -51,9 +66,34 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<UploadAvatarUseCase>(
     UploadAvatarUseCase(sl()),
   );
+  sl.registerSingleton<GetAddressesUseCase>(
+    GetAddressesUseCase(sl()),
+  );
+  sl.registerSingleton<GetAddressUseCase>(
+    GetAddressUseCase(sl()),
+  );
+  sl.registerSingleton<AddAddressUseCase>(
+    AddAddressUseCase(sl()),
+  );
+  sl.registerSingleton<EditAddressUseCase>(
+    EditAddressUseCase(sl()),
+  );
+  sl.registerSingleton<DeleteAddressUseCase>(
+    DeleteAddressUseCase(sl()),
+  );
+  sl.registerSingleton<UpdateDefaultAddressUseCase>(
+    UpdateDefaultAddressUseCase(sl()),
+  );
 
   // Blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory<ProfileBloc>(
       () => ProfileBloc(getProfileUseCase: sl(), uploadAvatarUseCase: sl()));
+  sl.registerFactory<AddressBloc>(() => AddressBloc(
+      getAddressesUseCase: sl(),
+      getAddressUseCase: sl(),
+      addAddressUseCase: sl(),
+      editAddressUseCase: sl(),
+      deleteAddressUseCase: sl(),
+      updateDefaultAddressUseCase: sl()));
 }
