@@ -100,18 +100,27 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                   itemCount: 10,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: const EdgeInsets.all(10),
-                      color: Colors.amber,
-                      child: const Text('data'),
-                    );
-                  },
-                ),
+                    return GestureDetector(
+                          onTap: () {
+                            GoRouter.of(context).pushNamed(
+                              AppRouterConstants.beverageDetailsRouteName,
+                            );
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            color: Colors.amber,
+                            child: const Text('data'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ]),
+            ),
           ),
-        )
-      ]),
+        ],
+      ),
     );
   }
 }

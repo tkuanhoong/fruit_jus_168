@@ -6,6 +6,7 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
@@ -116,6 +117,16 @@ final router = GoRouter(
       path: '/referral-code',
       builder: (context, state) {
         return const ReferralCodePage(profile: null);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.beverageDetailsRouteName,
+      path: '/beverageDetails',
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: BeverageDetailsPage(beverage: null),
+        );
       },
     ),
   ],
