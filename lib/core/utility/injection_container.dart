@@ -20,6 +20,7 @@ import 'package:fruit_jus_168/features/auth/domain/usecases/verify_otp.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/verify_phone.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/profile/domain/usecases/upload_avatar.dart';
+import 'package:fruit_jus_168/features/search/search_injection_container.dart';
 import 'package:get_it/get_it.dart';
 import 'package:fruit_jus_168/features/profile/data/datasources/profile_datasource.dart';
 import 'package:fruit_jus_168/features/profile/data/repositories/profile_repository_impl.dart';
@@ -96,4 +97,5 @@ Future<void> initializeDependencies() async {
       editAddressUseCase: sl(),
       deleteAddressUseCase: sl(),
       updateDefaultAddressUseCase: sl()));
+  await searchInjectionContainer();
 }

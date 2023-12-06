@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
+import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
@@ -10,6 +11,9 @@ import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
+import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
+
 import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
@@ -173,6 +177,34 @@ final router = GoRouter(
       path: '/edit-address',
       builder: (context, state) {
         return const EditAddressPage();
+      },
+    ),
+    GoRoute(
+      name: AppRouterConstants.searchRouteName,
+      path: '/search',
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.easeIn;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          child: BlocProvider<SearchBloc>(
+            create: (_) => sl<SearchBloc>()..add(const SearchRequested('')),
+            child: const SearchPage(),
+          ),
+        );
       },
     ),
   ],
