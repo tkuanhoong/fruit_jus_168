@@ -9,13 +9,13 @@ import 'presentation/bloc/menu_bloc.dart';
 
 Future<void> menuInjectionContainer() async {
   // Dependencies
-  sl.registerSingleton<MenuApiService>(sl());
+  sl.registerSingleton<MenuApiService>(MenuApiService(sl()));
   sl.registerSingleton<MenuRepository>(MenuRepositoryImpl(sl()));
 
   // Usecases
   sl.registerSingleton<GetCategoryProducts>(GetCategoryProducts(sl()));
   sl.registerSingleton<GetAllCategories>(GetAllCategories(sl()));
-  
+
   // Blocs
   sl.registerFactory<MenuBloc>(() => MenuBloc(sl(), sl()));
 }

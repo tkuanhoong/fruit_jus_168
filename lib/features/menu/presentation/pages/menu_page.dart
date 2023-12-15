@@ -8,8 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/theme/app_colors.dart';
-import 'package:fruit_jus_168/core/domain/entities/product.dart';
-import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -185,7 +183,7 @@ class _MenuPageState extends State<MenuPage>
                                         margin: const EdgeInsets.all(8),
                                         child: Text(category.name,
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontFamily: 'Mulish',
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 10)),
@@ -253,7 +251,7 @@ class _MenuPageState extends State<MenuPage>
                             .cart!
                             .totalItemsQuantity
                             .toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -281,11 +279,11 @@ class _MenuPageState extends State<MenuPage>
       SliverToBoxAdapter(
         child: Text(
           '|  $category' /*+ categoryKey.toString()*/,
-          style: TextStyle(
+          style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 16,
               fontFamily: 'Mulish',
-              color: const Color.fromARGB(255, 19, 88, 17)),
+              color: Color.fromARGB(255, 19, 88, 17)),
         ),
       ),
       SliverGrid.builder(
@@ -307,6 +305,7 @@ class _MenuPageState extends State<MenuPage>
                     context.pushNamed(
                       AppRouterConstants.beverageDetailsRouteName,
                       extra: product,
+                      pathParameters: {"isEdit": "false"},
                     );
                   },
                   child: Stack(

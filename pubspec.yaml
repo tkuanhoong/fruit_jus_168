@@ -51,7 +51,6 @@ dependencies:
   location: ^5.0.3
   permission_handler: ^11.0.1
   scroll_to_index: ^3.0.1
-  vertical_scrollable_tabview: ^0.1.1
 flutter/services.dart: ^0.10.5
 
 dev_dependencies:
