@@ -25,6 +25,7 @@ class _MenuPageState extends State<MenuPage>
   final Map<String, GlobalKey> _categoryKeys = {};
   final double marginForSection = 30;
   final double marginForTop = 10;
+  final double triggerTopMargin = 10;
   late GlobalKey highlightedKey = _categoryKeys.entries.first.value;
   late List<double> positions = _categoryKeys
       .map((key, value) => MapEntry(
@@ -36,7 +37,8 @@ class _MenuPageState extends State<MenuPage>
                   .y -
               kToolbarHeight -
               marginForSection -
-              marginForTop))
+              marginForTop -
+              triggerTopMargin))
       .values
       .toList();
 
