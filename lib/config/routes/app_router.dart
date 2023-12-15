@@ -1,19 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
+import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
-import 'package:fruit_jus_168/features/menu/data/datasources/menu_api_service.dart';
-import 'package:fruit_jus_168/features/menu/data/datasources/menu_service.dart';
-import 'package:fruit_jus_168/features/menu/data/repositories/menu_repository_impl.dart';
-import 'package:fruit_jus_168/features/menu/domain/usecases/get_all_category.dart';
-import 'package:fruit_jus_168/features/menu/domain/usecases/get_category_product.dart';
+
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
+import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
@@ -68,12 +65,7 @@ final router = GoRouter(
           pageBuilder: (context, state) {
             return NoTransitionPage(
               child: BlocProvider(
-                create: (context) => MenuBloc(
-                  GetCategoryProducts(MenuRepositoryImpl(
-                      MenuService(FirebaseFirestore.instance))),
-                  GetAllCategories(MenuRepositoryImpl(
-                      MenuService(FirebaseFirestore.instance))),
-                ),
+                create: (context) => sl<MenuBloc>()..add(FetchAllCategories()),
                 child: const MenuPage(),
               ),
             );
@@ -144,10 +136,12 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       name: AppRouterConstants.beverageDetailsRouteName,
-      path: '/beverageDetails',
+      path: '/beverageDetails/:isEdit',
       pageBuilder: (context, state) {
-        return const NoTransitionPage(
-          child: BeverageDetailsPage(beverage: null),
+        final isEdit = state.pathParameters['isEdit'] == 'true';
+        return NoTransitionPage(
+          child: BeverageDetailsPage(
+              beverage: state.extra as Product, isEdit: isEdit),
         );
       },
     ),
@@ -220,6 +214,14 @@ final router = GoRouter(
             child: const SearchPage(),
           ),
         );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.orderConfirmation,
+      path: '/order-confirmation',
+      builder: (context, state) {
+        return const OrderConfirmationPage();
       },
     ),
   ],
