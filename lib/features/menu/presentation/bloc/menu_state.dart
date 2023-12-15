@@ -1,5 +1,4 @@
-import 'package:fruit_jus_168/core/domain/entities/product.dart';
-import 'package:fruit_jus_168/features/menu/domain/entities/category.dart';
+part of 'menu_bloc.dart';
 
 abstract class MenuState {}
 

@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/core/domain/entities/product.dart';
+import 'package:fruit_jus_168/features/menu/domain/entities/category.dart';
 import 'package:fruit_jus_168/features/menu/domain/usecases/get_all_category.dart';
 import 'package:fruit_jus_168/features/menu/domain/usecases/get_category_product.dart';
-import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_event.dart';
-import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_state.dart';
+
+part "menu_event.dart";
+part "menu_state.dart";
 
 class MenuBloc extends Bloc<MenuEvent, MenuState> {
   final GetCategoryProducts getCategoryProducts;

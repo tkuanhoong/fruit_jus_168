@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fruit_jus_168/features/menu/data/datasources/menu_api_service.dart';
-import 'package:fruit_jus_168/features/menu/data/models/category.dart';
-import 'package:fruit_jus_168/features/menu/data/models/product.dart';
+part of 'menu_api_service.dart';
 
-class MenuService implements MenuApiService {
+class _MenuService implements MenuApiService {
   final FirebaseFirestore _firestore;
 
-  MenuService(this._firestore);
+  _MenuService(this._firestore);
 
   @override
   Future<List<ProductModel>> fetchCategoryProducts(String category) async {
@@ -41,8 +38,6 @@ class MenuService implements MenuApiService {
           price: productData['price'],
           imageUrl: productData['imageUrl'],
           description: productData['description'],
-          category: categoryName,
-          // Add other product fields here
         );
       }).toList();
       categories.add(CategoryModel(
