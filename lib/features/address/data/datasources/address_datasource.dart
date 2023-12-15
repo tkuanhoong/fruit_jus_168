@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_jus_168/features/address/data/models/address.dart';
-import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.dart';
 
 abstract class AddressDataSource {
   Future<List<AddressModel>> getAddresses();

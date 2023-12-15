@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -7,6 +8,12 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+import 'package:fruit_jus_168/features/menu/data/datasources/menu_api_service.dart';
+import 'package:fruit_jus_168/features/menu/data/datasources/menu_service.dart';
+import 'package:fruit_jus_168/features/menu/data/repositories/menu_repository_impl.dart';
+import 'package:fruit_jus_168/features/menu/domain/usecases/get_all_category.dart';
+import 'package:fruit_jus_168/features/menu/domain/usecases/get_category_product.dart';
+import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
@@ -59,8 +66,16 @@ final router = GoRouter(
           name: AppRouterConstants.menuRouteName,
           path: '/menu',
           pageBuilder: (context, state) {
-            return const NoTransitionPage(
-              child: MenuPage(),
+            return NoTransitionPage(
+              child: BlocProvider(
+                create: (context) => MenuBloc(
+                  GetCategoryProducts(MenuRepositoryImpl(
+                      MenuService(FirebaseFirestore.instance))),
+                  GetAllCategories(MenuRepositoryImpl(
+                      MenuService(FirebaseFirestore.instance))),
+                ),
+                child: const MenuPage(),
+              ),
             );
           },
         ),
