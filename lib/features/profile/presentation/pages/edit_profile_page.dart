@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/theme/app_theme.dart';
+import 'package:fruit_jus_168/core/utility/date_format_generator.dart';
 import 'package:fruit_jus_168/features/auth/data/models/user.dart';
 import 'package:fruit_jus_168/features/profile/data/models/profile.dart';
 import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
@@ -46,9 +47,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   TextEditingController(text: state.profile.fullName ?? '');
               final controllerEmail =
                   TextEditingController(text: state.profile.emailAddress ?? '');
-              final controllerdateOfBirth = getCustomFormattedDateTime(
-                  state.profile.dateOfBirth!.toIso8601String(),
-                  'dd - MM - yyyy');
+              final controllerdateOfBirth =
+                  DateFormatGenerator.getFormattedDateTime(
+                      state.profile.dateOfBirth!.toIso8601String(),
+                      'dd - MM - yyyy');
+
               final controllerPhoneNum =
                   TextEditingController(text: state.profile.phoneNumber);
 
@@ -236,12 +239,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
         );
       },
     );
-  }
-
-  //Function Format Date
-  String getCustomFormattedDateTime(String givenDateTime, String dateFormat) {
-    // dateFormat = 'MM/dd/yy';
-    final DateTime docDateTime = DateTime.parse(givenDateTime);
-    return DateFormat(dateFormat).format(docDateTime);
   }
 }
