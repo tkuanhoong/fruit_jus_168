@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
+import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.dart';
 
 // A wrapper to wrap the app with the blocs providers
@@ -24,9 +24,9 @@ class BlocsWrapper extends StatelessWidget {
         BlocProvider<AddressBloc>(
           create: (_) => sl<AddressBloc>(),
         ),
-        BlocProvider<MenuBloc>(
-          create: (_) => sl<MenuBloc>(),
-        )
+        BlocProvider<CartBloc>(
+          create: (_) => sl<CartBloc>(),
+        ),
       ],
       child: child,
     );
