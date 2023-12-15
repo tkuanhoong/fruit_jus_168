@@ -23,7 +23,22 @@ class _MenuPageState extends State<MenuPage>
   final ScrollController _scrollController = ScrollController();
   bool isScrollingDown = false;
   final Map<String, GlobalKey> _categoryKeys = {};
-  int highlighted = 0;
+  final double marginForSection = 30;
+  final double marginForTop = 10;
+  late GlobalKey highlightedKey = _categoryKeys.entries.first.value;
+  late List<double> positions = _categoryKeys
+      .map((key, value) => MapEntry(
+          key,
+          value.currentContext!
+                  .findRenderObject()!
+                  .getTransformTo(null)
+                  .getTranslation()
+                  .y -
+              kToolbarHeight -
+              marginForSection -
+              marginForTop))
+      .values
+      .toList();
 
   @override
   void initState() {
@@ -37,6 +52,13 @@ class _MenuPageState extends State<MenuPage>
               ScrollDirection.reverse
           ? false
           : true;
+
+      for (var i = 0; i < positions.length; i++) {
+        if (_scrollController.offset >= positions[i]) {
+          setState(
+              () => highlightedKey = _categoryKeys.entries.elementAt(i).value);
+        }
+      }
     });
     // log('scrolls' + _scrollController.offset.toString());
   }
@@ -95,14 +117,14 @@ class _MenuPageState extends State<MenuPage>
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Flexible(
                       child: TextField(
                         readOnly: true,
-                        // onTap: () => context
-                        //     .pushNamed(AppRouterConstants.searchRouteName),
-                        decoration: InputDecoration(
+                        onTap: () => context
+                            .pushNamed(AppRouterConstants.searchRouteName),
+                        decoration: const InputDecoration(
                           prefixIcon: Icon(
                             Icons.search,
                             color: Color(0XFF20941C),
@@ -131,7 +153,7 @@ class _MenuPageState extends State<MenuPage>
             children: [
               Expanded(
                 child: Container(
-                  margin: const EdgeInsetsDirectional.only(top: 10),
+                  margin: EdgeInsetsDirectional.only(top: marginForTop),
                   child: Row(children: [
                     Flexible(
                       flex: 1,
@@ -142,24 +164,18 @@ class _MenuPageState extends State<MenuPage>
                             final category = state.categories[index];
                             return GestureDetector(
                               onTap: () {
-                                _scrollController.animateTo(
-                                  _getCategoryKey(category.name)
-                                      .currentContext!
-                                      .findRenderObject()!
-                                      .getTransformTo(null)
-                                      .getTranslation()
-                                      .y,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.slowMiddle,
-                                );
-                                highlighted = index;
+                                _scrollController.animateTo(positions[index],
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.slowMiddle);
+                                highlightedKey = _getCategoryKey(category.name);
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(
                                   left: 1,
                                 ),
                                 padding: const EdgeInsets.only(top: 10),
-                                decoration: highlighted == index
+                                decoration: highlightedKey ==
+                                        _getCategoryKey(category.name)
                                     ? highlighted_category()
                                     : not_highlighted_category(),
                                 child: Column(
@@ -272,18 +288,17 @@ class _MenuPageState extends State<MenuPage>
   }) {
     return <Widget>[
       SliverToBoxAdapter(
-          key: categoryKey,
-          child: Container(
-            height: 30,
-          )),
-      SliverToBoxAdapter(
-        child: Text(
-          '|  $category' /*+ categoryKey.toString()*/,
-          style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              fontFamily: 'Mulish',
-              color: Color.fromARGB(255, 19, 88, 17)),
+        key: categoryKey,
+        child: Container(
+          margin: EdgeInsets.only(top: marginForSection),
+          child: Text(
+            '|  $category',
+            style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                fontFamily: 'Mulish',
+                color: Color.fromARGB(255, 19, 88, 17)),
+          ),
         ),
       ),
       SliverGrid.builder(
@@ -327,7 +342,9 @@ class _MenuPageState extends State<MenuPage>
                         width: 130,
                         child: FittedBox(
                             fit: BoxFit.contain,
-                            child: Image.network(product.imageUrl.toString())),
+                            child: Image.network(
+                              product.imageUrl.toString(),
+                            )),
                       )
                     ],
                   ),
