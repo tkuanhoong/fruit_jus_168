@@ -6,14 +6,12 @@ class SearchItemEntity extends Product {
     String? name,
     String? imageUrl,
     String? description,
-    String? category,
     int? price,
   }) : super(
           id: id,
           name: name,
           imageUrl: imageUrl,
           description: description,
-          category: category,
           price: price,
         );
 }

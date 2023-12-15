@@ -8,7 +8,6 @@ class SearchItemModel extends SearchItemEntity {
     super.name,
     super.imageUrl,
     super.description,
-    super.category,
     super.price,
   });
 
@@ -26,7 +25,6 @@ class SearchItemModel extends SearchItemEntity {
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
       description: description ?? this.description,
-      category: category ?? this.category,
       price: price ?? this.price,
     );
   }
@@ -38,7 +36,6 @@ class SearchItemModel extends SearchItemEntity {
       'name': name,
       'imageUrl': imageUrl,
       'description': description,
-      'category': category,
       'price': price,
     };
   }
@@ -51,7 +48,6 @@ class SearchItemModel extends SearchItemEntity {
       imageUrl: map['imageUrl'] != null ? map['imageUrl'] as String : null,
       description:
           map['description'] != null ? map['description'] as String : null,
-      category: map['category'] != null ? map['category'] as String : null,
       price: map['price'] != null ? map['price'] as int : null,
     );
   }
@@ -70,7 +66,6 @@ class SearchItemModel extends SearchItemEntity {
       name: entity.name,
       imageUrl: entity.imageUrl,
       description: entity.description,
-      category: entity.category,
       price: entity.price,
     );
   }
