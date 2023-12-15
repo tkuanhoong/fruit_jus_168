@@ -1,56 +1,66 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/domain/entities/product.dart';
+import 'package:fruit_jus_168/core/utility/price_converter.dart';
+import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/menu_details/data/datasource/beverage_datasource.dart';
 import 'package:fruit_jus_168/features/menu_details/data/repository/beverage_repository_impl.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_description.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_item.dart';
 import 'package:fruit_jus_168/features/menu_details/domain/entities/beverage.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/utils/beverage_utils.dart';
+import 'package:go_router/go_router.dart';
 
 class BeverageDetailsPage extends StatefulWidget {
-  const BeverageDetailsPage({super.key, required this.beverage});
-  final BeverageEntity? beverage;
+  const BeverageDetailsPage({super.key, required this.beverage, this.isEdit});
+  final Product beverage;
+  final bool? isEdit;
 
   @override
   State<BeverageDetailsPage> createState() => _BeverageDetailsPageState();
 }
 
 class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
-  final BeverageRepositoryImpl _beverageRepository = BeverageRepositoryImpl(FirestoreService());
-  List<BeverageEntity> products = [];
+  // final BeverageRepositoryImpl _beverageRepository =
+  //     BeverageRepositoryImpl(FirestoreService());
+  // List<BeverageEntity> products = [];
   bool showFullDescription = false;
-  String selectedSize = 'normalIce';
+  String selectedIceLevel = 'Normal Ice';
   int itemCount = 1;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    fetchProducts();
+    // fetchProducts();
   }
 
-  Future<void> fetchProducts() async{
-    try {
-      // Call the getProducts method from BeverageRepository
-      List<BeverageEntity> fetchedProducts = 
-        await _beverageRepository.getProducts();
-      
-      setState(() {
-        products = fetchedProducts;
-      });
-    } catch (e) {
-      // Handle errors
-      throw Exception('Errors fetching products: $e');
-    }
-  }
+  // Future<void> fetchProducts() async {
+  //   try {
+  //     // Call the getProducts method from BeverageRepository
+  //     List<BeverageEntity> fetchedProducts =
+  //         await _beverageRepository.getProducts();
+
+  //     setState(() {
+  //       products = fetchedProducts;
+  //     });
+  //   } catch (e) {
+  //     // Handle errors
+  //     throw Exception('Errors fetching products: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            'Beverage Details',
-          ),
+        centerTitle: true,
+        title: const Text(
+          'Beverage Details',
         ),
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -67,14 +77,16 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        BeverageUtils.getProductName(products),
+                        widget.beverage.name!,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      BeverageDescription(showFullDescription: showFullDescription),
+                      BeverageDescription(
+                          desc: widget.beverage.description!,
+                          showFullDescription: showFullDescription),
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -102,12 +114,12 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                         ),
                       ),
                       BeverageItem(
-                        getProductName: BeverageUtils.getProductName(products),
+                        name: widget.beverage.name!,
                         itemCount: itemCount,
-                        selectedSize: selectedSize,
+                        selectedIceLevel: selectedIceLevel,
                         onIceChanged: (value) {
                           setState(() {
-                            selectedSize = value ?? 'normalIce';
+                            selectedIceLevel = value ?? 'Normal Ice';
                           });
                         },
                         onDecrease: () {
@@ -146,15 +158,15 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          BeverageUtils.getProductNameWithIceLevel(products, selectedSize),
+                          "${widget.beverage.name} | $selectedIceLevel",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
-                          'RM 9.99',
+                        Text(
+                          'RM ${PriceConverter.fromInt(widget.beverage.price! * itemCount)}',
                           style: TextStyle(
                             fontSize: 20,
                           ),
@@ -238,22 +250,27 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                // backgroundColor: Colors.green,
-                // foregroundColor: Colors.white,
                 fixedSize: const Size(130, 20),
               ),
               child: const Text('Order Now'),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // Implement Add to Cart logic
+                context.read<CartBloc>().add(
+                      AddProduct(
+                          product: widget.beverage,
+                          quantity: itemCount,
+                          preference: selectedIceLevel),
+                    );
+                context.goNamed(AppRouterConstants.menuRouteName);
+              },
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
                 side: const BorderSide(color: Colors.green, width: 1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                // backgroundColor: Colors.green,
-                // foregroundColor: Colors.white,
                 fixedSize: const Size(130, 20),
               ),
               child: const Text('Add to Cart'),

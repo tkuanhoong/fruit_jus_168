@@ -45,7 +45,6 @@ dependencies:
   geolocator: ^10.1.0
   get_it: ^7.6.4
   go_router: ^12.0.0
-  google_fonts: ^6.1.0
   google_maps_flutter: ^2.5.0
   image_picker: ^0.8.3
   intl: ^0.18.1
@@ -89,6 +88,13 @@ flutter:
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
         - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+    - family: Mulish
+      fonts:
+        - asset: assets/fonts/Mulish-Regular.ttf
+        - asset: assets/fonts/Mulish-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Mulish-Light.ttf
           weight: 300
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
