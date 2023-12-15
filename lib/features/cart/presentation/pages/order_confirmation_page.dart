@@ -163,7 +163,6 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                     '${context.watch<CartBloc>().state.cart!.totalItemsQuantity} items',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 8),
                   Text(
                     'RM ${PriceConverter.fromInt(context.watch<CartBloc>().state.cart!.totalPrice)}',
                     style: Theme.of(context).textTheme.titleLarge,
