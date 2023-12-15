@@ -1,17 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:fruit_jus_168/features/menu_details/data/datasource/beverage_datasource.dart';
-import 'package:fruit_jus_168/features/menu_details/data/repository/beverage_repository_impl.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_description.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_item.dart';
-import 'package:fruit_jus_168/features/menu_details/domain/entities/beverage.dart';
-import 'package:fruit_jus_168/features/menu_details/presentation/pages/utils/beverage_utils.dart';
 import 'package:go_router/go_router.dart';
 
 class BeverageDetailsPage extends StatefulWidget {
@@ -24,33 +18,9 @@ class BeverageDetailsPage extends StatefulWidget {
 }
 
 class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
-  // final BeverageRepositoryImpl _beverageRepository =
-  //     BeverageRepositoryImpl(FirestoreService());
-  // List<BeverageEntity> products = [];
   bool showFullDescription = false;
   String selectedIceLevel = 'Normal Ice';
   int itemCount = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    // fetchProducts();
-  }
-
-  // Future<void> fetchProducts() async {
-  //   try {
-  //     // Call the getProducts method from BeverageRepository
-  //     List<BeverageEntity> fetchedProducts =
-  //         await _beverageRepository.getProducts();
-
-  //     setState(() {
-  //       products = fetchedProducts;
-  //     });
-  //   } catch (e) {
-  //     // Handle errors
-  //     throw Exception('Errors fetching products: $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +41,30 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        radius: 80,
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Positioned(
+                            bottom: 10,
+                            child: Container(
+                              height: 130,
+                              width: 130,
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(104, 223, 223, 223),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                                maxHeight: 200, maxWidth: 200),
+                            child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Image.network(
+                                  "${widget.beverage.imageUrl}",
+                                )),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -167,7 +158,7 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                         const SizedBox(height: 5),
                         Text(
                           'RM ${PriceConverter.fromInt(widget.beverage.price! * itemCount)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                           ),
                         ),
