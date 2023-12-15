@@ -15,6 +15,7 @@ import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+import 'package:fruit_jus_168/features/reward/presentation/pages/reward.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
 
@@ -77,7 +78,7 @@ final router = GoRouter(
           path: '/rewards',
           pageBuilder: (context, state) {
             return const NoTransitionPage(
-              child: MyHomePage(title: 'Rewards Page Demo'),
+              child: RewardPage(),
             );
           },
         ),
