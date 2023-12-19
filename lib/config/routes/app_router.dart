@@ -8,6 +8,7 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
@@ -140,9 +141,15 @@ final router = GoRouter(
       path: '/beverageDetails/:isEdit',
       pageBuilder: (context, state) {
         final isEdit = state.pathParameters['isEdit'] == 'true';
+                int quantity = 0;
+        String preference = "No Ice";
+        if(state.pathParameters['quantity']!= null && state.pathParameters['preference'] != null){
+        quantity = int.parse(state.pathParameters['quantity']!);
+        preference = state.pathParameters['preference']!;
+        }
         return NoTransitionPage(
           child: BeverageDetailsPage(
-              beverage: state.extra as Product, isEdit: isEdit),
+              beverage: state.extra as Product, isEdit: isEdit, quantity: quantity, preference: preference,),
         );
       },
     ),

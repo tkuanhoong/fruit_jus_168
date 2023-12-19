@@ -3,15 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
+import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_description.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_item.dart';
 import 'package:go_router/go_router.dart';
 
 class BeverageDetailsPage extends StatefulWidget {
-  const BeverageDetailsPage({super.key, required this.beverage, this.isEdit});
+  const BeverageDetailsPage({super.key, required this.beverage, required this.isEdit, this.quantity, this.preference});
   final Product beverage;
-  final bool? isEdit;
+  final int? quantity;
+  final String? preference;
+  final bool isEdit;
 
   @override
   State<BeverageDetailsPage> createState() => _BeverageDetailsPageState();
@@ -21,6 +24,11 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
   bool showFullDescription = false;
   String selectedIceLevel = 'Normal Ice';
   int itemCount = 1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,15 +230,16 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(3),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.black, width: 1.0),
-          ),
+      padding: const EdgeInsets.all(3),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.black, width: 1.0),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          if (!widget.isEdit!) // Only show if not in edit mode
             ElevatedButton(
               onPressed: () {
                 // Implement Order Now logic
@@ -245,14 +254,16 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
               ),
               child: const Text('Order Now'),
             ),
+          if (!widget.isEdit) // Only show if not in edit mode
             ElevatedButton(
               onPressed: () {
                 // Implement Add to Cart logic
                 context.read<CartBloc>().add(
                       AddProduct(
-                          product: widget.beverage,
-                          quantity: itemCount,
-                          preference: selectedIceLevel),
+                        product: widget.beverage,
+                        quantity: itemCount,
+                        preference: selectedIceLevel,
+                      ),
                     );
                 context.goNamed(AppRouterConstants.menuRouteName);
               },
@@ -266,9 +277,32 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
               ),
               child: const Text('Add to Cart'),
             ),
-          ],
-        ),
+          if (widget.isEdit) // Only show if in edit mode
+            ElevatedButton(
+              onPressed: () {
+                context.read<CartBloc>().add(
+                     UpdateProduct(
+                        product: widget.beverage,
+                        quantity: itemCount,
+                        preference: selectedIceLevel,
+                      ),
+                    );
+                    context.pushNamed(AppRouterConstants.orderConfirmation);
+              },
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.zero,
+                side: const BorderSide(color: Colors.green, width: 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                fixedSize: const Size(300, 20),
+              ),
+              child: const Text('Update'),
+            ),
+        ],
       ),
+    ),
+
     );
   }
 }

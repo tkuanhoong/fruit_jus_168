@@ -52,21 +52,39 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       );
     });
     on<UpdateProduct>((event, emit) {
-      if (state is CartLoaded) {
-        final state = this.state as CartLoaded;
-        emit(CartLoaded(
-            cart: Cart(
-                items: List.from(state.cart!.items)
-                  ..where((element) => element.id == event.product.id)
-                  ..add(event.product as CartProduct))));
-      }
+        final items = List<CartProduct>.from(state.cart!.items);
+        
+        final updatingItem = items.where((element) => element.id == event.product.id).first;
+
+        updatingItem.copyWith(quantity: event.quantity, preference: event.preference);
+
+        log("updatingItem");
+          
+          emit(CartLoaded(
+            cart: Cart(items: items),
+          ));
+        
+      
     });
+
+
     on<RemoveProduct>((event, emit) {
       if (state is CartLoaded) {
         final state = this.state as CartLoaded;
         emit(CartLoaded(
             cart: Cart(
                 items: List.from(state.cart!.items)..remove(event.product))));
+      }
+    });
+    on<ConfirmDeleteProduct>((event, emit) {
+      if (state is CartLoaded) {
+        final state = this.state as CartLoaded;
+        // Handle the ConfirmDeleteProduct event
+        emit(CartLoaded(
+          cart: Cart(
+            items: List.from(state.cart!.items)..remove(event.product),
+          ),
+        ));
       }
     });
   }

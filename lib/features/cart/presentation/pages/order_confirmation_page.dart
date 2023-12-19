@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
+import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/cart_item.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/divider_text.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fruit_jus_168/features/cart/domain/repositories/cart_repository.dart';
 
 class OrderConfirmationPage extends StatefulWidget {
   const OrderConfirmationPage({super.key});
@@ -17,6 +20,8 @@ class OrderConfirmationPage extends StatefulWidget {
 }
 
 class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
+
+  final CartRepository _cartRepository = CartRepository();
   @override
   void initState() {
     super.initState();
@@ -26,6 +31,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
   _buildOrderSection() {
     return BlocBuilder<CartBloc, CartState>(
       builder: (_, state) {
+        // print('OrderConfirmationPage rebuilt with state: $state');
         if (state is CartLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -51,12 +57,17 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   CartItem(
                     product: item,
                     onEditPressed: () => context.pushNamed(
-                      AppRouterConstants.beverageDetailsRouteName,
-                      pathParameters: {'isEdit': 'true'},
-                      extra: item,
+                    AppRouterConstants.beverageDetailsRouteName,
+                    pathParameters: {'isEdit': 'true'},
+                    queryParameters: {'quantity': '${item.quantity}', 'preference': '${item.preference}'},
+                    extra: item, // Ensure item is of type Product
                     ),
-                    onDeletePressed: () {},
-                  ),
+                    onDeletePressed: () {
+                      if (state.cart != null && state.cart!.items.isNotEmpty) {
+                        _cartRepository.showDeleteConfirmationDialog(context, state.cart!.items.first);
+                      }
+                    },
+                  )
               ],
             );
           }
@@ -83,53 +94,53 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 onPressed: () {},
               ),
               const SizedBox(height: 16),
-              DividerText(
+              const DividerText(
                 title: 'Your Order',
               ),
               _buildOrderSection(),
               const SizedBox(height: 16),
-              DividerText(
+              const DividerText(
                 title: 'Special Remarks',
               ),
-              TextField(
+              const TextField(
                 decoration: InputDecoration(
                   hintText: 'Enter your special remarks here',
                   border: OutlineInputBorder(),
                 ),
               ),
-              DividerText(
+              const DividerText(
                 title: 'Vouchers',
               ),
-              DividerText(
+              const DividerText(
                 title: 'Payment Details',
               ),
-              Column(
+              const Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Amount'),
+                      Text('Amount'),
                       Text('RM xx.xx'),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Delivery Fee'),
+                      Text('Delivery Fee'),
                       Text('RM xx.xx'),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Discount'),
+                      Text('Discount'),
                       Text('RM xx.xx'),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Total'),
+                      Text('Total'),
                       Text('RM xx.xx'),
                     ],
                   ),
