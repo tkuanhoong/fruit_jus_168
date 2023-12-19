@@ -245,7 +245,7 @@ class _MenuPageState extends State<MenuPage>
             child: FloatingActionButton(
               onPressed: () {
                 GoRouter.of(context).pushNamed(
-                  AppRouterConstants.orderConfirmation,
+                  AppRouterConstants.orderConfirmationRouteName,
                 );
               },
               backgroundColor: AppColors.primaryColor,

@@ -230,7 +230,7 @@ final router = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
-      name: AppRouterConstants.orderConfirmation,
+      name: AppRouterConstants.orderConfirmationRouteName,
       path: '/order-confirmation',
       builder: (context, state) {
         return const OrderConfirmationPage();
