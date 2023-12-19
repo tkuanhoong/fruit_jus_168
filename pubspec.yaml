@@ -42,7 +42,7 @@ dependencies:
   # service locator
   get_it: ^7.6.4
   # firebase functions
-  firebase_core: ^2.20.0
+  firebase_core: ^2.21.0
   # firebase authentication
   firebase_auth: ^4.12.0
   # firebase storage
@@ -51,6 +51,17 @@ dependencies:
   firebase_messaging: ^14.7.2
   # remote database
   cloud_firestore: ^4.12.1
+  # comparing objects
+  equatable: ^2.0.5
+  # validate email
+  email_validator: ^2.1.17
+  # format date
+  intl: ^0.18.1
+  #slider homepage
+  carousel_slider: ^4.2.1
+  # image_picker - for uploading image from phone
+  image_picker: ^0.8.3
+
 
 dev_dependencies:
   flutter_test:
@@ -75,9 +86,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

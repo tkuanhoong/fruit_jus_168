@@ -11,14 +11,29 @@ ThemeData theme() {
     textTheme: textTheme(),
     // color scheme defines the colors
     colorScheme: colorScheme(),
+    elevatedButtonTheme: elevatedButtonThemeData(),
   );
 }
 
 TextTheme textTheme() {
   return const TextTheme(
-      displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
-      bodyLarge: TextStyle(fontSize: 18, color: Colors.black87),
-      bodyMedium: TextStyle(color: Colors.black87));
+    displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+    bodyLarge: TextStyle(fontSize: 18, color: Colors.black87),
+    bodyMedium: TextStyle(color: Colors.black87),
+    titleMedium: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+  );
+}
+
+ElevatedButtonThemeData elevatedButtonThemeData() {
+  return ElevatedButtonThemeData(
+    style: ButtonStyle(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+      ),
+    ),
+  );
 }
 
 ColorScheme colorScheme() {
