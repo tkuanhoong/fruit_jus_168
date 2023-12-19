@@ -1,13 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 
-
 class CartRepository {
-  Future<void> showDeleteConfirmationDialog(BuildContext context, Product item) async {
+  Future<void> showDeleteConfirmationDialog(
+      BuildContext context, int cartIndex) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -25,7 +22,9 @@ class CartRepository {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 // Dispatch the ConfirmDeleteProduct event
-                context.read<CartBloc>().add(ConfirmDeleteProduct(item));
+                context
+                    .read<CartBloc>()
+                    .add(RemoveProduct(cartIndex: cartIndex));
               },
               child: const Text('Delete'),
             ),

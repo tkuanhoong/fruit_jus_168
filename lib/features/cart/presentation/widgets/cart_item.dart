@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
+import 'package:fruit_jus_168/features/cart/presentation/widgets/item_image.dart';
 
 class CartItem extends StatelessWidget {
   final CartProduct product;
@@ -17,12 +18,9 @@ class CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Flexible(
+        Flexible(
           flex: 1,
-          child: Placeholder(
-            fallbackHeight: 100,
-            fallbackWidth: 100,
-          ),
+          child: ItemImage(imageUrl: product.imageUrl!),
         ),
         const SizedBox(width: 16),
         Flexible(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -8,7 +10,6 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
-import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
@@ -20,7 +21,6 @@ import 'package:fruit_jus_168/features/reward/presentation/pages/reward.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
 
-import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/profile_page.dart';
@@ -36,7 +36,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/login',
+  initialLocation: '/menu',
   routes: <RouteBase>[
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -141,15 +141,19 @@ final router = GoRouter(
       path: '/beverageDetails/:isEdit',
       pageBuilder: (context, state) {
         final isEdit = state.pathParameters['isEdit'] == 'true';
-                int quantity = 0;
-        String preference = "No Ice";
-        if(state.pathParameters['quantity']!= null && state.pathParameters['preference'] != null){
-        quantity = int.parse(state.pathParameters['quantity']!);
-        preference = state.pathParameters['preference']!;
+        int? quantity;
+        String? preference;
+        if (state.uri.queryParameters['quantity'] != null &&
+            state.uri.queryParameters['preference'] != null) {
+          quantity = int.parse(state.uri.queryParameters['quantity']!);
+          preference = state.uri.queryParameters['preference']!;
         }
         return NoTransitionPage(
           child: BeverageDetailsPage(
-              beverage: state.extra as Product, isEdit: isEdit, quantity: quantity, preference: preference,),
+              beverage: state.extra as Product,
+              isEdit: isEdit,
+              quantity: quantity,
+              preference: preference),
         );
       },
     ),

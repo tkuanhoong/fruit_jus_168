@@ -2,15 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
+import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
+import 'package:fruit_jus_168/features/cart/domain/repositories/cart_repository.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_description.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_item.dart';
 import 'package:go_router/go_router.dart';
 
 class BeverageDetailsPage extends StatefulWidget {
-  const BeverageDetailsPage({super.key, required this.beverage, required this.isEdit, this.quantity, this.preference});
+  const BeverageDetailsPage(
+      {super.key,
+      required this.beverage,
+      required this.isEdit,
+      this.quantity,
+      this.preference});
   final Product beverage;
   final int? quantity;
   final String? preference;
@@ -22,13 +29,8 @@ class BeverageDetailsPage extends StatefulWidget {
 
 class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
   bool showFullDescription = false;
-  String selectedIceLevel = 'Normal Ice';
-  int itemCount = 1;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  late String selectedIceLevel = widget.preference ?? 'Normal Ice';
+  late int itemCount = widget.quantity ?? 1;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Beverage Details',
+          "Beverage Details",
         ),
       ),
       body: SafeArea(
@@ -182,7 +184,8 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (itemCount > 1) {
+                                if (itemCount > 1 ||
+                                    widget.isEdit && itemCount > 0) {
                                   itemCount--;
                                 }
                               });
@@ -230,79 +233,91 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
         ),
       ),
       bottomNavigationBar: Container(
-      padding: const EdgeInsets.all(3),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.black, width: 1.0),
+        padding: const EdgeInsets.all(3),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Colors.black, width: 1.0),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            if (!widget.isEdit) // Only show if not in edit mode
+              ElevatedButton(
+                onPressed: () {
+                  // Implement Order Now logic
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  side: const BorderSide(color: Colors.green, width: 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  fixedSize: const Size(130, 20),
+                ),
+                child: const Text('Order Now'),
+              ),
+            if (!widget.isEdit) // Only show if not in edit mode
+              ElevatedButton(
+                onPressed: () {
+                  // Implement Add to Cart logic
+                  context.read<CartBloc>().add(
+                        AddProduct(
+                          product: widget.beverage,
+                          quantity: itemCount,
+                          preference: selectedIceLevel,
+                        ),
+                      );
+                  context.goNamed(AppRouterConstants.menuRouteName);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  side: const BorderSide(color: Colors.green, width: 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  fixedSize: const Size(130, 20),
+                ),
+                child: const Text('Add to Cart'),
+              ),
+            if (widget.isEdit) // Only show if in edit mode
+              ElevatedButton(
+                onPressed: () async {
+                  final itemIndex = context
+                      .read<CartBloc>()
+                      .state
+                      .cart!
+                      .items
+                      .indexWhere((element) => element == widget.beverage);
+                  if (itemCount != 0) {
+                    context.read<CartBloc>().add(
+                          UpdateProduct(
+                            cartIndex: itemIndex,
+                            quantity: itemCount,
+                            preference: selectedIceLevel,
+                          ),
+                        );
+                  } else {
+                    await sl<CartRepository>()
+                        .showDeleteConfirmationDialog(context, itemIndex);
+                  }
+                  if (context.mounted) {
+                    context.pop();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  side: const BorderSide(color: Colors.green, width: 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  fixedSize: const Size(300, 20),
+                ),
+                child: Text(itemCount != 0 ? 'Update' : 'Remove'),
+              ),
+          ],
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          if (!widget.isEdit!) // Only show if not in edit mode
-            ElevatedButton(
-              onPressed: () {
-                // Implement Order Now logic
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                side: const BorderSide(color: Colors.green, width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                fixedSize: const Size(130, 20),
-              ),
-              child: const Text('Order Now'),
-            ),
-          if (!widget.isEdit) // Only show if not in edit mode
-            ElevatedButton(
-              onPressed: () {
-                // Implement Add to Cart logic
-                context.read<CartBloc>().add(
-                      AddProduct(
-                        product: widget.beverage,
-                        quantity: itemCount,
-                        preference: selectedIceLevel,
-                      ),
-                    );
-                context.goNamed(AppRouterConstants.menuRouteName);
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                side: const BorderSide(color: Colors.green, width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                fixedSize: const Size(130, 20),
-              ),
-              child: const Text('Add to Cart'),
-            ),
-          if (widget.isEdit) // Only show if in edit mode
-            ElevatedButton(
-              onPressed: () {
-                context.read<CartBloc>().add(
-                     UpdateProduct(
-                        product: widget.beverage,
-                        quantity: itemCount,
-                        preference: selectedIceLevel,
-                      ),
-                    );
-                    context.pushNamed(AppRouterConstants.orderConfirmation);
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                side: const BorderSide(color: Colors.green, width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                fixedSize: const Size(300, 20),
-              ),
-              child: const Text('Update'),
-            ),
-        ],
-      ),
-    ),
-
     );
   }
 }

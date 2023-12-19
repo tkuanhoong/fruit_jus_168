@@ -24,35 +24,25 @@ class AddProduct extends CartEvent {
 }
 
 class UpdateProduct extends CartEvent {
-  final Product product;
+  final int cartIndex;
   final int quantity;
   final String preference;
 
   const UpdateProduct({
-    required this.product,
+    required this.cartIndex,
     required this.quantity,
     required this.preference,
   });
 
   @override
-  List<Object> get props => [product, quantity, preference];
+  List<Object> get props => [cartIndex, quantity, preference];
 }
-
 
 class RemoveProduct extends CartEvent {
-  final Product product;
+  final int cartIndex;
 
-  const RemoveProduct(this.product);
-
-  @override
-  List<Object> get props => [product];
-}
-
-class ConfirmDeleteProduct extends CartEvent {
-  final Product product;
-
-  const ConfirmDeleteProduct(this.product);
+  const RemoveProduct({required this.cartIndex});
 
   @override
-  List<Object> get props => [product];
+  List<Object> get props => [cartIndex];
 }

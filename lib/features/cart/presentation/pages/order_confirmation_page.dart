@@ -3,14 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
-import 'package:fruit_jus_168/core/domain/entities/product.dart';
+import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
-import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
+import 'package:fruit_jus_168/features/cart/domain/repositories/cart_repository.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/cart_item.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/divider_text.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fruit_jus_168/features/cart/domain/repositories/cart_repository.dart';
 
 class OrderConfirmationPage extends StatefulWidget {
   const OrderConfirmationPage({super.key});
@@ -20,8 +19,6 @@ class OrderConfirmationPage extends StatefulWidget {
 }
 
 class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
-
-  final CartRepository _cartRepository = CartRepository();
   @override
   void initState() {
     super.initState();
@@ -57,15 +54,17 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   CartItem(
                     product: item,
                     onEditPressed: () => context.pushNamed(
-                    AppRouterConstants.beverageDetailsRouteName,
-                    pathParameters: {'isEdit': 'true'},
-                    queryParameters: {'quantity': '${item.quantity}', 'preference': '${item.preference}'},
-                    extra: item, // Ensure item is of type Product
+                      AppRouterConstants.beverageDetailsRouteName,
+                      pathParameters: {'isEdit': 'true'},
+                      queryParameters: {
+                        'quantity': "${item.quantity}",
+                        'preference': "${item.preference}"
+                      },
+                      extra: item, // Ensure item is of type Product
                     ),
-                    onDeletePressed: () {
-                      if (state.cart != null && state.cart!.items.isNotEmpty) {
-                        _cartRepository.showDeleteConfirmationDialog(context, state.cart!.items.first);
-                      }
+                    onDeletePressed: () async {
+                      await sl<CartRepository>().showDeleteConfirmationDialog(
+                          context, state.cart!.items.indexOf(item));
                     },
                   )
               ],
