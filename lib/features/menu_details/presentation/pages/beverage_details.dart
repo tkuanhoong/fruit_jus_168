@@ -246,6 +246,15 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
               ElevatedButton(
                 onPressed: () {
                   // Implement Order Now logic
+                  context.read<CartBloc>().add(
+                        AddProduct(
+                          product: widget.beverage,
+                          quantity: itemCount,
+                          preference: selectedIceLevel,
+                        ),
+                      );
+                  context.pushReplacementNamed(
+                      AppRouterConstants.orderConfirmationRouteName);
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
