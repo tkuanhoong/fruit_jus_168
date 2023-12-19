@@ -14,4 +14,5 @@ class AppRouterConstants {
   static const String openMapRouteName = "open-map";
   static const String addAddressRouteName = "add-address";
   static const String editAddressRouteName = "edit-address";
+  static const String orderConfirmationRouteName = "order-confiramtions";
 }

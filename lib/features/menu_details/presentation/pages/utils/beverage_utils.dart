@@ -3,10 +3,12 @@ import 'package:fruit_jus_168/features/menu_details/domain/entities/beverage.dar
 // beverage_utils.dart
 
 class BeverageUtils {
-  static String getProductNameWithIceLevel(List<BeverageEntity> products, String selectedSize) {
+  static String getProductNameWithIceLevel(
+      List<BeverageEntity> products, String selectedSize) {
     // Assuming your product list contains the necessary data
-    String productName = products.isNotEmpty ? products[0].name : 'Unknown Product';
-    
+    String productName =
+        products.isNotEmpty ? products[0].name! : 'Unknown Product';
+
     String iceLevel = '';
     switch (selectedSize) {
       case 'noIce':
@@ -22,10 +24,4 @@ class BeverageUtils {
 
     return '$productName | $iceLevel';
   }
-
-  static String getProductName(List<BeverageEntity> products) {
-    // Assuming your product list contains the necessary data
-    return products.isNotEmpty ? products[0].name : 'Unknown Product';
-  }
 }
-

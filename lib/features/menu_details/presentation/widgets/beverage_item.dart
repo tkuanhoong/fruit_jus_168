@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 class BeverageItem extends StatelessWidget {
   const BeverageItem({
     Key? key,
-    required this.getProductName,
+    required this.name,
     required this.itemCount,
-    required this.selectedSize,
+    required this.selectedIceLevel,
     required this.onIceChanged,
     required this.onDecrease,
     required this.onIncrease,
   }) : super(key: key);
 
-  final String getProductName;
+  final String name;
   final int itemCount;
-  final String selectedSize;
+  final String selectedIceLevel;
   final ValueChanged<String?> onIceChanged;
   final VoidCallback onDecrease;
   final VoidCallback onIncrease;
@@ -37,20 +37,20 @@ class BeverageItem extends StatelessWidget {
           ),
           RadioListTile<String>(
             title: const Text('No Ice'),
-            value: 'noIce',
-            groupValue: selectedSize,
+            value: 'No Ice',
+            groupValue: selectedIceLevel,
             onChanged: onIceChanged,
           ),
           RadioListTile<String>(
             title: const Text('Normal Ice'),
-            value: 'normalIce',
-            groupValue: selectedSize,
+            value: 'Normal Ice',
+            groupValue: selectedIceLevel,
             onChanged: onIceChanged,
           ),
           RadioListTile<String>(
             title: const Text('More Ice'),
-            value: 'moreIce',
-            groupValue: selectedSize,
+            value: 'More Ice',
+            groupValue: selectedIceLevel,
             onChanged: onIceChanged,
           ),
         ],

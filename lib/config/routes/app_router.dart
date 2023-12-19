@@ -1,20 +1,26 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
+import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+
+import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
+import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+import 'package:fruit_jus_168/features/reward/presentation/pages/reward.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
 
-import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/profile_page.dart';
@@ -59,8 +65,11 @@ final router = GoRouter(
           name: AppRouterConstants.menuRouteName,
           path: '/menu',
           pageBuilder: (context, state) {
-            return const NoTransitionPage(
-              child: MenuPage(),
+            return NoTransitionPage(
+              child: BlocProvider(
+                create: (context) => sl<MenuBloc>()..add(FetchAllCategories()),
+                child: const MenuPage(),
+              ),
             );
           },
         ),
@@ -70,7 +79,7 @@ final router = GoRouter(
           path: '/rewards',
           pageBuilder: (context, state) {
             return const NoTransitionPage(
-              child: MyHomePage(title: 'Rewards Page Demo'),
+              child: RewardPage(),
             );
           },
         ),
@@ -129,10 +138,22 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       name: AppRouterConstants.beverageDetailsRouteName,
-      path: '/beverageDetails',
+      path: '/beverageDetails/:isEdit',
       pageBuilder: (context, state) {
-        return const NoTransitionPage(
-          child: BeverageDetailsPage(beverage: null),
+        final isEdit = state.pathParameters['isEdit'] == 'true';
+        int? quantity;
+        String? preference;
+        if (state.uri.queryParameters['quantity'] != null &&
+            state.uri.queryParameters['preference'] != null) {
+          quantity = int.parse(state.uri.queryParameters['quantity']!);
+          preference = state.uri.queryParameters['preference']!;
+        }
+        return NoTransitionPage(
+          child: BeverageDetailsPage(
+              beverage: state.extra as Product,
+              isEdit: isEdit,
+              quantity: quantity,
+              preference: preference),
         );
       },
     ),
@@ -205,6 +226,14 @@ final router = GoRouter(
             child: const SearchPage(),
           ),
         );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.orderConfirmationRouteName,
+      path: '/order-confirmation',
+      builder: (context, state) {
+        return const OrderConfirmationPage();
       },
     ),
   ],
