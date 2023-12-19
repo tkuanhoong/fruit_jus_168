@@ -9,6 +9,7 @@ class UserModel extends UserEntity {
     super.emailAddress,
     super.phoneNumber,
     super.dateOfBirth,
+    super.userReferralCode,
   });
 
   // Fetching data from Firebase
@@ -24,6 +25,7 @@ class UserModel extends UserEntity {
     String? emailAddress,
     String? phoneNumber,
     DateTime? dateOfBirth,
+    String? userReferralCode
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -31,6 +33,7 @@ class UserModel extends UserEntity {
       emailAddress: emailAddress ?? this.emailAddress,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      userReferralCode: userReferralCode ?? this.userReferralCode,
     );
   }
 
@@ -42,6 +45,7 @@ class UserModel extends UserEntity {
       'emailAddress': emailAddress,
       'phoneNumber': phoneNumber,
       'dateOfBirth': dateOfBirth?.millisecondsSinceEpoch,
+      'userRefferalCode': userReferralCode,
     };
   }
 
@@ -58,6 +62,8 @@ class UserModel extends UserEntity {
       dateOfBirth: map['dateOfBirth'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['dateOfBirth'] as int)
           : null,
+      userReferralCode:
+          map['userRefferalCode'] != null ? map['userRefferalCode'] as String : null,
     );
   }
 
@@ -76,6 +82,7 @@ class UserModel extends UserEntity {
       emailAddress: entity.emailAddress,
       phoneNumber: entity.phoneNumber,
       dateOfBirth: entity.dateOfBirth,
+      userReferralCode: entity.userReferralCode,
     );
   }
 }

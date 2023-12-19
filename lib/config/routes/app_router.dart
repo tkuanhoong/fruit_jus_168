@@ -2,15 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/config/routes/scaffold_with_nav_bar.dart';
+import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
+import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
+import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
+import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
+
 import 'package:fruit_jus_168/main.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/profile_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/add_address_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/address_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/edit_address_page.dart';
+import 'package:fruit_jus_168/features/address/presentation/pages/open_map_page.dart';
 
 // _rootNavigatorKey will help us in all of the routes that are not suppose to have the persistent BottomNavigationBar
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -49,7 +60,7 @@ final router = GoRouter(
           path: '/menu',
           pageBuilder: (context, state) {
             return const NoTransitionPage(
-              child: MyHomePage(title: 'Menu Page Demo'),
+              child: MenuPage(),
             );
           },
         ),
@@ -105,6 +116,95 @@ final router = GoRouter(
       path: '/edit-profile',
       builder: (context, state) {
         return const EditProfilePage(profile: null);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.referralCodePageRouteName,
+      path: '/referral-code',
+      builder: (context, state) {
+        return const ReferralCodePage(profile: null);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.beverageDetailsRouteName,
+      path: '/beverageDetails',
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: BeverageDetailsPage(beverage: null),
+        );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.addressRouteName,
+      path: '/address',
+      builder: (context, state) {
+        return const AddressPage();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.openMapRouteName,
+      path: '/open-map',
+      builder: (context, state) {
+        return const OpenMapPage();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.addAddressRouteName,
+      path: '/add-address/:streetName/:city/:postalCode/:state/:country',
+      builder: (context, state) {
+        final streetName = state.pathParameters['streetName'];
+        final city = state.pathParameters['city'];
+        final postalCode = state.pathParameters['postalCode'];
+        final state_ = state.pathParameters['state'];
+        final country = state.pathParameters['country'];
+        return AddAddressPage(
+          streetName: streetName,
+          city: city,
+          postalCode: postalCode,
+          state_: state_,
+          country: country,
+        );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.editAddressRouteName,
+      path: '/edit-address',
+      builder: (context, state) {
+        return const EditAddressPage();
+      },
+    ),
+    GoRoute(
+      name: AppRouterConstants.searchRouteName,
+      path: '/search',
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.easeIn;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+          child: BlocProvider<SearchBloc>(
+            create: (_) => sl<SearchBloc>()..add(const SearchRequested('')),
+            child: const SearchPage(),
+          ),
+        );
       },
     ),
   ],

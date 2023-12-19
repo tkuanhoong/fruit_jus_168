@@ -33,7 +33,23 @@ class _AuthService implements AuthApiService {
       DocumentReference userRef =
           _db.collection("users").doc(_auth.currentUser!.uid);
       // set the generated id to user id
-      user = user.copyWith(id: _auth.currentUser!.uid);
+      bool isReferralCodeExist;
+      String referralCode;
+      do {
+        // generate referral
+        referralCode = ReferralCodeGenerator.getReferralCode(user.fullName!, 4);
+        // check is referral exist
+        QuerySnapshot query = await _db
+            .collection('users')
+            .where('userReferralCode', isEqualTo: referralCode)
+            .get();
+
+        // factor to exit loop
+        isReferralCodeExist = query.docs.isNotEmpty;
+      } while (isReferralCodeExist);
+
+      user = user.copyWith(
+          id: _auth.currentUser!.uid, userReferralCode: referralCode);
       await userRef.set(user.toMap());
     } catch (e) {
       throw Exception(e.toString());
