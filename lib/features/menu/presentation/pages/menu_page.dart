@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/menu/presentation/widgets/highlighted_category.dart';
 import 'package:fruit_jus_168/features/menu/presentation/widgets/menu_loading.dart';
@@ -313,7 +315,6 @@ class _MenuPageState extends State<MenuPage>
           const StretchingOverscrollIndicator(
               axisDirection: AxisDirection.down);
           final product = products[index];
-          double productprice = double.parse(product.price.toString()) / 100;
           return Column(
             children: [
               Expanded(
@@ -344,8 +345,29 @@ class _MenuPageState extends State<MenuPage>
                         width: 130,
                         child: FittedBox(
                             fit: BoxFit.contain,
-                            child: Image.network(
-                              product.imageUrl.toString(),
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    SizedBox(
+                                        height: 0.5,
+                                        width: 15,
+                                        child: LinearProgressIndicator(
+                                          backgroundColor: Colors.grey,
+                                          color:
+                                              Color.fromARGB(255, 81, 81, 81),
+                                        )),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              imageUrl: "${product.imageUrl}",
                             )),
                       )
                     ],
@@ -356,7 +378,7 @@ class _MenuPageState extends State<MenuPage>
                 height: 15,
               ),
               Text(
-                product.name.toString(),
+                "${product.name}",
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -367,7 +389,7 @@ class _MenuPageState extends State<MenuPage>
                 height: 5,
               ),
               Text(
-                'RM ${productprice.toStringAsFixed(2)}',
+                'RM ${PriceConverter.fromInt(product.price!)}',
                 style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ItemImage extends StatelessWidget {
@@ -22,8 +23,10 @@ class ItemImage extends StatelessWidget {
           width: 130,
           child: FittedBox(
               fit: BoxFit.fitHeight,
-              child: Image.network(
-                imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
               )),
         )
       ],

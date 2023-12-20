@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
-import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 import 'package:fruit_jus_168/features/cart/domain/repositories/cart_repository.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/widgets/beverage_description.dart';
@@ -68,11 +68,16 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                           ConstrainedBox(
                             constraints: const BoxConstraints(
                                 maxHeight: 200, maxWidth: 200),
-                            child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Image.network(
-                                  "${widget.beverage.imageUrl}",
-                                )),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) => const Center(
+                                child: LinearProgressIndicator(
+                                  backgroundColor: Colors.grey,
+                                  color: Color.fromARGB(255, 81, 81, 81),
+                                ),
+                              ),
+                              imageUrl: "${widget.beverage.imageUrl}",
+                            ),
                           )
                         ],
                       ),
