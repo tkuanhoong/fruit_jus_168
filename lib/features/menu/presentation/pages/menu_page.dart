@@ -64,7 +64,6 @@ class _MenuPageState extends State<MenuPage>
         }
       }
     });
-    // log('scrolls' + _scrollController.offset.toString());
   }
 
   @override
