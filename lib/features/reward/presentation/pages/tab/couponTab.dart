@@ -8,16 +8,19 @@ class couponTab extends StatelessWidget {
   couponTab({super.key});
   final List<Coupon> list1 = [
     Coupon(
+        code: "RTTTTT",
         expiryDate: DateTime.now(),
         minItem: 2,
         discount: 15,
         imageURL: 'assets/images/logo.png'),
     Coupon(
+        code: "RTTTTT",
         expiryDate: DateTime.now(),
         minItem: 1,
         discount: 20,
         imageURL: 'assets/images/slider_1.jpg'),
     Coupon(
+        code: "RTTTTT",
         expiryDate: DateTime.now(),
         minItem: 4,
         discount: 35,

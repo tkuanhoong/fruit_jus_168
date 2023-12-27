@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
+import 'package:fruit_jus_168/features/cart/domain/entities/selected_voucher_entity.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -72,6 +73,30 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoaded(
           cart: Cart(
               items: List.from(state.cart!.items)..removeAt(event.cartIndex))));
+    });
+
+    on<ClearCart>((event, emit) {
+      emit(const CartLoaded(cart: Cart(items: [], voucher: null)));
+    });
+
+    on<VoucherChange>(
+      (event, emit) {
+        emit(
+          CartLoaded(
+            cart: state.cart!.copyWith(voucher: event.voucher),
+          ),
+        );
+      },
+    );
+
+    on<VoucherDelete>((event, emit) {
+      Cart updatedCart =
+          state.cart!.copyWith(voucher: null); // Setting voucher to null
+      emit(
+        CartLoaded(
+          cart: updatedCart,
+        ),
+      );
     });
   }
 }

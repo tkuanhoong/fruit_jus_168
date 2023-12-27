@@ -10,6 +10,7 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/login_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/otp_page.dart';
 import 'package:fruit_jus_168/features/auth/presentation/pages/register_page.dart';
+import 'package:fruit_jus_168/features/cart/presentation/bloc/voucher_bloc.dart';
 
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
@@ -233,7 +234,10 @@ final router = GoRouter(
       name: AppRouterConstants.orderConfirmationRouteName,
       path: '/order-confirmation',
       builder: (context, state) {
-        return const OrderConfirmationPage();
+        return BlocProvider<VoucherBloc>(
+          create: (_) => sl<VoucherBloc>(),
+          child: const OrderConfirmationPage(),
+        );
       },
     ),
   ],
