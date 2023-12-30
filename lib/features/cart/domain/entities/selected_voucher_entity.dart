@@ -1,14 +1,14 @@
-import 'package:fruit_jus_168/features/reward/domain/entities/coupon.dart';
+import 'package:fruit_jus_168/features/reward/domain/entities/voucher.dart';
 
-class SelectedVoucherEntity extends Coupon {
+class SelectedVoucherEntity extends VoucherEntity {
   const SelectedVoucherEntity({
-    required String code,
+    required String voucherCode,
     required DateTime expiryDate,
     required int minItem,
     required double discount,
     required String imageURL,
   }) : super(
-          code: code,
+          voucherCode: voucherCode,
           expiryDate: expiryDate,
           minItem: minItem,
           discount: discount,

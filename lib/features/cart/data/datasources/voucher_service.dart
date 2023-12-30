@@ -14,8 +14,8 @@ class _VoucherService implements VoucherApiService {
       final snapshot = await _db
           .collection('users')
           .doc(userId)
-          .collection('vouchers')
-          .where('code', isEqualTo: voucherCode)
+          .collection('voucher')
+          .where('voucherCode', isEqualTo: voucherCode)
           .get();
       if (snapshot.docs.isEmpty) {
         throw Exception('Voucher not found!');
@@ -25,7 +25,8 @@ class _VoucherService implements VoucherApiService {
         throw Exception('Voucher has expired!');
       }
       if (itemQuantity < voucher.minItem) {
-        throw Exception('Minimum ${voucher.minItem} item(s) is required to use this voucher!');
+        throw Exception(
+            'Minimum ${voucher.minItem} item(s) is required to use this voucher!');
       }
       return voucher;
     } catch (e) {

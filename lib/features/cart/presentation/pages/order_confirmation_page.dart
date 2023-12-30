@@ -396,7 +396,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Voucher (${state.voucher!.code})'),
+                              Text('Voucher (${state.voucher!.voucherCode})'),
                               Text(
                                   '- RM ${PriceConverter.fromInt(((state.voucher!.discount) * amount).toInt())}'),
                             ],
