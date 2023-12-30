@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/core/utility/date_format_generator.dart';
-import 'package:fruit_jus_168/features/reward/domain/entities/coupon.dart';
+import 'package:fruit_jus_168/features/reward/domain/entities/voucher.dart';
 
 class CouponDetailPage extends StatefulWidget {
   const CouponDetailPage({super.key});
@@ -17,22 +17,26 @@ class _CouponDetailPageState extends State<CouponDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final coupon = ModalRoute.of(context)!.settings.arguments as Coupon;
+    final coupon = ModalRoute.of(context)!.settings.arguments as VoucherEntity;
     final expiryDate = DateFormatGenerator.getFormattedDateTime(
         coupon.expiryDate.toIso8601String(), 'dd - MM - yyyy');
+    final voucherDiscount = coupon.discount * 100.toInt();
     // Use the Todo to create the UI.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Coupon Detail'),
+        title: const Text('Coupon Detail'),
       ),
       body: Column(
         children: [
-          Container(
-            width: 100,
-            height: 100,
-            child: Image.asset(coupon.imageURL),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 200, maxWidth: 200),
+            child: FittedBox(
+                fit: BoxFit.contain,
+                child: Image.asset(
+                  coupon.imageURL,
+                )),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
                 style: TextStyle(
@@ -42,14 +46,14 @@ class _CouponDetailPageState extends State<CouponDetailPage> {
                 'Discount : '),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                 ),
-                coupon.discount.toString()),
+                voucherDiscount.toString()),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
                 style: TextStyle(
@@ -59,14 +63,14 @@ class _CouponDetailPageState extends State<CouponDetailPage> {
                 'Expired Date : '),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                 ),
                 expiryDate),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
                 style: TextStyle(
@@ -76,9 +80,9 @@ class _CouponDetailPageState extends State<CouponDetailPage> {
                 'Minimum Item : '),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                 ),
                 coupon.minItem.toString()),

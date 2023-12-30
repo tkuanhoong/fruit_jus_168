@@ -4,7 +4,7 @@ import 'package:fruit_jus_168/features/reward/presentation/pages/tab/stampTab.da
 
 class RewardPage extends StatefulWidget {
   const RewardPage({super.key});
-  // final ProfileEntity? profile;
+
   @override
   State<RewardPage> createState() => _RewardPageState();
 }
@@ -74,7 +74,7 @@ class _RewardPageState extends State<RewardPage> {
                 Expanded(
                     child: TabBarView(children: [
                   stampTab(),
-                  couponTab(),
+                  CouponTab(),
                 ]))
               ],
             ),
