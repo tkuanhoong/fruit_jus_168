@@ -9,6 +9,7 @@ class VoucherModel extends VoucherEntity {
     required super.expiryDate,
     required super.imageURL,
     required super.minItem,
+    required super.isUsed,
   });
 
   VoucherModel copyWith({
@@ -17,6 +18,7 @@ class VoucherModel extends VoucherEntity {
     required DateTime expiryDate,
     required String imageURL,
     required int minItem,
+    required bool isUsed,
   }) {
     return VoucherModel(
       voucherCode: voucherCode,
@@ -24,6 +26,7 @@ class VoucherModel extends VoucherEntity {
       expiryDate: expiryDate,
       imageURL: imageURL,
       minItem: minItem,
+      isUsed: isUsed,
     );
   }
 
@@ -35,6 +38,7 @@ class VoucherModel extends VoucherEntity {
       'discount': discount,
       'imageURL': imageURL,
       'minItem': minItem,
+      'isUsed': isUsed,
     };
   }
 
@@ -47,6 +51,7 @@ class VoucherModel extends VoucherEntity {
       discount: map['discount'],
       imageURL: map['imageURL'],
       minItem: map['minItem'],
+      isUsed: map['isUsed'],
     );
   }
 
@@ -65,6 +70,7 @@ class VoucherModel extends VoucherEntity {
       discount: entity.discount,
       imageURL: entity.imageURL,
       minItem: entity.minItem,
+      isUsed: entity.isUsed,
     );
   }
 }

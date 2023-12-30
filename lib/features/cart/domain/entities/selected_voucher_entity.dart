@@ -7,11 +7,13 @@ class SelectedVoucherEntity extends VoucherEntity {
     required int minItem,
     required double discount,
     required String imageURL,
+    required bool isUsed,
   }) : super(
           voucherCode: voucherCode,
           expiryDate: expiryDate,
           minItem: minItem,
           discount: discount,
           imageURL: imageURL,
+          isUsed: isUsed,
         );
 }

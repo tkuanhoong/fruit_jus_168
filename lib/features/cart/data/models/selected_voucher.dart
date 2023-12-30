@@ -7,12 +7,14 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
     required int minItem,
     required double discount,
     required String imageURL,
+    required bool isUsed,
   }) : super(
           voucherCode: voucherCode,
           expiryDate: expiryDate,
           minItem: minItem,
           discount: discount,
           imageURL: imageURL,
+          isUsed: isUsed,
         );
 
   factory SelectedVoucherModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
       minItem: json['minItem'],
       discount: json['discount'],
       imageURL: json['imageURL'],
+      isUsed: json['isUsed'],
     );
   }
 
@@ -32,6 +35,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
       'minItem': minItem,
       'discount': discount,
       'imageURL': imageURL,
+      'isUsed': isUsed,
     };
   }
 
@@ -42,6 +46,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
       minItem: entity.minItem,
       discount: entity.discount,
       imageURL: entity.imageURL,
+      isUsed: entity.isUsed,
     );
   }
 
@@ -52,6 +57,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
       'minItem': minItem,
       'discount': discount,
       'imageURL': imageURL,
+      'isUsed': isUsed,
     };
   }
 
@@ -62,6 +68,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
       minItem: map['minItem'],
       discount: map['discount'],
       imageURL: map['imageURL'],
+      isUsed: map['isUsed'],
     );
   }
 }

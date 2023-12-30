@@ -19,6 +19,7 @@ class NewVoucherGeneratorService {
         discount: 0.2,
         minItem: 1,
         imageURL: 'assets/images/logo.png',
+        isUsed: false,
       );
       //Convert the coupon data to map
       Map<String, dynamic> voucherData = newVoucher.toMap();
