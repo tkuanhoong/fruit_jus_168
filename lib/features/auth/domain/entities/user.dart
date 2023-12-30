@@ -7,14 +7,17 @@ class UserEntity extends Equatable {
   final String? phoneNumber;
   final DateTime? dateOfBirth;
   final String? userReferralCode;
+  final int? stamp;
 
-  const UserEntity(
-      {this.id,
-      this.fullName,
-      this.emailAddress,
-      this.phoneNumber,
-      this.dateOfBirth,
-      this.userReferralCode, });
+  const UserEntity({
+    this.id,
+    this.fullName,
+    this.emailAddress,
+    this.phoneNumber,
+    this.dateOfBirth,
+    this.userReferralCode,
+    this.stamp,
+  });
 
   @override
   List<Object?> get props {
@@ -24,7 +27,8 @@ class UserEntity extends Equatable {
       emailAddress,
       phoneNumber,
       dateOfBirth,
-      userReferralCode
+      userReferralCode,
+      stamp
     ];
   }
 
