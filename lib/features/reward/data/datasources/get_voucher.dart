@@ -10,7 +10,7 @@ class FirestoreService {
 
     try {
       CollectionReference userVoucherRef =
-          _firestore.collection('users').doc(user?.uid).collection('voucher');
+          _firestore.collection('users').doc(user?.uid).collection('vouchers');
       QuerySnapshot<Object?> querySnapshot = await userVoucherRef.get();
 
       List<VoucherEntity> voucher = querySnapshot.docs.map((doc) {
@@ -18,11 +18,12 @@ class FirestoreService {
         DateTime expiryDate = (doc['expiryDate'] as Timestamp).toDate();
 
         return VoucherEntity(
-          voucherCode: doc['voucherCode'],
+          voucherCode: doc['code'],
           expiryDate: expiryDate,
           discount: doc['discount'],
           imageURL: doc['imageURL'],
           minItem: doc['minItem'],
+          isUsed: doc['isUsed'],
         );
       }).toList();
 

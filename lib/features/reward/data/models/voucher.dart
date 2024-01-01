@@ -52,7 +52,7 @@ class VoucherModel extends VoucherEntity {
       imageURL: map['imageURL'],
       minItem: map['minItem'],
       isUsed: map['isUsed'],
-    );
+    );  
   }
 
   //Convert VoucherModel to JSON

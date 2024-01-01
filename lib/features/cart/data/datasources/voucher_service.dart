@@ -14,13 +14,16 @@ class _VoucherService implements VoucherApiService {
       final snapshot = await _db
           .collection('users')
           .doc(userId)
-          .collection('voucher')
-          .where('voucherCode', isEqualTo: voucherCode)
+          .collection('vouchers')
+          .where('code', isEqualTo: voucherCode)
           .get();
       if (snapshot.docs.isEmpty) {
         throw Exception('Voucher not found!');
       }
       final voucher = SelectedVoucherModel.fromMap(snapshot.docs.first.data());
+      if(voucher.isUsed){
+        throw Exception('Voucher has been used!');
+      }
       if (voucher.expiryDate.isBefore(DateTime.now())) {
         throw Exception('Voucher has expired!');
       }

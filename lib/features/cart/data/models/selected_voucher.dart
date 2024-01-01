@@ -19,7 +19,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
 
   factory SelectedVoucherModel.fromJson(Map<String, dynamic> json) {
     return SelectedVoucherModel(
-      voucherCode: json['voucherCode'],
+      voucherCode: json['code'],
       expiryDate: DateTime.parse(json['expiryDate']),
       minItem: json['minItem'],
       discount: json['discount'],
@@ -30,7 +30,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'voucherCode': voucherCode,
+      'code': voucherCode,
       'expiryDate': expiryDate.toIso8601String(),
       'minItem': minItem,
       'discount': discount,
@@ -52,7 +52,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'voucherCode': voucherCode,
+      'code': voucherCode,
       'expiryDate': expiryDate.toIso8601String(),
       'minItem': minItem,
       'discount': discount,
@@ -63,7 +63,7 @@ class SelectedVoucherModel extends SelectedVoucherEntity {
 
   factory SelectedVoucherModel.fromMap(Map<String, dynamic> map) {
     return SelectedVoucherModel(
-      voucherCode: map['voucherCode'],
+      voucherCode: map['code'],
       expiryDate: map['expiryDate'].toDate(),
       minItem: map['minItem'],
       discount: map['discount'],
