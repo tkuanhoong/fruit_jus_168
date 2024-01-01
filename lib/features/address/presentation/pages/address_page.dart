@@ -158,7 +158,8 @@ class _AddressPageState extends State<AddressPage> {
                                       ),
                                     ),
                                     Text(
-                                      '${address.unit}, ${address.streetName}, ${address.city}, ${address.postalCode}, ${address.state}, ${address.country}',
+                                      // '${address.unit}, ${address.streetName}, ${address.city}, ${address.postalCode}, ${address.state}, ${address.country}',
+                                      '${address.address}, ${address.city}, ${address.postalCode}, ${address.state}, ${address.country}',
                                       style: const TextStyle(
                                           fontSize: 11, color: Colors.grey),
                                     ),

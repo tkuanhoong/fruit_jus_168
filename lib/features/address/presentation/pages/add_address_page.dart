@@ -4,30 +4,36 @@ import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.da
 import 'package:go_router/go_router.dart';
 
 class AddAddressPage extends StatefulWidget {
-  final String? streetName;
+  // final String? streetName;
   final String? city;
   final String? postalCode;
   final String? state_;
   final String? country;
+  final double? latitude;
+  final double? longitude;
 
-  const AddAddressPage(
-      {super.key,
-      required this.streetName,
-      required this.city,
-      required this.postalCode,
-      required this.state_,
-      required this.country});
+  const AddAddressPage({
+    super.key,
+    // required this.streetName,
+    required this.city,
+    required this.postalCode,
+    required this.state_,
+    required this.country,
+    required this.latitude,
+    required this.longitude,
+  });
   @override
   State<AddAddressPage> createState() => _AddAddressPageState();
 }
 
 class _AddAddressPageState extends State<AddAddressPage> {
   late TextEditingController nameController;
-  late TextEditingController unitController;
+  // late TextEditingController unitController;
+  late TextEditingController addressController;
   late TextEditingController noteController;
 
   // Controllers for fixed fields
-  late TextEditingController streetController;
+  // late TextEditingController streetController;
   late TextEditingController cityController;
   late TextEditingController postalCodeController;
   late TextEditingController stateController;
@@ -37,9 +43,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
   void initState() {
     super.initState();
     nameController = TextEditingController();
-    unitController = TextEditingController();
+    // unitController = TextEditingController();
+    addressController = TextEditingController();
     noteController = TextEditingController();
-    streetController = TextEditingController();
+    // streetController = TextEditingController();
     cityController = TextEditingController();
     postalCodeController = TextEditingController();
     stateController = TextEditingController();
@@ -47,14 +54,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   void _validateInputs() {
-    if (nameController.text.isEmpty && unitController.text.isEmpty) {
+    if (nameController.text.isEmpty && addressController.text.isEmpty) {
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Validation Error'),
-            content: const Text('Name and Unit are required fields.'),
+            content: const Text('Name and Address are required fields.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -85,14 +92,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
           );
         },
       );
-    } else if (unitController.text.isEmpty) {
+    } else if (addressController.text.isEmpty) {
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Validation Error'),
-            content: const Text('Unit is required field.'),
+            content: const Text('Address is required field.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -106,14 +113,18 @@ class _AddAddressPageState extends State<AddAddressPage> {
       );
     } else {
       BlocProvider.of<AddressBloc>(context).add(AddAddress(
-          name: nameController.text,
-          unit: unitController.text,
-          streetName: streetController.text,
-          city: cityController.text,
-          postalCode: postalCodeController.text,
-          state: stateController.text,
-          country: countryController.text,
-          note: noteController.text));
+        name: nameController.text,
+        // unit: unitController.text,
+        // streetName: streetController.text,
+        address: addressController.text,
+        city: cityController.text,
+        postalCode: postalCodeController.text,
+        state: stateController.text,
+        country: countryController.text,
+        note: noteController.text,
+        latitude: widget.latitude!,
+        longitude: widget.longitude!,
+      ));
 
       showDialog(
         context: context,
@@ -125,6 +136,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
+                  // GoRouter.of(context).go('/address');
                   GoRouter.of(context).pop();
                   GoRouter.of(context).pop();
                   GoRouter.of(context).pop();
@@ -174,10 +186,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     _buildTextField("Name*", nameController,
                         'Save address as ...', 'e.g.: Home, Office'),
                     const SizedBox(height: 24),
-                    _buildTextField("Unit*", unitController, '', ''),
+                    // _buildTextField("Unit*", unitController, '', ''),
+                    _buildTextField("Address*", addressController,
+                        'Your address ...', 'e.g.: unit, block, street'),
                     // const SizedBox(height: 4),
-                    _buildFixedTextField(
-                        "Street Name", streetController, widget.streetName),
+                    // _buildFixedTextField(
+                    //     "Street Name", streetController, widget.streetName),
                     const SizedBox(height: 24),
                     _buildFixedTextField("City", cityController, widget.city),
                     const SizedBox(height: 24),
@@ -193,7 +207,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     _buildTextField(
                         "Note (Optional)",
                         noteController,
-                        'Add delivery instructions',
+                        'Add delivery instructions ...',
                         'e.g.: nearest building, nearest place'),
                     const SizedBox(height: 8),
                   ],

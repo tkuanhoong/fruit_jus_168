@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,7 +63,8 @@ class _EditAddressPageState extends State<EditAddressPage> {
                       child: ListTile(
                         leading: const Icon(Icons.location_on_outlined),
                         title: Text(
-                          '${state.address!.unit}, ${state.address!.streetName}, ${state.address!.city}, ${state.address!.postalCode}, ${state.address!.state}, ${state.address!.country}',
+                          // '${state.address!.unit}, ${state.address!.streetName}, ${state.address!.city}, ${state.address!.postalCode}, ${state.address!.state}, ${state.address!.country}',
+                          '${state.address!.address}, ${state.address!.city}, ${state.address!.postalCode}, ${state.address!.state}, ${state.address!.country}',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
@@ -113,14 +113,18 @@ class _EditAddressPageState extends State<EditAddressPage> {
                           BlocProvider.of<AddressBloc>(context).add(EditAddress(
                             id: state.address!.id!,
                             name: nameController.text,
-                            unit: state.address!.unit!,
-                            streetName: state.address!.streetName!,
+                            // unit: state.address!.unit!,
+                            // streetName: state.address!.streetName!,
+                            address: state.address!.address!,
                             city: state.address!.city!,
                             postalCode: state.address!.postalCode!,
                             state: state.address!.state!,
                             country: state.address!.country!,
                             note: noteController.text,
                             isDefault: state.address!.isDefault!,
+                            createdAt: state.address!.createdAt!,
+                            latitude: state.address!.latitude!,
+                            longitude: state.address!.longitude!,
                           ));
 
                           showDialog(
@@ -134,6 +138,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
+                                      // GoRouter.of(context).go('/address');
                                       GoRouter.of(context).pop();
                                       GoRouter.of(context).pop();
                                     },

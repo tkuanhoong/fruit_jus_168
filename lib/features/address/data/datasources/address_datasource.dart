@@ -45,6 +45,15 @@ class FirebaseAddressDataSource implements AddressDataSource {
         addressesList.add(addressModel);
       }
 
+      // Sort the addressesList based on the "createdAt" property
+      addressesList.sort((a, b) {
+        Timestamp timestampA = a.createdAt!;
+        Timestamp timestampB = b.createdAt!;
+
+        // Compare timestamps and return the result
+        return timestampA.compareTo(timestampB);
+      });
+
       return addressesList;
     } else {
       throw Exception('No user logged in');

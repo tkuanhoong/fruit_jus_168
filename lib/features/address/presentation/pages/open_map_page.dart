@@ -16,19 +16,21 @@ class OpenMapPage extends StatefulWidget {
 class _OpenMapPageState extends State<OpenMapPage> {
   final Completer<GoogleMapController> _controllerCompleter =
       Completer<GoogleMapController>();
-  late LatLng _selectedLocation = const LatLng(0.0, 0.0);
+  late LatLng _selectedLocation = const LatLng(10.0, 10.0);
   late Marker _marker = Marker(
     markerId: const MarkerId('selected_location'),
     position: _selectedLocation,
     draggable: true,
   );
   TextEditingController _searchController = TextEditingController();
-  late String _streetName = '';
-  late String _city = '';
-  late String _postalCode = '';
-  late String _state = '';
-  late String _country = '';
+  // late String _streetName = '';
+  late String? _city = '';
+  late String? _postalCode = '';
+  late String? _state = '';
+  late String? _country = '';
   List<Placemark> _placemarks = [];
+  late double? latitude = 0.0;
+  late double? longitude = 0.0;
 
   @override
   void initState() {
@@ -70,12 +72,15 @@ class _OpenMapPageState extends State<OpenMapPage> {
     // Extract address details
     if (_placemarks.isNotEmpty) {
       Placemark firstPlacemark = _placemarks.first;
-      _streetName = firstPlacemark.street ?? '';
+      // _streetName = firstPlacemark.street ?? '';
       _city = firstPlacemark.locality ?? '';
       _postalCode = firstPlacemark.postalCode ?? '';
       _state = firstPlacemark.administrativeArea ?? '';
       _country = firstPlacemark.country ?? '';
     }
+
+    latitude = _selectedLocation.latitude;
+    longitude = _selectedLocation.longitude;
   }
 
   void _updateSelectedLocation(CameraPosition position) {
@@ -143,7 +148,7 @@ class _OpenMapPageState extends State<OpenMapPage> {
             child: ElevatedButton(
               onPressed: () {
                 GoRouter.of(context).push(
-                    '/add-address/$_streetName/$_city/$_postalCode/$_state/$_country');
+                    '/add-address/$_city/$_postalCode/$_state/$_country/$latitude/$longitude');
               },
               child: const Text('Confirm'),
             ),

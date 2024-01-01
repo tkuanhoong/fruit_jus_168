@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fruit_jus_168/features/address/domain/entities/address.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/features/address/domain/usecases/add_address.dart';
@@ -47,14 +48,18 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         final address = AddressEntity(
           id: null,
           name: event.name,
-          unit: event.unit,
-          streetName: event.streetName,
+          // unit: event.unit,
+          // streetName: event.streetName,
+          address: event.address,
           city: event.city,
           postalCode: event.postalCode,
           state: event.state,
           country: event.country,
           note: event.note,
           isDefault: false,
+          createdAt: Timestamp.now(),
+          latitude: event.latitude,
+          longitude: event.longitude,
         );
         await addAddressUseCase.call(address);
         final List<AddressEntity> addresses = await getAddressesUseCase.call();
@@ -70,14 +75,18 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         final address = AddressEntity(
           id: event.id,
           name: event.name,
-          unit: event.unit,
-          streetName: event.streetName,
+          // unit: event.unit,
+          // streetName: event.streetName,
+          address: event.address,
           city: event.city,
           postalCode: event.postalCode,
           state: event.state,
           country: event.country,
           note: event.note,
           isDefault: event.isDefault,
+          createdAt: event.createdAt,
+          latitude: event.latitude,
+          longitude: event.longitude,
         );
         await editAddressUseCase.call(address);
         final List<AddressEntity> addresses = await getAddressesUseCase.call();

@@ -177,19 +177,25 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       name: AppRouterConstants.addAddressRouteName,
-      path: '/add-address/:streetName/:city/:postalCode/:state/:country',
+      // path: '/add-address/:streetName/:city/:postalCode/:state/:country',
+      path:
+          '/add-address/:city/:postalCode/:state/:country/:latitude/:longitude',
       builder: (context, state) {
-        final streetName = state.pathParameters['streetName'];
+        // final streetName = state.pathParameters['streetName'];
         final city = state.pathParameters['city'];
         final postalCode = state.pathParameters['postalCode'];
         final state_ = state.pathParameters['state'];
         final country = state.pathParameters['country'];
+        final latitude = double.parse(state.pathParameters['latitude']!);
+        final longitude = double.parse(state.pathParameters['longitude']!);
         return AddAddressPage(
-          streetName: streetName,
+          // streetName: streetName,
           city: city,
           postalCode: postalCode,
           state_: state_,
           country: country,
+          latitude: latitude,
+          longitude: longitude,
         );
       },
     ),
