@@ -11,7 +11,7 @@ class NewVoucherGeneratorService {
       CollectionReference userVoucherRef = FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
-          .collection('voucher');
+          .collection('vouchers');
 
       VoucherModel newVoucher = VoucherModel(
         voucherCode: 'NEW001',

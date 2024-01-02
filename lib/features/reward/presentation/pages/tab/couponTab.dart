@@ -27,7 +27,7 @@ class _CouponTabState extends State<CouponTab> {
       future: _voucherListFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: const CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -99,7 +99,7 @@ class _CouponTabState extends State<CouponTab> {
                             subtitle: Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "${vouchers[index].discount * 100}% ",
+                                "${(vouchers[index].discount * 100).toInt()}% ",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
