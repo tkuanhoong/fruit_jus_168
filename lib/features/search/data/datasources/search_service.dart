@@ -8,7 +8,7 @@ class _SearchService implements SearchApiService {
   @override
   Stream<List<SearchItemModel>> searchProduct(String query) {
     try {
-      return _db.collection('products').orderBy('name').snapshots().map(
+      return _db.collectionGroup('products').orderBy('name').snapshots().map(
           (snapshot) => snapshot.docs
               .map((doc) => SearchItemModel.fromMap(doc.data()))
               .where((element) =>

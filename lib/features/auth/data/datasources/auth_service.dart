@@ -35,6 +35,8 @@ class _AuthService implements AuthApiService {
       // set the generated id to user id
       bool isReferralCodeExist;
       String referralCode;
+      //stamp
+      int stamp;
       do {
         // generate referral
         referralCode = ReferralCodeGenerator.getReferralCode(user.fullName!, 4);
@@ -47,10 +49,15 @@ class _AuthService implements AuthApiService {
         // factor to exit loop
         isReferralCodeExist = query.docs.isNotEmpty;
       } while (isReferralCodeExist);
-
+      //declare stamp count
+      stamp = 0;
       user = user.copyWith(
-          id: _auth.currentUser!.uid, userReferralCode: referralCode);
+          id: _auth.currentUser!.uid,
+          userReferralCode: referralCode,
+          stamp: stamp);
       await userRef.set(user.toMap());
+      //  Create new coupon for the user
+      await NewVoucherGeneratorService().createNewVoucher();
     } catch (e) {
       throw Exception(e.toString());
     }

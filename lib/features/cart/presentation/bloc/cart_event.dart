@@ -4,7 +4,7 @@ sealed class CartEvent extends Equatable {
   const CartEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadCart extends CartEvent {}
@@ -45,4 +45,34 @@ class RemoveProduct extends CartEvent {
 
   @override
   List<Object> get props => [cartIndex];
+}
+
+class ClearCart extends CartEvent {}
+
+class VoucherChange extends CartEvent {
+  final SelectedVoucherEntity? voucher;
+
+  const VoucherChange({this.voucher});
+
+  @override
+  List<Object?> get props => [voucher];
+}
+
+class VoucherDelete extends CartEvent {
+  final SelectedVoucherEntity? voucher;
+
+  const VoucherDelete({this.voucher});
+
+  @override
+  List<Object?> get props => [voucher];
+}
+
+class FullfillmentChange extends CartEvent {
+  final String deliveryMethod;
+  final String address;
+
+  const FullfillmentChange({required this.deliveryMethod,required this.address});
+
+  @override
+  List<Object?> get props => [deliveryMethod, address];
 }

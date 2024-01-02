@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/core/utility/dialog_display.dart';
+import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/menu/presentation/widgets/highlighted_category.dart';
 import 'package:fruit_jus_168/features/menu/presentation/widgets/menu_loading.dart';
@@ -21,7 +24,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  bool isScrollingDown = false;
+  bool isScrollingDown = true;
   final Map<String, GlobalKey> _categoryKeys = {};
   final double marginForSection = 30;
   final double marginForTop = 10;
@@ -62,7 +65,6 @@ class _MenuPageState extends State<MenuPage>
         }
       }
     });
-    // log('scrolls' + _scrollController.offset.toString());
   }
 
   @override
@@ -78,37 +80,42 @@ class _MenuPageState extends State<MenuPage>
       appBar: isScrollingDown
           ? AppBar(
               backgroundColor: const Color.fromARGB(255, 209, 231, 207),
-              title: Container(
-                padding: const EdgeInsets.all(8),
-                height: AppBar().preferredSize.height * 0.65,
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: const Row(
-                  children: [
-                    Flexible(
-                        flex: 2,
-                        child: Icon(
-                          Icons.share_location_outlined,
-                          color: Color(0XFF20941C),
-                        )),
-                    Flexible(
-                      flex: 1,
-                      child: SizedBox(width: 20),
-                    ),
-                    Flexible(
-                      flex: 7,
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Text(
-                          'Your Address Here',
-                          style: TextStyle(color: Colors.black),
+              title: GestureDetector(
+                onTap: () {
+                  displayDeliveryPickUpDialog(context);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  height: AppBar().preferredSize.height * 0.65,
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Row(
+                    children: [
+                      Flexible(
+                          flex: 2,
+                          child: Icon(
+                            Icons.share_location_outlined,
+                            color: Color(0XFF20941C),
+                          )),
+                      Flexible(
+                        flex: 1,
+                        child: SizedBox(width: 20),
+                      ),
+                      Flexible(
+                        flex: 7,
+                        child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Text(
+                            'Change Your Delivery Option Here',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             )
@@ -313,7 +320,6 @@ class _MenuPageState extends State<MenuPage>
           const StretchingOverscrollIndicator(
               axisDirection: AxisDirection.down);
           final product = products[index];
-          double productprice = double.parse(product.price.toString()) / 100;
           return Column(
             children: [
               Expanded(
@@ -344,8 +350,29 @@ class _MenuPageState extends State<MenuPage>
                         width: 130,
                         child: FittedBox(
                             fit: BoxFit.contain,
-                            child: Image.network(
-                              product.imageUrl.toString(),
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    SizedBox(
+                                        height: 0.5,
+                                        width: 15,
+                                        child: LinearProgressIndicator(
+                                          backgroundColor: Colors.grey,
+                                          color:
+                                              Color.fromARGB(255, 81, 81, 81),
+                                        )),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              imageUrl: "${product.imageUrl}",
                             )),
                       )
                     ],
@@ -356,7 +383,7 @@ class _MenuPageState extends State<MenuPage>
                 height: 15,
               ),
               Text(
-                product.name.toString(),
+                "${product.name}",
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -367,7 +394,7 @@ class _MenuPageState extends State<MenuPage>
                 height: 5,
               ),
               Text(
-                'RM ${productprice.toStringAsFixed(2)}',
+                'RM ${PriceConverter.fromInt(product.price!)}',
                 style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,

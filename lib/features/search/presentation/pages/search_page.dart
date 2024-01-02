@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/widgets/typing_search_bar.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -52,9 +56,12 @@ class _SearchPageState extends State<SearchPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              TypingSearchBar(
-                onSearchChanged: _onSearchChanged,
-                searching: _searching,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TypingSearchBar(
+                  onSearchChanged: _onSearchChanged,
+                  searching: _searching,
+                ),
               ),
               BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
@@ -68,11 +75,103 @@ class _SearchPageState extends State<SearchPage> {
                           child: Center(child: Text("No Result")));
                     }
                     return Expanded(
-                      child: ListView.builder(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 0.8,
+                          crossAxisCount: 2,
+                        ),
                         itemCount: _allResult.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(_allResult[index].name),
+                          final product = _allResult[index];
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.pushNamed(
+                                      AppRouterConstants
+                                          .beverageDetailsRouteName,
+                                      extra: product,
+                                      pathParameters: {"isEdit": "false"},
+                                    );
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      Positioned(
+                                        bottom: 10,
+                                        child: Container(
+                                          height: 130,
+                                          width: 130,
+                                          decoration: const BoxDecoration(
+                                            color: Color.fromARGB(
+                                                104, 223, 223, 223),
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 130,
+                                        width: 130,
+                                        child: FittedBox(
+                                            fit: BoxFit.contain,
+                                            child: CachedNetworkImage(
+                                              placeholder: (context, url) =>
+                                                  const Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    SizedBox(
+                                                        height: 0.5,
+                                                        width: 15,
+                                                        child:
+                                                            LinearProgressIndicator(
+                                                          backgroundColor:
+                                                              Colors.grey,
+                                                          color: Color.fromARGB(
+                                                              255, 81, 81, 81),
+                                                        )),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              imageUrl: "${product.imageUrl}",
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                "${product.name}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                  fontFamily: 'Mulish',
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'RM ${PriceConverter.fromInt(product.price)}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                  fontFamily: 'Mulish',
+                                ),
+                              ),
+                            ],
                           );
                         },
                       ),

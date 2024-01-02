@@ -18,3 +18,8 @@ class AddressError extends AddressState {
 
   AddressError({required this.errorMessage});
 }
+
+class DefaultAddressUpdated extends AddressState {
+  final AddressEntity address;
+  DefaultAddressUpdated({required this.address});
+}

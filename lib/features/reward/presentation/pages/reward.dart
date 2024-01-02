@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_jus_168/features/reward/presentation/pages/tab/couponTab.dart';
+import 'package:fruit_jus_168/features/reward/presentation/pages/tab/CouponTab.dart';
 import 'package:fruit_jus_168/features/reward/presentation/pages/tab/stampTab.dart';
 
 class RewardPage extends StatefulWidget {
   const RewardPage({super.key});
-  // final ProfileEntity? profile;
+
   @override
   State<RewardPage> createState() => _RewardPageState();
 }
@@ -74,7 +74,7 @@ class _RewardPageState extends State<RewardPage> {
                 Expanded(
                     child: TabBarView(children: [
                   stampTab(),
-                  couponTab(),
+                  CouponTab(),
                 ]))
               ],
             ),

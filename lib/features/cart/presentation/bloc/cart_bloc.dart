@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
+import 'package:fruit_jus_168/features/cart/domain/entities/selected_voucher_entity.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -43,11 +44,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         // add product for other case
         items.add(addingProduct);
       }
+      final updatedCart = state.cart!.copyWith(items: items);
       emit(
         CartLoaded(
-          cart: Cart(
-            items: items,
-          ),
+          cart: updatedCart,
         ),
       );
     });
@@ -62,16 +62,55 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           quantity: event.quantity, preference: event.preference);
 
       items[updatingItemIndex] = updatingItem;
-
-      emit(CartLoaded(
-        cart: Cart(items: items),
-      ));
+      final updatedCart = state.cart!.copyWith(items: items);
+      emit(
+        CartLoaded(
+          cart: updatedCart,
+        ),
+      );
     });
 
     on<RemoveProduct>((event, emit) {
-      emit(CartLoaded(
+      List<CartProduct> items = List.from(state.cart!.items)
+        ..removeAt(event.cartIndex);
+      final updatedCart = state.cart!.copyWith(items: items);
+      emit(
+        CartLoaded(
+          cart: updatedCart,
+        ),
+      );
+    });
+
+    on<ClearCart>((event, emit) {
+      emit(const CartLoaded(
           cart: Cart(
-              items: List.from(state.cart!.items)..removeAt(event.cartIndex))));
+              items: [], voucher: null, fulfillMethod: null, address: null)));
+    });
+
+    on<VoucherChange>(
+      (event, emit) {
+        emit(
+          CartLoaded(
+            cart: state.cart!.copyWith(voucher: event.voucher),
+          ),
+        );
+      },
+    );
+
+    on<VoucherDelete>((event, emit) {
+      Cart updatedCart =
+          state.cart!.copyWith(voucher: null); // Setting voucher to null
+      emit(
+        CartLoaded(
+          cart: updatedCart,
+        ),
+      );
+    });
+
+    on<FullfillmentChange>((event, emit) {
+      Cart updatedCart = state.cart!.copyWith(
+          fulfillMethod: event.deliveryMethod, address: event.address);
+      emit(CartLoaded(cart: updatedCart));
     });
   }
 }
