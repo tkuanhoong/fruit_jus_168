@@ -12,7 +12,10 @@ class DividerText extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(title),
+            Text(title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                )),
             const Spacer(),
             if (onPressed != null)
               IconButton(
