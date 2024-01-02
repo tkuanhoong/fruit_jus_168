@@ -112,7 +112,9 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
       try {
         await updateDefaultAddressUseCase.call(event.addressId);
         final List<AddressEntity> addresses = await getAddressesUseCase.call();
-        emit(AddressesLoaded(addresses: addresses));
+        final defaultAddress =
+            addresses.where((element) => element.isDefault!).first;
+        emit(DefaultAddressUpdated(address: defaultAddress));
       } catch (e) {
         emit(AddressError(errorMessage: 'Failed to update default address.'));
       }

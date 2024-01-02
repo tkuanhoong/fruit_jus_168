@@ -1,8 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/config/address/pickup_address_constant.dart';
+import 'package:fruit_jus_168/config/enum/direction.dart';
+import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/utility/dialog_display.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fruit_jus_168/features/auth/presentation/widgets/fulfillment_card.dart';
 import 'package:fruit_jus_168/features/auth/presentation/widgets/home_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required String title}) : super(key: key);
@@ -140,113 +147,41 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 400,
-                    height: 250,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          12), // Optional: Rounded corners
-                    ),
-                  ),
-                  Positioned(
-                    top: 30,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      color: Colors.grey,
-                      elevation: 4,
-                      child: Container(
-                        width: 370,
-                        height: 170,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Our Driver Will Deliver Your Order To',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 10),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.green,
-                                  size: 20,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  'Set Your Address',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                side: const BorderSide(
-                                    color: Colors.green, width: 1),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                fixedSize: const Size(300, 30),
-                              ),
-                              child: const Text('Order Now'),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 10,
-                    left: 80,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 10),
-                        backgroundColor: Colors.green[400],
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Delivery'),
-                    ),
-                  ),
-                  Positioned(
-                    top: 10,
-                    left: 180,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add your action here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 10),
-                      ),
-                      child: const Text('Pickup'),
-                    ),
-                  ),
-                ],
-              ),
+              const SizedBox(height: 25),
+              buildDeliveryPickupSection()
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Container buildDeliveryPickupSection() {
+    return Container(
+      margin: const EdgeInsets.all(15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: FullfillmentCard(
+              direction: Direction.vertical,
+              text: "DELIVERY",
+              imagePath: 'assets/images/delivery.png',
+              onTap: () =>
+                  context.pushNamed(AppRouterConstants.addressRouteName),
+            ),
+          ),
+          Expanded(
+            child: FullfillmentCard(
+              direction: Direction.vertical,
+              text: "PICKUP",
+              imagePath: 'assets/images/delivery.png',
+              onTap: () {
+                displayPickupLocationDialog(context);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

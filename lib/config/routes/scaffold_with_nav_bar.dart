@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/utility/dialog_display.dart';
+import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 /// Builds the "shell" for the app by building a Scaffold with a
@@ -69,7 +72,12 @@ class ScaffoldWithNavBar extends StatelessWidget {
         context.goNamed(AppRouterConstants.homeRouteName);
         break;
       case 1:
+        if (context.read<CartBloc>().state.cart!.fulfillMethod == null) {
+          displayDeliveryPickUpDialog(context);
+          return;
+        }
         context.goNamed(AppRouterConstants.menuRouteName);
+
         break;
       case 2:
         context.goNamed(AppRouterConstants.rewardsRouteName);

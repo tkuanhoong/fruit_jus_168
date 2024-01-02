@@ -92,7 +92,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     }
   }
 
-  void _displayPaymentSheet() async {
+  Future<void> _displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
         //Clear paymentIntent variable after successful payment
@@ -207,6 +207,36 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     );
   }
 
+  Future<bool> _confirmExit() async {
+    bool value = true;
+    if (context.read<CartBloc>().state.cart!.voucher != null) {
+      value = await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: const Text(
+                  'Are you sure you want to exit? Your voucher will be temporarily removed.'),
+              actions: [
+                TextButton(
+                  child: const Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                TextButton(
+                  child: const Text('Yes, back to menu.'),
+                  onPressed: () {
+                    context.read<CartBloc>().add(const VoucherDelete());
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+              ],
+            );
+          });
+    }
+    return value == true;
+  }
+
   @override
   Widget build(BuildContext context) {
     itemQuantity = context.watch<CartBloc>().state.cart!.totalItemsQuantity;
@@ -214,218 +244,228 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     amount = context.watch<CartBloc>().state.cart!.totalPrice;
     subtotal = context.watch<CartBloc>().state.cart!.subTotal;
     grandTotal = context.watch<CartBloc>().state.cart!.grandTotal;
-    return BlocListener<VoucherBloc, VoucherState>(
-      listener: (context, state) {
-        if (state is VoucherLoaded) {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text('Voucher Applied'),
-                    content:
-                        const Text('Voucher has been applied successfully!'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ));
-          context.read<CartBloc>().add(
-                VoucherChange(voucher: state.voucher),
-              );
-        }
-        if (state is VoucherRemoved) {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text('Voucher Removed'),
-                    content:
-                        const Text('Voucher has been removed successfully!'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ));
-          context.read<CartBloc>().add(
-                const VoucherDelete(voucher: null),
-              );
-        }
-        if (state is VoucherError) {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: Text(state.message.replaceAll("Exception: ", '')),
-                    content: const Text('Please check and try again.'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ));
-          // reset voucher state
-          context.read<VoucherBloc>().add(ResetVoucherState());
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Order Confirmation Page'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DividerText(
-                  title: 'Delivery To / Pickup At',
-                  onPressed: () {},
-                ),
-                Text("${context.watch<CartBloc>().state.cart!.address}"),
-                const SizedBox(height: 16),
-                const DividerText(
-                  title: 'Your Order',
-                ),
-                _buildOrderSection(),
-                const SizedBox(height: 16),
-                const DividerText(
-                  title: 'Special Remarks',
-                ),
-                TextField(
-                  controller: remarkController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your special remarks here',
-                    border: OutlineInputBorder(),
+    return WillPopScope(
+      onWillPop: _confirmExit,
+      child: BlocListener<VoucherBloc, VoucherState>(
+        listener: (context, state) {
+          if (state is VoucherLoaded) {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text('Voucher Applied'),
+                      content:
+                          const Text('Voucher has been applied successfully!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ));
+            context.read<CartBloc>().add(
+                  VoucherChange(voucher: state.voucher),
+                );
+          }
+          if (state is VoucherRemoved) {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text('Voucher Removed'),
+                      content:
+                          const Text('Voucher has been removed successfully!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ));
+            context.read<CartBloc>().add(
+                  const VoucherDelete(voucher: null),
+                );
+          }
+          if (state is VoucherError) {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: Text(state.message.replaceAll("Exception: ", '')),
+                      content: const Text('Please check and try again.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ));
+            // reset voucher state
+            context.read<VoucherBloc>().add(ResetVoucherState());
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Order Confirmation Page'),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BlocBuilder<CartBloc, CartState>(builder: (context, state) {
+                    return DividerText(
+                      title: (state.cart!.fulfillMethod != null
+                              ? "${state.cart!.fulfillMethod} Address"
+                              : "No delivery option")
+                          .toUpperCase(),
+                    );
+                  }),
+                  BlocBuilder<CartBloc, CartState>(builder: (context, state) {
+                    return Text(state.cart!.address ?? 'No address selected');
+                  }),
+                  const SizedBox(height: 16),
+                  const DividerText(
+                    title: 'Your Order',
                   ),
-                ),
-                const SizedBox(height: 16),
-                const DividerText(
-                  title: 'Vouchers',
-                ),
-                BlocBuilder<VoucherBloc, VoucherState>(
-                  builder: (context, state) {
-                    if (state is VoucherLoaded && state.voucher != null) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            flex: 2,
-                            child: TextField(
-                              readOnly: true,
-                              controller: voucherCodeController,
-                              decoration: const InputDecoration(
-                                hintText: 'Enter your voucher code here',
-                                border: OutlineInputBorder(),
+                  _buildOrderSection(),
+                  const SizedBox(height: 16),
+                  const DividerText(
+                    title: 'Special Remarks',
+                  ),
+                  TextField(
+                    controller: remarkController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your special remarks here',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const DividerText(
+                    title: 'Vouchers',
+                  ),
+                  BlocBuilder<VoucherBloc, VoucherState>(
+                    builder: (context, state) {
+                      if (state is VoucherLoaded && state.voucher != null) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: TextField(
+                                readOnly: true,
+                                controller: voucherCodeController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter your voucher code here',
+                                  border: OutlineInputBorder(),
+                                ),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context
-                                    .read<VoucherBloc>()
-                                    .add(RemoveVoucher());
-                                voucherCodeController.clear();
-                              },
-                              child: const Text("Remove"),
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            flex: 2,
-                            child: TextField(
-                              readOnly: false,
-                              controller: voucherCodeController,
-                              decoration: const InputDecoration(
-                                hintText: 'Enter your voucher code here',
-                                border: OutlineInputBorder(),
+                            Flexible(
+                              flex: 1,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<VoucherBloc>()
+                                      .add(RemoveVoucher());
+                                  voucherCodeController.clear();
+                                },
+                                child: const Text("Remove"),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (voucherCodeController.text.isEmpty) return;
-                                context.read<VoucherBloc>().add(
-                                      ApplyVoucher(
-                                        voucherCode: voucherCodeController.text,
-                                        itemQuantity: itemQuantity,
-                                      ),
-                                    );
-                              },
-                              child: const Text("Apply"),
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: TextField(
+                                readOnly: false,
+                                controller: voucherCodeController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter your voucher code here',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
                             ),
-                          ),
+                            Flexible(
+                              flex: 1,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (voucherCodeController.text.isEmpty) {
+                                    return;
+                                  }
+                                  context.read<VoucherBloc>().add(
+                                        ApplyVoucher(
+                                          voucherCode:
+                                              voucherCodeController.text,
+                                          itemQuantity: itemQuantity,
+                                        ),
+                                      );
+                                },
+                                child: const Text("Apply"),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  const DividerText(
+                    title: 'Payment Details',
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Amount'),
+                          Text(
+                              'RM ${PriceConverter.fromInt(context.watch<CartBloc>().state.cart!.totalPrice)}'),
                         ],
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
-                const DividerText(
-                  title: 'Payment Details',
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Amount'),
-                        Text(
-                            'RM ${PriceConverter.fromInt(context.watch<CartBloc>().state.cart!.totalPrice)}'),
-                      ],
-                    ),
-                    BlocBuilder<VoucherBloc, VoucherState>(
-                      builder: (context, state) {
-                        if (state is VoucherLoaded) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Voucher (${state.voucher!.voucherCode})'),
-                              Text(
-                                  '- RM ${PriceConverter.fromInt(((state.voucher!.discount) * amount).toInt())}'),
-                            ],
-                          );
-                        } else {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Voucher'),
-                              Text(
-                                  '- RM ${PriceConverter.fromInt((0 * amount).toInt())}'),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                    Divider(
-                      indent: MediaQuery.of(context).size.width * 0.7,
-                      color: Colors.grey,
-                      thickness: 2,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Subtotal'),
-                        Text('RM ${PriceConverter.fromInt(subtotal)}'),
-                      ],
-                    ),
-                    if (deliveryFee != null)
+                      ),
+                      BlocBuilder<VoucherBloc, VoucherState>(
+                        builder: (context, state) {
+                          if (state is VoucherLoaded) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Voucher (${state.voucher!.voucherCode})'),
+                                Text(
+                                    '- RM ${PriceConverter.fromInt(((state.voucher!.discount) * amount).toInt())}'),
+                              ],
+                            );
+                          } else {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Voucher'),
+                                Text(
+                                    '- RM ${PriceConverter.fromInt((0 * amount).toInt())}'),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                      Divider(
+                        indent: MediaQuery.of(context).size.width * 0.7,
+                        color: Colors.grey,
+                        thickness: 2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Subtotal'),
+                          Text('RM ${PriceConverter.fromInt(subtotal)}'),
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -433,85 +473,86 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                           Text('RM ${PriceConverter.fromInt(deliveryFee!)}'),
                         ],
                       ),
-                    Divider(
-                      indent: MediaQuery.of(context).size.width * 0.7,
-                      color: Colors.grey,
-                      thickness: 2,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Grand Total',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'RM ${PriceConverter.fromInt(grandTotal)}',
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
+                      Divider(
+                        indent: MediaQuery.of(context).size.width * 0.7,
+                        color: Colors.grey,
+                        thickness: 2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Grand Total',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'RM ${PriceConverter.fromInt(grandTotal)}',
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
-          ),
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          height: MediaQuery.of(context).size.height * 0.1,
-          child: Row(
-            children: [
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    Text(
-                      '$itemQuantity items',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Text(
-                      'RM ${PriceConverter.fromInt(grandTotal)}',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  if (itemQuantity == 0) {
-                    ScaffoldMessenger.of(context).clearSnackBars();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Your cart is empty'),
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Row(
+              children: [
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        '$itemQuantity items',
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                    );
-                  } else {
-                    await makePayment();
-                  }
-                },
-                child: const Text('Order Now'),
-              ),
-              const SizedBox(width: 16),
-            ],
+                      Text(
+                        'RM ${PriceConverter.fromInt(grandTotal)}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (itemQuantity == 0) {
+                      ScaffoldMessenger.of(context).clearSnackBars();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Your cart is empty'),
+                        ),
+                      );
+                    } else {
+                      await makePayment();
+                    }
+                  },
+                  child: const Text('Order Now'),
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
           ),
         ),
       ),

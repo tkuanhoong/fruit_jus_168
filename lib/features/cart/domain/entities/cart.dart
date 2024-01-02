@@ -8,14 +8,13 @@ class Cart extends Equatable {
   final String? address;
   final List<CartProduct> items;
   final SelectedVoucherEntity? voucher;
-  final int? deliveryFee;
 
   const Cart({
     this.fulfillMethod,
     this.address,
     required this.items,
     this.voucher,
-  }) : deliveryFee = fulfillMethod == "delivery" ? 500 : 0;
+  });
 
   int get totalPrice => items.fold(
         0,
@@ -30,18 +29,19 @@ class Cart extends Equatable {
   int get subTotal =>
       (totalPrice * (1 - (voucher != null ? voucher!.discount : 0))).toInt();
 
-  int get grandTotal => (subTotal + deliveryFee!).toInt();
+  int get grandTotal => (subTotal + deliveryFee).toInt();
+
+  int get deliveryFee =>
+      (fulfillMethod == "delivery" && totalItemsQuantity > 1) ? 500 : 0;
 
   @override
-  List<Object?> get props =>
-      [items, voucher, deliveryFee, fulfillMethod, address];
+  List<Object?> get props => [items, voucher, fulfillMethod, address];
 
   Cart copyWith({
     List<CartProduct>? items,
     SelectedVoucherEntity? voucher,
     String? fulfillMethod,
     String? address,
-    int? deliveryFee,
   }) {
     return Cart(
       items: items ?? this.items,

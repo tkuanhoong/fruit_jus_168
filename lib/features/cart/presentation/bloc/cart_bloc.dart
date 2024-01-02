@@ -44,11 +44,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         // add product for other case
         items.add(addingProduct);
       }
+      final updatedCart = state.cart!.copyWith(items: items);
       emit(
         CartLoaded(
-          cart: Cart(
-            items: items,
-          ),
+          cart: updatedCart,
         ),
       );
     });
@@ -63,20 +62,29 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           quantity: event.quantity, preference: event.preference);
 
       items[updatingItemIndex] = updatingItem;
-
-      emit(CartLoaded(
-        cart: Cart(items: items),
-      ));
+      final updatedCart = state.cart!.copyWith(items: items);
+      emit(
+        CartLoaded(
+          cart: updatedCart,
+        ),
+      );
     });
 
     on<RemoveProduct>((event, emit) {
-      emit(CartLoaded(
-          cart: Cart(
-              items: List.from(state.cart!.items)..removeAt(event.cartIndex))));
+      List<CartProduct> items = List.from(state.cart!.items)
+        ..removeAt(event.cartIndex);
+      final updatedCart = state.cart!.copyWith(items: items);
+      emit(
+        CartLoaded(
+          cart: updatedCart,
+        ),
+      );
     });
 
     on<ClearCart>((event, emit) {
-      emit(const CartLoaded(cart: Cart(items: [], voucher: null)));
+      emit(const CartLoaded(
+          cart: Cart(
+              items: [], voucher: null, fulfillMethod: null, address: null)));
     });
 
     on<VoucherChange>(
@@ -97,6 +105,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           cart: updatedCart,
         ),
       );
+    });
+
+    on<FullfillmentChange>((event, emit) {
+      Cart updatedCart = state.cart!.copyWith(
+          fulfillMethod: event.deliveryMethod, address: event.address);
+      emit(CartLoaded(cart: updatedCart));
     });
   }
 }

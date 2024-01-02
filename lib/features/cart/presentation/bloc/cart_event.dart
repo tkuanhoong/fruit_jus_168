@@ -66,3 +66,13 @@ class VoucherDelete extends CartEvent {
   @override
   List<Object?> get props => [voucher];
 }
+
+class FullfillmentChange extends CartEvent {
+  final String deliveryMethod;
+  final String address;
+
+  const FullfillmentChange({required this.deliveryMethod,required this.address});
+
+  @override
+  List<Object?> get props => [deliveryMethod, address];
+}
