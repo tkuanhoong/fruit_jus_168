@@ -31,6 +31,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthCodeSentState(verificationId: event.verificationId)));
 
     on<LogOutRequested>(onLogOut);
+
+    on<UserNameChange>((event, emit) {
+      emit(UserInfoSavedSuccess(
+          firebaseUser: FirebaseAuth.instance.currentUser));
+    });
   }
   Future<void> onSaveUserInfo(
       SaveUserInfo event, Emitter<AuthState> emit) async {

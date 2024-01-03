@@ -3,10 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
-import 'package:fruit_jus_168/config/theme/app_theme.dart';
 import 'package:fruit_jus_168/core/utility/date_format_generator.dart';
-import 'package:fruit_jus_168/features/auth/data/models/user.dart';
-import 'package:fruit_jus_168/features/profile/data/models/profile.dart';
+import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
 import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.dart';
 
@@ -50,7 +48,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               final controllerdateOfBirth =
                   DateFormatGenerator.getFormattedDateTime(
                       state.profile.dateOfBirth!.toIso8601String(),
-                      'dd - MM - yyyy');
+                      'dd-MM-yyyy');
 
               final controllerPhoneNum =
                   TextEditingController(text: state.profile.phoneNumber);
@@ -179,6 +177,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   //controllerName.text = '';
                                 });
                                 _showMyDialog();
+                                context.read<AuthBloc>().add(SaveUserInfo(
+                                    fullName: controllerName.text,
+                                    email: controllerEmail.text,
+                                    dateOfBirth: DateFormat('dd-MM-yyyy')
+                                        .parse(controllerdateOfBirth),
+                                    phoneNumber: controllerPhoneNum.text));
                               },
                               child: const Text('UPDATE'),
                             ),
