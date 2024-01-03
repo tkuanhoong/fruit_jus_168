@@ -66,3 +66,5 @@ class AuthVerified extends AuthEvent {
 }
 
 class LogOutRequested extends AuthEvent {}
+
+class UserNameChange extends AuthEvent {}
