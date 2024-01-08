@@ -6,7 +6,7 @@ class VoucherEntity extends Equatable {
   final int minItem;
   final double discount;
   final String imageURL;
-  final bool isUsed;
+  final bool? isUsed;
 
   // final boolean usedAt;
 
@@ -16,7 +16,7 @@ class VoucherEntity extends Equatable {
     required this.discount,
     required this.imageURL,
     required this.minItem,
-    required this.isUsed,
+    this.isUsed,
   });
   // @override
   // List<Object?> get props => [name];
