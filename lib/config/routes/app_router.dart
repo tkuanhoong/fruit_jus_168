@@ -14,6 +14,7 @@ import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
+import 'package:fruit_jus_168/features/order_history/presentation/pages/order_history_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
 import 'package:fruit_jus_168/features/reward/presentation/pages/reward.dart';
@@ -203,6 +204,14 @@ final router = GoRouter(
       path: '/edit-address',
       builder: (context, state) {
         return const EditAddressPage();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.orderHistoryRouteName,
+      path: '/order-history',
+      builder: (context, state) {
+        return OrderHistoryPage();
       },
     ),
     GoRoute(

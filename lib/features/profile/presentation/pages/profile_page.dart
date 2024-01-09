@@ -161,6 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       trailing: const Icon(Icons.chevron_right_rounded),
                       onTap: () {
                         // Handle the action on tapping "Orders"
+                        GoRouter.of(context).push('/order-history');
                       },
                     ),
                     Container(

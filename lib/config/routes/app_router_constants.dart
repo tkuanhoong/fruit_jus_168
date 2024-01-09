@@ -15,4 +15,5 @@ class AppRouterConstants {
   static const String addAddressRouteName = "add-address";
   static const String editAddressRouteName = "edit-address";
   static const String orderConfirmationRouteName = "order-confiramtions";
+  static const String orderHistoryRouteName = "order-history";
 }
