@@ -16,3 +16,7 @@ final class CartLoading extends CartState {
 class CartLoaded extends CartState {
   const CartLoaded({Cart? cart}) : super(cart: cart);
 }
+
+class PaymentSuccess extends CartState{
+  
+} 

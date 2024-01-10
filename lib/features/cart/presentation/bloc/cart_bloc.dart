@@ -1,17 +1,21 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fruit_jus_168/core/domain/entities/order.dart';
 import 'package:fruit_jus_168/core/domain/entities/product.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 import 'package:fruit_jus_168/features/cart/domain/entities/selected_voucher_entity.dart';
+import 'package:fruit_jus_168/features/cart/domain/usecases/make_order.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc() : super(const CartLoading()) {
+  MakeOrderUseCase makeOrderUseCase;
+  CartBloc(this.makeOrderUseCase) : super(const CartLoading()) {
     on<LoadCart>(
       (event, emit) {
         emit(CartLoaded(cart: state.cart ?? const Cart(items: [])));
@@ -111,6 +115,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       Cart updatedCart = state.cart!.copyWith(
           fulfillMethod: event.deliveryMethod, address: event.address);
       emit(CartLoaded(cart: updatedCart));
+    });
+
+    on<MakeOrder>((event, emit) async {
+      Cart cartData = event.cart;
+      log('cartData: $cartData');
+      OrderEntity order = OrderEntity(
+          type: cartData.fulfillMethod!,
+          address: cartData.address!,
+          items: cartData.items,
+          amount: cartData.totalPrice,
+          total: cartData.grandTotal,
+          status: 'pending',
+          createdAt: Timestamp.now(),
+          deiveryFee: cartData.deliveryFee,
+          discount: cartData.voucher != null
+              ? cartData.totalPrice * cartData.voucher!.discount ~/ 100
+              : 0,
+          note: event.remark,
+          voucherCode: cartData.voucher != null ? cartData.voucher!.voucherCode : null);
+      await makeOrderUseCase(params: order);
+      emit(PaymentSuccess());
     });
   }
 }
