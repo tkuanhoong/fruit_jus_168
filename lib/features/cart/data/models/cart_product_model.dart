@@ -19,18 +19,6 @@ class CartProductModel extends CartProduct {
           preference: preference,
         );
 
-  factory CartProductModel.fromJson(Map<String, dynamic> json) {
-    return CartProductModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      price: json['price'],
-      imageUrl: json['imageUrl'],
-      quantity: json['quantity'],
-      preference: json['preference'],
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -87,5 +75,18 @@ class CartProductModel extends CartProduct {
       'quantity': quantity,
       'preference': preference,
     };
+  }
+
+  // fromMap
+  factory CartProductModel.fromMap(Map<String, dynamic> map) {
+    return CartProductModel(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      price: map['price'],
+      imageUrl: map['imageUrl'],
+      quantity: map['quantity'],
+      preference: map['preference'],
+    );
   }
 }
