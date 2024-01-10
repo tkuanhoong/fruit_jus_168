@@ -11,7 +11,8 @@ class FirestoreService {
     try {
       CollectionReference userVoucherRef =
           _firestore.collection('users').doc(user?.uid).collection('vouchers');
-      QuerySnapshot<Object?> querySnapshot = await userVoucherRef.get();
+      QuerySnapshot<Object?> querySnapshot =
+          await userVoucherRef.where("isUsed", isNotEqualTo: true).get();
 
       List<VoucherEntity> voucher = querySnapshot.docs.map((doc) {
         // Convert timestamp to DateTime
