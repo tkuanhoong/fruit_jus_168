@@ -312,9 +312,10 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         child: BlocListener<CartBloc, CartState>(
           listener: (context, state) {
             if (state is PaymentSuccess) {
-              context.pushReplacementNamed(AppRouterConstants.orderHistoryRouteName);
+              voucherCodeController.clear();
+              context.pushReplacementNamed(
+                  AppRouterConstants.orderHistoryRouteName);
               context.read<CartBloc>().add(ClearCart());
-              log(context.read<CartBloc>().state.cart!.toString());
             }
           },
           child: Scaffold(

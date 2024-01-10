@@ -14,6 +14,7 @@ import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
+import 'package:fruit_jus_168/features/order_history/presentation/bloc/order_history_bloc.dart';
 import 'package:fruit_jus_168/features/order_history/presentation/pages/order_history_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
@@ -211,7 +212,10 @@ final router = GoRouter(
       name: AppRouterConstants.orderHistoryRouteName,
       path: '/order-history',
       builder: (context, state) {
-        return OrderHistoryPage();
+        return BlocProvider(
+          create: (_) => sl<OrderHistoryBloc>()..add(OrderHistoryRequested()),
+          child: const OrderHistoryPage(),
+        );
       },
     ),
     GoRoute(

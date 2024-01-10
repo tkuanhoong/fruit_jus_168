@@ -21,6 +21,7 @@ import 'package:fruit_jus_168/features/auth/domain/usecases/verify_phone.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/cart/cart_injection_container.dart';
 import 'package:fruit_jus_168/features/menu/menu_injection_container.dart';
+import 'package:fruit_jus_168/features/order_history/order_history_injection_container.dart';
 import 'package:fruit_jus_168/features/profile/domain/usecases/upload_avatar.dart';
 import 'package:fruit_jus_168/features/search/search_injection_container.dart';
 import 'package:get_it/get_it.dart';
@@ -102,4 +103,5 @@ Future<void> initializeDependencies() async {
   await searchInjectionContainer();
   await cartInjectionContainer();
   await menuInjectionContainer();
+  await orderHistoryInjectionContainer();
 }
