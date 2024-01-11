@@ -45,7 +45,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                 children: _buildOrderHistoryCards(state
                     .orders), // Replace 5 with the quantity of order's history
               );
-              return Text(state.orders.toString());
             }
             return const SizedBox();
           },
