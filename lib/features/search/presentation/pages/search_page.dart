@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/components/image_placeholder.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/widgets/typing_search_bar.dart';
@@ -118,30 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                                             fit: BoxFit.contain,
                                             child: CachedNetworkImage(
                                               placeholder: (context, url) =>
-                                                  const Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    SizedBox(
-                                                        height: 0.5,
-                                                        width: 15,
-                                                        child:
-                                                            LinearProgressIndicator(
-                                                          backgroundColor:
-                                                              Colors.grey,
-                                                          color: Color.fromARGB(
-                                                              255, 81, 81, 81),
-                                                        )),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                                  const ImagePlaceholder(),
                                               imageUrl: "${product.imageUrl}",
                                             )),
                                       )

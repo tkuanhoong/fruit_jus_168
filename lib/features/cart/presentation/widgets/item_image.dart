@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_jus_168/core/components/image_placeholder.dart';
 
 class ItemImage extends StatelessWidget {
   final String imageUrl;
@@ -22,12 +23,12 @@ class ItemImage extends StatelessWidget {
           height: 130,
           width: 130,
           child: FittedBox(
-              fit: BoxFit.fitHeight,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-              )),
+            fit: BoxFit.fitHeight,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              placeholder: (context, url) => ImagePlaceholder(),
+            ),
+          ),
         )
       ],
     );

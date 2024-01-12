@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/core/components/image_placeholder.dart';
 import 'package:fruit_jus_168/core/utility/dialog_display.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
@@ -351,27 +352,8 @@ class _MenuPageState extends State<MenuPage>
                         child: FittedBox(
                             fit: BoxFit.contain,
                             child: CachedNetworkImage(
-                              placeholder: (context, url) => const Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                        height: 0.5,
-                                        width: 15,
-                                        child: LinearProgressIndicator(
-                                          backgroundColor: Colors.grey,
-                                          color:
-                                              Color.fromARGB(255, 81, 81, 81),
-                                        )),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              placeholder: (context, url) =>
+                                  const ImagePlaceholder(),
                               imageUrl: "${product.imageUrl}",
                             )),
                       )
