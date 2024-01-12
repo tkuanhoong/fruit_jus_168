@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -61,7 +62,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               backgroundColor: Colors.white,
                               radius: 50,
                               backgroundImage: state.profile.avatarURL != null
-                                  ? NetworkImage(state.profile.avatarURL!)
+                                  ? CachedNetworkImageProvider(
+                                      state.profile.avatarURL!)
                                   : const AssetImage(
                                           "assets/images/default_avatar.png")
                                       as ImageProvider<Object>?,
