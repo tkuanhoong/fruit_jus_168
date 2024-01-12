@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fruit_jus_168/features/auth/domain/entities/user.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/log_out.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/save_user_info.dart';
+import 'package:fruit_jus_168/features/auth/domain/usecases/update_user_info.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/verify_otp.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/verify_phone.dart';
 
@@ -17,8 +18,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final VerifyPhoneUseCase _verifyPhoneUseCase;
   final VerifyOtpUseCase _verifyOtpUseCase;
   final LogOutUseCase _logOutUseCase;
+  final UpdateUserInfoUseCase _updateUserInfo;
   AuthBloc(this._saveUserInfoUseCase, this._verifyPhoneUseCase,
-      this._verifyOtpUseCase, this._logOutUseCase)
+      this._verifyOtpUseCase, this._logOutUseCase, this._updateUserInfo)
       : super(AuthInitial()) {
     on<SaveUserInfo>(onSaveUserInfo);
     on<AuthOtpRequested>(sendOtp);
@@ -32,7 +34,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<LogOutRequested>(onLogOut);
 
-    on<UserNameChange>((event, emit) {
+    on<UserNameChange>((event, emit) async {
+      await _updateUserInfo(params: event.fullName);
       emit(UserInfoSavedSuccess(
           firebaseUser: FirebaseAuth.instance.currentUser));
     });

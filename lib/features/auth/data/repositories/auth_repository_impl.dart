@@ -28,4 +28,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> logOut() async {
     await _authApiService.logOut();
   }
+  
+  @override
+  Future<void> updateUserInfo(String fullName) async {
+    await _authApiService.updateUserInfo(fullName);
+  }
 }

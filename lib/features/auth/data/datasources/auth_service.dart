@@ -76,4 +76,12 @@ class _AuthService implements AuthApiService {
   Future<void> logOut() async {
     await _auth.signOut();
   }
+
+  @override
+  Future<void> updateUserInfo(String fullName) async {
+    await _auth.currentUser!.updateDisplayName(fullName);
+    await _db.collection('users').doc(_auth.currentUser!.uid).update({
+      'fullName': fullName,
+    });
+  }
 }

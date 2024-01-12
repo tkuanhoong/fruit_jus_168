@@ -67,4 +67,9 @@ class AuthVerified extends AuthEvent {
 
 class LogOutRequested extends AuthEvent {}
 
-class UserNameChange extends AuthEvent {}
+class UserNameChange extends AuthEvent {
+  final String fullName;
+  const UserNameChange(this.fullName);
+  @override
+  List<Object> get props => [fullName];
+}
