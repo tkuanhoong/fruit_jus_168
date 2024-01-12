@@ -1,12 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_jus_168/config/enum/order_status.dart';
 import 'package:fruit_jus_168/core/utility/date_format_generator.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/order_history/domain/entities/order_history.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderHistoryEntity order;
-  const OrderCard({super.key, required this.order});
+  final VoidCallback onOrderCardTap;
+  const OrderCard(
+      {super.key, required this.order, required this.onOrderCardTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class OrderCard extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           child: InkWell(
-            onTap: () {},
+            onTap: onOrderCardTap,
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 270,
@@ -36,9 +39,11 @@ class OrderCard extends StatelessWidget {
                     ),
                     child: Container(
                       height: 50,
-                      color: const Color.fromARGB(80, 158, 158, 158),
+                      color: getOrderStatusColor(order.status).withOpacity(0.4),
                       child: Center(
-                          child: Text("Delivery Status: ${order.status}")),
+                        child: Text(
+                            "Order Status: ${buildOrderStatusText(order.status)}"),
+                      ),
                     ),
                   ),
                   Row(
@@ -66,7 +71,6 @@ class OrderCard extends StatelessWidget {
                             const SizedBox(
                               height: 7,
                             ),
-                            // const Text("21 Dec 2023 20:30"),
                             Text(
                               DateFormatGenerator.formatFirebaseTimestamp(
                                   order.createdAt),
@@ -75,64 +79,64 @@ class OrderCard extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        width: 50,
-                        height: 50,
-                        margin: const EdgeInsets.only(top: 10, bottom: 1),
-                        child: InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(100)),
-                          child: const FittedBox(
-                            child: Image(
-                              width: 25,
-                              height: 50,
-                              alignment: Alignment.center,
-                              image: AssetImage('assets/images/receipt.png'),
-                            ),
-                          ),
-                          onTap: () {},
-                          onLongPress: () {},
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 15, bottom: 5, right: 15, left: 5),
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          child: Material(
-                            color: Colors.transparent,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Ink(
-                                padding: const EdgeInsets.only(
-                                    top: 10, bottom: 10, right: 15, left: 15),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors
-                                        .black, // Change this color to the color you want
-                                    width:
-                                        1, // Change this width to the width you want
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                child: const Center(
-                                    child: Text(
-                                  "Reorder",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11),
-                                )),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   width: 50,
+                      //   height: 50,
+                      //   margin: const EdgeInsets.only(top: 10, bottom: 1),
+                      //   child: InkWell(
+                      //     borderRadius:
+                      //         const BorderRadius.all(Radius.circular(100)),
+                      //     child: const FittedBox(
+                      //       child: Image(
+                      //         width: 25,
+                      //         height: 50,
+                      //         alignment: Alignment.center,
+                      //         image: AssetImage('assets/images/receipt.png'),
+                      //       ),
+                      //     ),
+                      //     onTap: () {},
+                      //     onLongPress: () {},
+                      //   ),
+                      // ),
+                      // Container(
+                      //   margin: const EdgeInsets.only(
+                      //       top: 15, bottom: 5, right: 15, left: 5),
+                      //   child: ClipRRect(
+                      //     borderRadius:
+                      //         const BorderRadius.all(Radius.circular(20)),
+                      //     child: Material(
+                      //       color: Colors.transparent,
+                      //       shape: const RoundedRectangleBorder(
+                      //         borderRadius:
+                      //             BorderRadius.all(Radius.circular(20)),
+                      //       ),
+                      //       child: InkWell(
+                      //         onTap: () {},
+                      //         child: Ink(
+                      //           padding: const EdgeInsets.only(
+                      //               top: 10, bottom: 10, right: 15, left: 15),
+                      //           decoration: BoxDecoration(
+                      //             border: Border.all(
+                      //               color: Colors
+                      //                   .black, // Change this color to the color you want
+                      //               width:
+                      //                   1, // Change this width to the width you want
+                      //             ),
+                      //             borderRadius: const BorderRadius.all(
+                      //                 Radius.circular(20)),
+                      //           ),
+                      //           child: const Center(
+                      //               child: Text(
+                      //             "Reorder",
+                      //             style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontSize: 11),
+                      //           )),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   Divider(
@@ -146,71 +150,57 @@ class OrderCard extends StatelessWidget {
                         20),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const SizedBox(
-                        width: 20,
+                      Flexible(
+                        flex: 3,
+                        child: order.type == "delivery"
+                            ? const Image(
+                                width: 50,
+                                height: 50,
+                                image: AssetImage(
+                                    'assets/images/smalldelivery.png'),
+                              )
+                            : const Icon(size: 50, Icons.store),
                       ),
-                      const FittedBox(
-                        clipBehavior: Clip.hardEdge,
-                        child: Image(
-                          width: 50,
-                          height: 50,
-                          alignment: Alignment.center,
-                          image: AssetImage('assets/images/smalldelivery.png'),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: 150,
-                            margin: const EdgeInsets.only(left: 20, bottom: 3),
-                            child: Text(
+                      Flexible(
+                        flex: 4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
                               order.type == "delivery"
                                   ? 'Delivery To:'
-                                  : "Pickup From",
+                                  : 'Pickup From:',
                               style: const TextStyle(color: Colors.grey),
                             ),
-                          ),
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            clipBehavior: Clip.hardEdge,
-                            child: Container(
-                              width: 150,
-                              margin:
-                                  const EdgeInsets.only(left: 20, bottom: 3),
-                              child: AutoSizeText(
-                                order.address,
-                                minFontSize: 9,
-                                maxFontSize: 16,
-                                maxLines: 2,
-                              ),
+                            const SizedBox(
+                              height: 5,
                             ),
-                          )
-                        ],
+                            Text(
+                              order.address,
+                              style: const TextStyle(
+                                  fontSize: 9, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ),
-                      const Spacer(),
-                      FittedBox(
-                        fit: BoxFit.contain,
+                      Flexible(
+                        flex: 3,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 100,
-                              margin:
-                                  const EdgeInsets.only(left: 10, bottom: 3),
-                              child: const Text(
-                                'Total: ',
-                                style: TextStyle(color: Colors.grey),
-                              ),
+                            const Text(
+                              'Total: ',
+                              style: TextStyle(color: Colors.grey),
                             ),
-                            Container(
-                              width: 100,
-                              margin:
-                                  const EdgeInsets.only(left: 10, bottom: 3),
-                              child: Text(
-                                'RM ${PriceConverter.fromInt(order.total)}',
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'RM ${PriceConverter.fromInt(order.total)}',
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
