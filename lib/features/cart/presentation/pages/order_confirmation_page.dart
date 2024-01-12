@@ -14,6 +14,7 @@ import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/bloc/voucher_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/cart_item.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/divider_text.dart';
+import 'package:fruit_jus_168/features/cart/presentation/widgets/payment_detail.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
@@ -103,7 +104,9 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         context.read<VoucherBloc>().add(ResetVoucherState());
         final cart = context.read<CartBloc>().state.cart!;
         final remark = remarkController.text;
-        context.read<CartBloc>().add(MakeOrder(cart: cart, remark: remark));
+        context
+            .read<CartBloc>()
+            .add(MakeOrder(cart: cart, remark: remark.isEmpty ? null : remark));
       });
     } on StripeException catch (e) {
       if (e.error.code == FailureCode.Canceled) {
@@ -313,9 +316,9 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
           listener: (context, state) {
             if (state is PaymentSuccess) {
               voucherCodeController.clear();
-              context.pushReplacementNamed(
-                  AppRouterConstants.orderHistoryRouteName);
               context.read<CartBloc>().add(ClearCart());
+              context.goNamed(AppRouterConstants.homeRouteName);
+              context.pushNamed(AppRouterConstants.orderHistoryRouteName);
             }
           },
           child: Scaffold(
@@ -432,86 +435,11 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                     const DividerText(
                       title: 'Payment Details',
                     ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Amount'),
-                            Text(
-                                'RM ${PriceConverter.fromInt(context.watch<CartBloc>().state.cart!.totalPrice)}'),
-                          ],
-                        ),
-                        BlocBuilder<VoucherBloc, VoucherState>(
-                          builder: (context, state) {
-                            if (state is VoucherLoaded) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                      'Voucher (${state.voucher!.voucherCode})'),
-                                  Text(
-                                      '- RM ${PriceConverter.fromInt(((state.voucher!.discount) * amount).toInt())}'),
-                                ],
-                              );
-                            } else {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Voucher'),
-                                  Text(
-                                      '- RM ${PriceConverter.fromInt((0 * amount).toInt())}'),
-                                ],
-                              );
-                            }
-                          },
-                        ),
-                        Divider(
-                          indent: MediaQuery.of(context).size.width * 0.7,
-                          color: Colors.grey,
-                          thickness: 2,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Subtotal'),
-                            Text('RM ${PriceConverter.fromInt(subtotal)}'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Delivery Fee'),
-                            Text('RM ${PriceConverter.fromInt(deliveryFee!)}'),
-                          ],
-                        ),
-                        Divider(
-                          indent: MediaQuery.of(context).size.width * 0.7,
-                          color: Colors.grey,
-                          thickness: 2,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Grand Total',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'RM ${PriceConverter.fromInt(grandTotal)}',
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ],
+                    PaymentDetail(
+                      amount: amount,
+                      subtotal: subtotal,
+                      deliveryFee: deliveryFee,
+                      grandTotal: grandTotal,
                     ),
                   ],
                 ),

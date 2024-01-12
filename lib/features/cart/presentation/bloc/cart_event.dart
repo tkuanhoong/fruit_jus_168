@@ -80,9 +80,9 @@ class FullfillmentChange extends CartEvent {
 
 class MakeOrder extends CartEvent {
   final Cart cart;
-  final String remark;
+  final String? remark;
 
-  const MakeOrder({required this.cart, required this.remark});
+  const MakeOrder({required this.cart, this.remark});
 
   @override
   List<Object?> get props => [cart, remark];
