@@ -33,10 +33,11 @@ class _OrderService implements OrderApiService {
     }
     if (order.voucherCode != null) {
       final voucherDoc = await _db
-          .collection('users').doc(userId).collection("vouchers")
+          .collection('users')
+          .doc(userId)
+          .collection("vouchers")
           .where('code', isEqualTo: order.voucherCode)
           .get();
-      // voucherDoc.docs.firstOrNull?.reference.update({"isUsed": true});
 
       batch.update(voucherDoc.docs.first.reference, {"isUsed": true});
     }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -119,7 +117,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<MakeOrder>((event, emit) async {
       Cart cartData = event.cart;
-      log('cartData: $cartData');
       OrderEntity order = OrderEntity(
           type: cartData.fulfillMethod!,
           address: cartData.address!,
@@ -133,7 +130,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               ? cartData.totalPrice * cartData.voucher!.discount ~/ 100
               : 0,
           note: event.remark,
-          voucherCode: cartData.voucher != null ? cartData.voucher!.voucherCode : null);
+          voucherCode:
+              cartData.voucher != null ? cartData.voucher!.voucherCode : null);
       await makeOrderUseCase(params: order);
       emit(PaymentSuccess());
     });
