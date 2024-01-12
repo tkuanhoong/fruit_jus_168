@@ -15,4 +15,18 @@ class DateFormatGenerator {
     String formatted = formatter.format(dateTime);
     return formatted;
   }
+
+  static Timestamp fromDateTime(DateTime dateTime) {
+    return Timestamp.fromDate(dateTime);
+  }
+
+  static DateTime toDateTime(Timestamp timestamp) {
+    return timestamp.toDate();
+  }
+
+  static Timestamp addMinutes(Timestamp timestamp, int minutes) {
+    return Timestamp.fromDate(toDateTime(timestamp).add(
+      Duration(minutes: minutes),
+    ));
+  }
 }
