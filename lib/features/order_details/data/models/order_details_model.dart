@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:fruit_jus_168/features/cart/data/models/cart_product_model.dart';
-import 'package:fruit_jus_168/features/cart/domain/entities/cart_product.dart';
 import 'package:fruit_jus_168/features/order_details/domain/entities/order_details.dart';
 import 'package:fruit_jus_168/features/order_history/data/models/order_history_model.dart';
 

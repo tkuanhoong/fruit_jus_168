@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/config/enum/order_status.dart';
 import 'package:fruit_jus_168/core/utility/date_format_generator.dart';

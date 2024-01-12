@@ -86,7 +86,7 @@ class _OtpPage extends State<OtpPage> {
           child: Column(
             children: [
               //brand logo here
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(top: 50),
                 child: Center(
                   child: Image(
@@ -100,7 +100,7 @@ class _OtpPage extends State<OtpPage> {
               Form(
                 key: _otpformKey,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 50, left: 25, right: 25),
+                  padding: const EdgeInsets.only(top: 50, left: 25, right: 25),
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -113,7 +113,7 @@ class _OtpPage extends State<OtpPage> {
                     keyboardType: TextInputType.number,
                     controller: otpController,
                     maxLength: 6,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       focusedBorder: OutlineInputBorder(
@@ -145,7 +145,7 @@ class _OtpPage extends State<OtpPage> {
               ),
               //////////////////////////////////////////////////OTP submit button
               Padding(
-                padding: EdgeInsets.only(top: 20, left: 25, right: 25),
+                padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
                 child: SizedBox(
                   width: double.infinity,
                   height: 40,
@@ -199,7 +199,7 @@ class _OtpPage extends State<OtpPage> {
                     ),
                     TextButton(
                         onPressed: () {
-                          String phoneNumber = "+60" + _phoneNumber;
+                          String phoneNumber = "+60$_phoneNumber";
                           startTimer();
                           context
                               .read<AuthBloc>()

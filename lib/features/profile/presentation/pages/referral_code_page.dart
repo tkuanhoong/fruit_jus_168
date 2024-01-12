@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/core/components/card_items.dart';
-import 'package:fruit_jus_168/features/auth/data/models/user.dart';
-import 'package:fruit_jus_168/features/profile/data/models/profile.dart';
 import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
 import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.dart';
 

@@ -26,7 +26,7 @@ class ItemImage extends StatelessWidget {
             fit: BoxFit.fitHeight,
             child: CachedNetworkImage(
               imageUrl: imageUrl,
-              placeholder: (context, url) => ImagePlaceholder(),
+              placeholder: (context, url) => const ImagePlaceholder(),
             ),
           ),
         )

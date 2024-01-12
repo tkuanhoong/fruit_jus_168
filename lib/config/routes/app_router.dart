@@ -16,7 +16,6 @@ import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
 import 'package:fruit_jus_168/features/order_details/presentation/bloc/order_details_bloc.dart';
 import 'package:fruit_jus_168/features/order_details/presentation/pages/order_details.dart';
-import 'package:fruit_jus_168/features/order_history/domain/entities/order_history.dart';
 import 'package:fruit_jus_168/features/order_history/presentation/bloc/order_history_bloc.dart';
 import 'package:fruit_jus_168/features/order_history/presentation/pages/order_history_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';

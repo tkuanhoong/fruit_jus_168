@@ -18,12 +18,12 @@ class LoginContinueButton extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthLoadingState) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
         return Padding(
-          padding: EdgeInsets.only(top: 20, left: 25, right: 25),
+          padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
           child: SizedBox(
             width: double.infinity,
             height: 40,
@@ -35,7 +35,7 @@ class LoginContinueButton extends StatelessWidget {
               ),
               onPressed: () {
                 if (loginformKey.currentState!.validate()) {
-                  String phoneNumber = "+60" + phoneController.text;
+                  String phoneNumber = "+60${phoneController.text}";
                   context
                       .read<AuthBloc>()
                       .add(AuthOtpRequested(phoneNumber: phoneNumber));

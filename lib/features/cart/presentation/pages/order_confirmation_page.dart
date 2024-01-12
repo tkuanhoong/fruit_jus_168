@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
-import 'package:fruit_jus_168/config/theme/app_colors.dart';
 import 'package:fruit_jus_168/core/utility/injection_container.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/cart/domain/repositories/cart_repository.dart';

@@ -30,54 +30,52 @@ class _RewardPageState extends State<RewardPage> {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Container(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  //Container Color
+                  color: const Color(0XFF20941C),
+                  //shape
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    //Container Color
-                    color: Color(0XFF20941C),
-                    //shape
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(children: [
-                    Padding(
-                      padding: EdgeInsets.all(4),
-                      child: TabBar(
-                        //Word Color
-                        labelColor: Colors.black87,
-                        labelStyle: TextStyle(),
-                        //Underline color
-                        indicatorColor: Colors.white,
-                        unselectedLabelColor: Colors.grey,
-                        tabs: [
-                          Tab(
-                            text: 'Stamps',
-                            icon: Icon(Icons.badge_rounded),
-                          ),
-                          Tab(
-                            text: 'Coupon',
-                            icon: Icon(Icons.card_giftcard_rounded),
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                    child: TabBarView(children: [
-                  stampTab(),
-                  CouponTab(),
-                ]))
-              ],
-            ),
+                child: const Column(children: [
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: TabBar(
+                      //Word Color
+                      labelColor: Colors.black87,
+                      labelStyle: TextStyle(),
+                      //Underline color
+                      indicatorColor: Colors.white,
+                      unselectedLabelColor: Colors.grey,
+                      tabs: [
+                        Tab(
+                          text: 'Stamps',
+                          icon: Icon(Icons.badge_rounded),
+                        ),
+                        Tab(
+                          text: 'Coupon',
+                          icon: Icon(Icons.card_giftcard_rounded),
+                        )
+                      ],
+                    ),
+                  )
+                ]),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                  child: TabBarView(children: [
+                stampTab(),
+                CouponTab(),
+              ]))
+            ],
           ),
         ),
       ),

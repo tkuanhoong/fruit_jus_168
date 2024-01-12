@@ -27,11 +27,11 @@ class _CouponTabState extends State<CouponTab> {
       future: _voucherListFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: const CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('No vouchers found');
+          return const Text('No vouchers found');
         } else {
           List<VoucherEntity> vouchers = snapshot.data!;
           return ListView.builder(

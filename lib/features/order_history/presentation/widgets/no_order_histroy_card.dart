@@ -40,9 +40,9 @@ class NoOrderHistoryCard extends StatelessWidget {
                     fit: BoxFit.contain,
                     child: Container(
                       margin: const EdgeInsets.only(top: 20),
-                      child: Opacity(
+                      child: const Opacity(
                         opacity: 0.2,
-                        child: const Image(
+                        child: Image(
                           width: 100,
                           height: 100,
                           alignment: Alignment.center,

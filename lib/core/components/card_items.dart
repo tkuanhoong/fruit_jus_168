@@ -46,7 +46,7 @@ class CardItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(

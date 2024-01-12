@@ -19,6 +19,7 @@ class _MenuService implements MenuApiService {
     return productModels;
   }
 
+  @override
   Future<List<CategoryModel>> getAllCategories() async {
     final categoryCollections =
         await _firestore.collectionGroup('categories').get();
