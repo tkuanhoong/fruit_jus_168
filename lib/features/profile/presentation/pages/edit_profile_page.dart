@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/core/errors/text_field_validator.dart';
 import 'package:fruit_jus_168/core/utility/date_format_generator.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
@@ -11,7 +12,6 @@ import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.da
 
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.profile});
@@ -21,6 +21,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final GlobalKey<FormState> _updateProfileFormKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -101,8 +102,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                       const SizedBox(height: 50),
                       Form(
+                        key: _updateProfileFormKey,
                         child: Column(children: [
                           TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: TextFieldValidator.fullName,
                             controller: controllerName,
                             decoration: InputDecoration(
                               labelText: 'Full Name',
@@ -169,10 +174,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<AuthBloc>().add(UserNameChange(
-                                      controllerName.text,
-                                    ));
-                                _showMyDialog();
+                                if (_updateProfileFormKey.currentState!
+                                    .validate()) {
+                                  context.read<AuthBloc>().add(UserNameChange(
+                                        controllerName.text,
+                                      ));
+                                  _showMyDialog();
+                                }
                               },
                               child: const Text('UPDATE'),
                             ),

@@ -101,15 +101,25 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                state.profile.fullName ?? 'User Name',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              if (context
+                                      .watch<AuthBloc>()
+                                      .state
+                                      .firebaseUser !=
+                                  null)
+                                Text(
+                                  context
+                                          .watch<AuthBloc>()
+                                          .state
+                                          .firebaseUser!
+                                          .displayName ??
+                                      'User Name',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
                               Text(
                                 state.profile.phoneNumber ?? '601123456789',
                                 style: const TextStyle(fontSize: 16),
