@@ -42,16 +42,16 @@ class _LoginPage extends State<LoginPage> {
         //body with brand logo at the top center and textfield for phone number
         body: SingleChildScrollView(
           // boxdecoration boxfitcover background image
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://i.pinimg.com/564x/71/52/56/71525601b8a06435f323cf39bca1710b.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
+            // decoration: const BoxDecoration(
+            //   image: DecorationImage(
+            //     image: NetworkImage(
+            //         'https://i.pinimg.com/564x/71/52/56/71525601b8a06435f323cf39bca1710b.jpg'),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             child: Column(
               children: [
                 //brand logo

@@ -18,8 +18,11 @@ class LoginContinueButton extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
         return Padding(
