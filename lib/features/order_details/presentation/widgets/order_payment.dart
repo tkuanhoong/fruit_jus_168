@@ -23,7 +23,7 @@ class OrderPayment extends StatelessWidget {
           children: [
             order.voucherCode == null
                 ? const Text('Voucher')
-                : Text('Voucher $order.voucherCode}(${order.voucherCode})'),
+                : Text('Voucher (${order.voucherCode})'),
             Text('- RM ${PriceConverter.fromInt(order.discount ?? 0)}'),
           ],
         ),
