@@ -54,6 +54,7 @@ class OrderDetailsPage extends StatelessWidget {
                         ),
                         if (order.note != null)
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Remark',

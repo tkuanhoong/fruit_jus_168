@@ -98,13 +98,13 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         //Clear paymentIntent variable after successful payment
         paymentIntent = null;
         //Go to payment success page
-        context.read<CartBloc>().add(ClearCart());
-        context.read<VoucherBloc>().add(ResetVoucherState());
         final cart = context.read<CartBloc>().state.cart!;
         final remark = remarkController.text;
         context
             .read<CartBloc>()
             .add(MakeOrder(cart: cart, remark: remark.isEmpty ? null : remark));
+        context.read<CartBloc>().add(ClearCart());
+        context.read<VoucherBloc>().add(ResetVoucherState());
       });
     } on StripeException catch (e) {
       if (e.error.code == FailureCode.Canceled) {

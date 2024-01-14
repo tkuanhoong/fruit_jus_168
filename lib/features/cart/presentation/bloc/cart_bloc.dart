@@ -127,7 +127,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           createdAt: Timestamp.now(),
           deiveryFee: cartData.deliveryFee,
           discount: cartData.voucher != null
-              ? cartData.totalPrice * cartData.voucher!.discount ~/ 100
+              ? (cartData.totalPrice * cartData.voucher!.discount).toInt()
               : 0,
           note: event.remark,
           voucherCode:
