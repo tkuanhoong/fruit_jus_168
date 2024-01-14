@@ -1,4 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -7,19 +10,66 @@ import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
 import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required this.profile});
+  const ProfilePage({Key? key, required this.profile}) : super(key: key);
   final ProfileEntity? profile;
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  List<Map<String, dynamic>> referralHistory = [];
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<ProfileBloc>(context).add(LoadProfile());
+    fetchReferralHistoryFromFirebase();
+  }
+
+  Future<void> fetchReferralHistoryFromFirebase() async {
+    print('Before fetching referral history'); // Add this line
+    try {
+      DocumentSnapshot userDocument = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      // Fetch the referrer's full name
+      String referrerFullName = userDocument.get('fullName');
+
+      // Fetch the referral history from Firestore 'users' collection
+      List<String> fetchedReferralHistory =
+          List<String>.from(userDocument.get('referrerHistory') ?? []);
+
+      // Update referralHistory to store objects with both names
+      List<Map<String, dynamic>> updatedReferralHistory = [];
+
+      for (String referralId in fetchedReferralHistory) {
+        // Fetch the referred user document
+        DocumentSnapshot referredUserDocument =
+            await FirebaseFirestore.instance.collection('users').doc(referralId).get();
+
+        // Fetch the full name from the referred user document
+        String referredFullName = referredUserDocument.get('fullName');
+
+        updatedReferralHistory.add({
+          'referralId': referralId,
+          'referrerFullName': referrerFullName,
+          'referredFullName': referredFullName,
+        });
+      }
+
+      setState(() {
+        referralHistory = updatedReferralHistory;
+        print('Referral History Length: ${referralHistory.length}');
+      });
+    } catch (e) {
+      print('Error fetching referral history: $e');
+    }
   }
 
   @override
@@ -65,8 +115,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ? CachedNetworkImageProvider(
                                       state.profile.avatarURL!)
                                   : const AssetImage(
-                                          "assets/images/default_avatar.png")
-                                      as ImageProvider<Object>?,
+                                      "assets/images/default_avatar.png")
+                              as ImageProvider<Object>?,
                             ),
                             Positioned(
                               bottom: 0,
@@ -102,16 +152,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (context
-                                      .watch<AuthBloc>()
-                                      .state
-                                      .firebaseUser !=
+                                  .watch<AuthBloc>()
+                                  .state
+                                  .firebaseUser !=
                                   null)
                                 Text(
                                   context
-                                          .watch<AuthBloc>()
-                                          .state
-                                          .firebaseUser!
-                                          .displayName ??
+                                      .watch<AuthBloc>()
+                                      .state
+                                      .firebaseUser!
+                                      .displayName ??
                                       'User Name',
                                   style: const TextStyle(
                                     fontSize: 20,
@@ -206,6 +256,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       onTap: () {
                         // Handle the action on tapping "Invite Your Friends"
                         GoRouter.of(context).push('/referral-code');
+                      },
+                    ),
+                    Container(
+                      height: 1,
+                      color: Colors.grey,
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.discount_outlined),
+                      title: const Text(
+                        'Referral History',
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () {
+                        GoRouter.of(context).push('/referral-history?referralHistory=${jsonEncode(referralHistory)}');
                       },
                     ),
                     Container(

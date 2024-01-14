@@ -12,14 +12,18 @@ class SaveUserInfo extends AuthEvent {
   final String email;
   final DateTime dateOfBirth;
   final String phoneNumber;
+  final String referralCode;
+  final String referrerUserId;
   const SaveUserInfo({
     required this.fullName,
     required this.email,
     required this.dateOfBirth,
     required this.phoneNumber,
+    required this.referralCode,
+    required this.referrerUserId,
   });
   @override
-  List<Object> get props => [fullName, email, dateOfBirth, phoneNumber];
+  List<Object> get props => [fullName, email, dateOfBirth, phoneNumber, referralCode];
 }
 
 // When user requests to send OTP to user's phone number

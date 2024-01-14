@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -20,6 +22,7 @@ import 'package:fruit_jus_168/features/order_history/presentation/bloc/order_his
 import 'package:fruit_jus_168/features/order_history/presentation/pages/order_history_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+import 'package:fruit_jus_168/features/profile/presentation/pages/referral_history.dart';
 import 'package:fruit_jus_168/features/reward/presentation/pages/reward.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
@@ -272,6 +275,19 @@ final router = GoRouter(
           child: const OrderDetailsPage(),
         );
       },
-    )
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.referralHistoryRouteName,
+      path: '/referral-history',
+      builder: (context, state) {
+        final referralHistoryString = state.uri.queryParameters['referralHistory'] ?? '[]';
+        final referralHistory = List<Map<String, dynamic>>.from(jsonDecode(referralHistoryString));
+        return ReferralHistoryPage(referralHistory: referralHistory);
+      },
+    ),
+
+
+
   ],
 );

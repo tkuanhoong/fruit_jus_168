@@ -29,6 +29,8 @@ class _AuthService implements AuthApiService {
   @override
   Future<void> storeUserInfo(UserModel user) async {
     try {
+      String currentUserId = _auth.currentUser!.uid; // Declare currentUserId here
+
       await _auth.currentUser!.updateDisplayName(user.fullName);
       DocumentReference userRef =
           _db.collection("users").doc(_auth.currentUser!.uid);
@@ -37,6 +39,10 @@ class _AuthService implements AuthApiService {
       String referralCode;
       //stamp
       int stamp;
+
+      // Initialize referrerHistory as an empty list
+    List<String> referrerHistory = [];
+
       do {
         // generate referral
         referralCode = ReferralCodeGenerator.getReferralCode(user.fullName!, 4);
@@ -54,10 +60,11 @@ class _AuthService implements AuthApiService {
       user = user.copyWith(
           id: _auth.currentUser!.uid,
           userReferralCode: referralCode,
-          stamp: stamp);
+          stamp: stamp,
+          referrerHistory: referrerHistory);
       await userRef.set(user.toMap());
-      //  Create new coupon for the user
-      await NewVoucherGeneratorService().createNewVoucher();
+      // //  Create new coupon for the user
+      // await NewVoucherGeneratorService().createNewVoucher();
     } catch (e) {
       throw Exception(e.toString());
     }

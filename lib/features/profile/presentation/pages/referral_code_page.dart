@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/core/components/card_items.dart';
 import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
 import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:flutter_share_me/flutter_share_me.dart';
 
 class ReferralCodePage extends StatefulWidget {
   const ReferralCodePage({super.key, required this.profile});
@@ -16,7 +17,7 @@ class _ReferralCodePageState extends State<ReferralCodePage> {
   @override
   void initState() {
     super.initState();
-    //BlocProvider.of<ProfileBloc>(context).add(LoadProfile());
+    BlocProvider.of<ProfileBloc>(context).add(LoadProfile());
   }
 
   @override
@@ -71,17 +72,20 @@ class _ReferralCodePageState extends State<ReferralCodePage> {
                         },
                         child: const Text('Copy'),
                       ),
+                      IconButton(
+                        icon: const Icon(Icons.share),
+                        onPressed: () {
+                          shareReferral(state.profile.userReferralCode);
+                        },
+                      ),
                     ],
                   ),
                 ),
-                Container(),
+
                 const SizedBox(height: 100),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      // Handle link tap action
-                      print('Link tapped!');
-                    },
+                    onTap: () {},
                     child: const Text(
                       'Invite more & get more vouchers >>>>',
                       style: TextStyle(
@@ -96,5 +100,11 @@ class _ReferralCodePageState extends State<ReferralCodePage> {
           }
           return const Center(child: Text('Unknown state'));
         }));
+  }
+  void shareReferral(String? userReferralCode) {
+    String codeToShare = userReferralCode ?? '';
+    FlutterShareMe().shareToSystem(
+      msg: 'Want exclusive discounts from Fruit Jus 168? \nSign up using my code! \n\nUse my referral code: $codeToShare',
+    );
   }
 }
