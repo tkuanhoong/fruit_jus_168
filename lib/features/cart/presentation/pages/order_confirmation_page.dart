@@ -13,6 +13,8 @@ import 'package:fruit_jus_168/features/cart/presentation/bloc/voucher_bloc.dart'
 import 'package:fruit_jus_168/features/cart/presentation/widgets/cart_item.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/divider_text.dart';
 import 'package:fruit_jus_168/features/cart/presentation/widgets/payment_detail.dart';
+import 'package:fruit_jus_168/features/reward/data/datasources/check_used_voucher.dart';
+import 'package:fruit_jus_168/features/reward/data/datasources/get_stamp_count.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
@@ -486,6 +488,9 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                         );
                       } else {
                         await makePayment();
+                        await CheckUsedVoucherService()
+                            .useVoucher(voucherCodeController.text);
+                        await StampFirestoreService().countStamp();
                       }
                     },
                     child: const Text('Order Now'),

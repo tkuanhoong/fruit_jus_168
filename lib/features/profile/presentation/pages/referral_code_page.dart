@@ -5,6 +5,7 @@ import 'package:fruit_jus_168/core/components/card_items.dart';
 import 'package:fruit_jus_168/features/profile/domain/entities/profile.dart';
 import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
+// import 'package:go_router/go_router.dart';
 
 class ReferralCodePage extends StatefulWidget {
   const ReferralCodePage({super.key, required this.profile});
@@ -81,30 +82,34 @@ class _ReferralCodePageState extends State<ReferralCodePage> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 100),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: const Text(
-                      'Invite more & get more vouchers >>>>',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       print("Tapped on 'Invite more & get more vouchers'");
+                //       GoRouter.of(context).push('/rewards');
+                //     },
+                //     child: const Text(
+                //       'Invite more & get more vouchers >>>>',
+                //       style: TextStyle(
+                //         color: Colors.blue,
+                //         decoration: TextDecoration.underline,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             );
           }
           return const Center(child: Text('Unknown state'));
         }));
   }
+
   void shareReferral(String? userReferralCode) {
     String codeToShare = userReferralCode ?? '';
     FlutterShareMe().shareToSystem(
-      msg: 'Want exclusive discounts from Fruit Jus 168? \nSign up using my code! \n\nUse my referral code: $codeToShare',
+      msg:
+          'Want exclusive discounts from Fruit Jus 168? \nSign up using my code! \n\nUse my referral code: $codeToShare',
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_jus_168/features/reward/presentation/pages/tab/CouponTab.dart';
+
 import 'package:fruit_jus_168/features/reward/presentation/pages/tab/stampTab.dart';
+import 'package:fruit_jus_168/features/reward/presentation/pages/tab/voucher.dart';
 
 class RewardPage extends StatefulWidget {
   const RewardPage({super.key});
@@ -59,7 +60,7 @@ class _RewardPageState extends State<RewardPage> {
                           icon: Icon(Icons.badge_rounded),
                         ),
                         Tab(
-                          text: 'Coupon',
+                          text: 'Vouchers',
                           icon: Icon(Icons.card_giftcard_rounded),
                         )
                       ],
@@ -72,8 +73,8 @@ class _RewardPageState extends State<RewardPage> {
               ),
               Expanded(
                   child: TabBarView(children: [
-                stampTab(),
-                CouponTab(),
+                StampTab(),
+                VoucherTab(),
               ]))
             ],
           ),
