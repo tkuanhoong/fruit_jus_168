@@ -46,7 +46,10 @@ class _OpenMapPageState extends State<OpenMapPage> {
           Component(Component.country, "my")
         ] // you can determine search for just one country
         );
-    displayPrediction(p!, homeScaffoldKey.currentState);
+    if (p == null) {
+      return;
+    }
+    displayPrediction(p, homeScaffoldKey.currentState);
   }
 
   void onError(places.PlacesAutocompleteResponse response) {
