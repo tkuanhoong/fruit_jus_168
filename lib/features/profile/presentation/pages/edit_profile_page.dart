@@ -175,24 +175,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                User? user = FirebaseAuth.instance.currentUser;
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(user?.uid)
-                                    .update({
-                                  "fullName": controllerName.text,
-                                }).then((value) {
-                                  //controllerName.text = '';
-                                });
-                                _showMyDialog();
-                                context.read<AuthBloc>().add(SaveUserInfo(
-                                    fullName: controllerName.text,
-                                    email: controllerEmail.text,
-                                    dateOfBirth: DateFormat('dd-MM-yyyy')
-                                        .parse(controllerdateOfBirth),
-                                    phoneNumber: controllerPhoneNum.text, 
-                                    referralCode: '', 
-                                    referrerUserId: ''));
+                                if (_updateProfileFormKey.currentState!
+                                    .validate()) {
+                                  context.read<AuthBloc>().add(UserNameChange(
+                                        controllerName.text,
+                                      ));
+                                  _showMyDialog();
+                                }
                               },
                               child: const Text('UPDATE'),
                             ),
