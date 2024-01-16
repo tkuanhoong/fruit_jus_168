@@ -226,6 +226,9 @@ class _MenuPageState extends State<MenuPage>
                             );
                           }),
                     ),
+                    const VerticalDivider(
+                      thickness: 1,
+                    ),
                     Flexible(
                       flex: 4,
                       child: CustomScrollView(
@@ -336,7 +339,7 @@ class _MenuPageState extends State<MenuPage>
                     alignment: Alignment.bottomCenter,
                     children: [
                       Positioned(
-                        bottom: 10,
+                        bottom: 20,
                         child: Container(
                           height: 130,
                           width: 130,

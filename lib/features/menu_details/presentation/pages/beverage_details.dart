@@ -51,23 +51,26 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Stack(
                         alignment: Alignment.bottomCenter,
                         children: [
                           Positioned(
-                            bottom: 10,
+                            bottom: 20,
                             child: Container(
-                              height: 130,
-                              width: 130,
+                              height: 150,
+                              width: 150,
                               decoration: const BoxDecoration(
                                 color: Color.fromARGB(104, 223, 223, 223),
                                 shape: BoxShape.circle,
                               ),
                             ),
                           ),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                maxHeight: 200, maxWidth: 200),
+                          SizedBox(
+                            height: 170,
+                            width: 170,
                             child: CachedNetworkImage(
                               fit: BoxFit.contain,
                               placeholder: (context, url) => const Center(
