@@ -14,23 +14,9 @@ class OpenMapPage extends StatefulWidget {
 }
 
 class _OpenMapPageState extends State<OpenMapPage> {
-  final Completer<GoogleMapController> _controllerCompleter =
-      Completer<GoogleMapController>();
-  late LatLng _selectedLocation = const LatLng(10.0, 10.0);
-  late Marker _marker = Marker(
-    markerId: const MarkerId('selected_location'),
-    position: _selectedLocation,
-    draggable: true,
-  );
-  TextEditingController _searchController = TextEditingController();
-  // late String _streetName = '';
-  late String? _city = '';
-  late String? _postalCode = '';
-  late String? _state = '';
-  late String? _country = '';
-  List<Placemark> _placemarks = [];
-  late double? latitude = 0.0;
-  late double? longitude = 0.0;
+  GoogleMapController? mapController;
+  LatLng currentLocation = const LatLng(10.0, 10.0);
+  bool isInitialLocationObtained = false;
 
   @override
   void initState() {
@@ -38,118 +24,139 @@ class _OpenMapPageState extends State<OpenMapPage> {
     _getCurrentLocation();
   }
 
-  Future<void> _getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      // Update _selectedLocation
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-        _marker = _marker.copyWith(positionParam: _selectedLocation);
-      });
-
-      // Move the map camera to the current location
-      final GoogleMapController controller = await _controllerCompleter.future;
-      await controller.moveCamera(
-        CameraUpdate.newLatLng(_selectedLocation),
-      );
-
-      updatePlacemarks();
-    } catch (e) {
-      print("Error getting current location: $e");
-    }
-  }
-
-  void updatePlacemarks() async {
-    // Get address details using geocoding
-    _placemarks = await placemarkFromCoordinates(
-      _selectedLocation.latitude,
-      _selectedLocation.longitude,
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
     );
 
-    // Extract address details
-    if (_placemarks.isNotEmpty) {
-      Placemark firstPlacemark = _placemarks.first;
-      // _streetName = firstPlacemark.street ?? '';
-      _city = firstPlacemark.locality ?? '';
-      _postalCode = firstPlacemark.postalCode ?? '';
-      _state = firstPlacemark.administrativeArea ?? '';
-      _country = firstPlacemark.country ?? '';
-    }
+    LatLng newLocation = LatLng(position.latitude, position.longitude);
 
-    latitude = _selectedLocation.latitude;
-    longitude = _selectedLocation.longitude;
+    setState(() {
+      currentLocation = newLocation;
+    });
+
+    // Move the camera to the user's current location
+    mapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(newLocation, 15.0),
+    );
+
+    setState(() {
+      isInitialLocationObtained = true;
+    });
   }
 
-  void _updateSelectedLocation(CameraPosition position) {
+  void _onMapCreated(GoogleMapController controller) {
     setState(() {
-      _selectedLocation = position.target;
-      _marker = _marker.copyWith(positionParam: _selectedLocation);
-      updatePlacemarks();
+      mapController = controller;
     });
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    setState(() {
+      currentLocation = position.target;
+    });
+  }
+
+  void _onConfirmButtonPressed() async {
+    try {
+      // Get location details using geocoding placemark
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        currentLocation.latitude,
+        currentLocation.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        // Extract location details
+        Placemark place = placemarks.first;
+        print(place);
+        String? city = place.locality ?? '';
+        if (city == '') {
+          city = place.subLocality;
+        }
+        if (city == '') {
+          city = ' ';
+        }
+        String? postalCode = place.postalCode ?? '';
+        if (place.postalCode == '') {
+          postalCode = ' ';
+        }
+        String? state = place.administrativeArea ?? '';
+        if (place.administrativeArea == '') {
+          state = ' ';
+        }
+        String? country = place.country ?? '';
+        if (place.country == '') {
+          country = ' ';
+        }
+
+        // Pass values to the next page
+        GoRouter.of(context).push(
+          '/add-address/$city/$postalCode/$state/$country/${currentLocation.latitude}/${currentLocation.longitude}',
+        );
+      } else {
+        // Handle the case when no placemarks are found
+        print("No placemarks found for the selected location.");
+        // You can show an error message or take appropriate action here.
+      }
+    } catch (e) {
+      // Handle exceptions that may occur during geocoding
+      print("Error during geocoding: $e");
+      // You can show an error message or take appropriate action here.
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Not valid location'),
+            content: const Text('Please select proper location.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text('Choose Delivery Address'),
       ),
       body: Stack(
         children: [
           GoogleMap(
-            onMapCreated: (controller) {
-              _controllerCompleter.complete(controller);
-            },
+            onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: _selectedLocation,
-              zoom: 15,
+              target: currentLocation,
+              zoom: 15.0,
             ),
-            onCameraMove: (CameraPosition position) {
-              _updateSelectedLocation(position);
-            },
+            onCameraMove: _onCameraMove,
             markers: {
-              _marker,
+              Marker(
+                markerId: const MarkerId('user_location'),
+                position: currentLocation,
+              ),
             },
-          ),
-          Positioned(
-            top: 16,
-            left: 16,
-            right: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Card(
-                  elevation: 8,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: 'Search location...',
-                        suffixIcon: Icon(Icons.search),
-                      ),
-                      onChanged: (value) {
-                        // _searchLocation(value);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
           Positioned(
             bottom: 40,
             left: 80,
             right: 80,
             child: ElevatedButton(
-              onPressed: () {
-                GoRouter.of(context).push(
-                    '/add-address/$_city/$_postalCode/$_state/$_country/$latitude/$longitude');
-              },
+              onPressed:
+                  isInitialLocationObtained ? _onConfirmButtonPressed : null,
+              style: ElevatedButton.styleFrom(
+                primary: isInitialLocationObtained
+                    ? const Color(0XFF20941C)
+                    : Colors.grey,
+              ),
               child: const Text('Confirm'),
             ),
           ),
