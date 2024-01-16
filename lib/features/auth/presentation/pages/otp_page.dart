@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/config/theme/app_colors.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -87,20 +89,45 @@ class _OtpPage extends State<OtpPage> {
             children: [
               //brand logo here
               const Padding(
-                padding: EdgeInsets.only(top: 50),
+                padding: EdgeInsets.only(top: 50, bottom: 50),
                 child: Center(
                   child: Image(
                     image: AssetImage('assets/images/logo.png'),
-                    height: 100,
-                    width: 100,
+                    height: 120,
+                    width: 120,
                   ),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  children: [
+                    const Text(
+                      'Verification',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.darkTextColor),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    AutoSizeText(
+                      textAlign: TextAlign.center,
+                      minFontSize: 9,
+                      maxFontSize: 12,
+                      maxLines: 2,
+                      'Enter the OTP code we sent to your registered phone number +60$_phoneNumber',
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
                 ),
               ),
               ////////////////////////////////////////////Textfield for OTP
               Form(
                 key: _otpformKey,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 50, left: 25, right: 25),
+                  padding: const EdgeInsets.only(top: 15, left: 25, right: 25),
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {

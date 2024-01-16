@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
+import 'package:fruit_jus_168/config/theme/app_colors.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/widgets/login_continue_button.dart';
 import 'package:fruit_jus_168/features/auth/presentation/widgets/login_textfield.dart';
@@ -42,53 +44,85 @@ class _LoginPage extends State<LoginPage> {
         //body with brand logo at the top center and textfield for phone number
         body: SingleChildScrollView(
           // boxdecoration boxfitcover background image
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            // decoration: const BoxDecoration(
-            //   image: DecorationImage(
-            //     image: NetworkImage(
-            //         'https://i.pinimg.com/564x/71/52/56/71525601b8a06435f323cf39bca1710b.jpg'),
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
-            child: Column(
-              children: [
-                //brand logo
-                const Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: Center(
-                    child: Image(
-                      image: AssetImage('assets/images/logo.png'),
-                      height: 100,
-                      width: 100,
-                    ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 30, bottom: 20),
+                child: const Text(
+                  "Welcome to 168 Jus!",
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkTextColor,
+                      fontFamily: 'Mulish'),
+                ),
+              ),
+              //brand logo
+              const Padding(
+                padding: EdgeInsets.only(top: 20, bottom: 50),
+                child: Center(
+                  child: Image(
+                    image: AssetImage('assets/images/logo.png'),
+                    height: 120,
+                    width: 120,
                   ),
                 ),
-                //text field for phone number
-                LoginTextFormField(
-                  phoneController: phoneController,
-                  loginformKey: _loginformKey,
+              ),
+              Container(
+                child: const Text(
+                  "Enter your phone number",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkTextColor),
                 ),
-                //Continue button
-                LoginContinueButton(
-                  phoneController: phoneController,
-                  loginformKey: _loginformKey,
-                ),
-                //a "By continuing, you agree to our Terms of Service and Privacy Policy" text at bottom of the page
-                const Padding(
-                  padding: EdgeInsets.only(top: 220, left: 25, right: 25),
-                  child: Text(
-                    'By continuing, you agree to our Terms of Service and Privacy Policy',
+              ),
+              //text field for phone number
+              LoginTextFormField(
+                phoneController: phoneController,
+                loginformKey: _loginformKey,
+              ),
+              //Continue button
+              LoginContinueButton(
+                phoneController: phoneController,
+                loginformKey: _loginformKey,
+              ),
+
+              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+              //a "Terms of Service" text at bottom of the page
+              Container(
+                width: 180,
+                child: const Padding(
+                  padding: EdgeInsets.only(bottom: 15),
+                  child: AutoSizeText.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                            text:
+                                'By Logging in or registering, you agree to our'),
+                        TextSpan(
+                            text: 'Terms of Service',
+                            style: TextStyle(color: Colors.blue)),
+                        TextSpan(text: ' and '),
+                        TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(color: Colors.blue)),
+                      ],
+                    ),
+                    minFontSize: 9,
+                    maxFontSize: 16,
+                    maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              const Text('Version 1.0.0',
+                  style: TextStyle(color: Colors.grey, fontSize: 12)),
+            ],
           ),
         ),
       ),

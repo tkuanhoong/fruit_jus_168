@@ -48,9 +48,7 @@ class _HomePageState extends State<HomePage> {
               Stack(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      print(currentIndex);
-                    },
+                    onTap: () {},
                     child: ClipPath(
                       clipper: MyCustomClipper(),
                       child: CarouselSlider(

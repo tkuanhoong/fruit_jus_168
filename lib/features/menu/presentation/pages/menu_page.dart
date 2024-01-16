@@ -310,7 +310,7 @@ class _MenuPageState extends State<MenuPage>
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 fontFamily: 'Mulish',
-                color: Color.fromARGB(255, 19, 88, 17)),
+                color: AppColors.darkTextColor),
           ),
         ),
       ),

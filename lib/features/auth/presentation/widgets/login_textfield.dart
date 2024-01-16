@@ -19,7 +19,7 @@ class _LoginTextFieldState extends State<LoginTextFormField> {
     return Form(
       key: widget.loginformKey,
       child: Padding(
-        padding: const EdgeInsets.only(top: 50, left: 25, right: 25),
+        padding: const EdgeInsets.only(top: 15, left: 25, right: 25),
         child: TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
