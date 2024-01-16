@@ -86,6 +86,7 @@ class _BeverageDetailsPageState extends State<BeverageDetailsPage> {
                       ),
                       const SizedBox(height: 20),
                       Text(
+                        textAlign: TextAlign.center,
                         widget.beverage.name!,
                         style: const TextStyle(
                           fontSize: 18,

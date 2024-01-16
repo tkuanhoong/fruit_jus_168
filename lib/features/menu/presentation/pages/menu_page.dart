@@ -368,10 +368,12 @@ class _MenuPageState extends State<MenuPage>
                 height: 15,
               ),
               Text(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 "${product.name}",
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: 14,
+                  fontSize: 13,
                   fontFamily: 'Mulish',
                 ),
               ),
