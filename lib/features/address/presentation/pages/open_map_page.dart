@@ -4,8 +4,9 @@ import 'package:geocoding/geocoding.dart' as a;
 import 'package:go_router/go_router.dart';
 import 'package:google_api_headers/google_api_headers.dart' as header;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/directions.dart';
 import 'package:google_maps_webservice/places.dart' as places;
-import 'package:location/location.dart';
+import 'package:location/location.dart' as locator;
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class OpenMapPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class OpenMapPage extends StatefulWidget {
 
 class _OpenMapPageState extends State<OpenMapPage> {
   final GlobalKey<ScaffoldState> homeScaffoldKey = GlobalKey<ScaffoldState>();
-  Location location = Location();
+  locator.Location location = locator.Location();
   final Map<String, Marker> _markers = {};
   bool isInitialLocationObtained = false;
   double latitude = 4.1093195;
@@ -41,9 +42,10 @@ class _OpenMapPageState extends State<OpenMapPage> {
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: const BorderSide(color: Colors.white))),
-        components: [] // you can determine search for just one country
+        components: [
+          Component(Component.country, "my")
+        ] // you can determine search for just one country
         );
-
     displayPrediction(p!, homeScaffoldKey.currentState);
   }
 
@@ -92,7 +94,7 @@ class _OpenMapPageState extends State<OpenMapPage> {
 
   getCurrentLocation() async {
     bool serviceEnabled;
-    PermissionStatus permissionGranted;
+    locator.PermissionStatus permissionGranted;
 
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
@@ -103,14 +105,14 @@ class _OpenMapPageState extends State<OpenMapPage> {
     }
 
     permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
+    if (permissionGranted == locator.PermissionStatus.denied) {
       permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
+      if (permissionGranted != locator.PermissionStatus.granted) {
         return;
       }
     }
 
-    LocationData currentPosition = await location.getLocation();
+    locator.LocationData currentPosition = await location.getLocation();
     latitude = currentPosition.latitude!;
     longitude = currentPosition.longitude!;
     final marker = Marker(
