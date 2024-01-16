@@ -50,8 +50,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
       for (String referralId in fetchedReferralHistory) {
         // Fetch the referred user document
-        DocumentSnapshot referredUserDocument =
-            await FirebaseFirestore.instance.collection('users').doc(referralId).get();
+        DocumentSnapshot referredUserDocument = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(referralId)
+            .get();
 
         // Fetch the full name from the referred user document
         String referredFullName = referredUserDocument.get('fullName');
@@ -115,8 +117,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ? CachedNetworkImageProvider(
                                       state.profile.avatarURL!)
                                   : const AssetImage(
-                                      "assets/images/default_avatar.png")
-                              as ImageProvider<Object>?,
+                                          "assets/images/default_avatar.png")
+                                      as ImageProvider<Object>?,
                             ),
                             Positioned(
                               bottom: 0,
@@ -152,16 +154,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (context
-                                  .watch<AuthBloc>()
-                                  .state
-                                  .firebaseUser !=
+                                      .watch<AuthBloc>()
+                                      .state
+                                      .firebaseUser !=
                                   null)
                                 Text(
                                   context
-                                      .watch<AuthBloc>()
-                                      .state
-                                      .firebaseUser!
-                                      .displayName ??
+                                          .watch<AuthBloc>()
+                                          .state
+                                          .firebaseUser!
+                                          .displayName ??
                                       'User Name',
                                   style: const TextStyle(
                                     fontSize: 20,
@@ -231,9 +233,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.grey,
                     ),
                     ListTile(
-                      leading: const Icon(Icons.settings),
+                      leading: const Icon(Icons.location_on_outlined),
                       title: const Text(
-                        'Setting',
+                        'Set Address',
                         style: TextStyle(fontWeight: FontWeight.normal),
                       ),
                       trailing: const Icon(Icons.chevron_right_rounded),
@@ -270,7 +272,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       trailing: const Icon(Icons.chevron_right_rounded),
                       onTap: () {
-                        GoRouter.of(context).push('/referral-history?referralHistory=${jsonEncode(referralHistory)}');
+                        GoRouter.of(context).push(
+                            '/referral-history?referralHistory=${jsonEncode(referralHistory)}');
                       },
                     ),
                     Container(
