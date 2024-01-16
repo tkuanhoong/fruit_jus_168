@@ -189,7 +189,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       child: GoogleMap(
                         initialCameraPosition: CameraPosition(
                           target: LatLng(widget.latitude!, widget.longitude!),
-                          zoom: 15.0,
+                          zoom: 16.0,
                         ),
                         markers: {
                           Marker(

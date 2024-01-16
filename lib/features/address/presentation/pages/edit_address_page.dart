@@ -61,7 +61,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                         initialCameraPosition: CameraPosition(
                           target: LatLng(state.address!.latitude!,
                               state.address!.longitude!),
-                          zoom: 15.0,
+                          zoom: 16.0,
                         ),
                         markers: {
                           Marker(
