@@ -130,20 +130,25 @@ class _HomePageState extends State<HomePage> {
                     subHeading: 'Friends',
                     icon: Icons.person_add,
                     onTap: () {
-                      GoRouter.of(context).push('/referral-code');
+                      context.pushNamed(
+                          AppRouterConstants.referralCodePageRouteName);
                     },
                   ),
                   HomeCard(
                     heading: 'Stamps',
-                    subHeading: '0/10',
+                    subHeading: 'Collected',
                     icon: Icons.local_drink,
-                    onTap: () {},
+                    onTap: () {
+                      context.goNamed(AppRouterConstants.rewardsRouteName);
+                    },
                   ),
                   HomeCard(
                     heading: 'Vouchers',
-                    subHeading: '0',
+                    subHeading: 'Collected',
                     icon: Icons.loyalty,
-                    onTap: () {},
+                    onTap: () {
+                      context.goNamed(AppRouterConstants.rewardsRouteName);
+                    },
                   ),
                 ],
               ),
