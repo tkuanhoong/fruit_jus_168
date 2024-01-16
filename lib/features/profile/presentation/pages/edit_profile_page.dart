@@ -1,6 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
@@ -12,7 +10,6 @@ import 'package:fruit_jus_168/features/profile/presentation/bloc/profile_bloc.da
 
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.profile});

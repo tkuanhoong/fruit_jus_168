@@ -29,7 +29,6 @@ class _AuthService implements AuthApiService {
   @override
   Future<void> storeUserInfo(UserModel user) async {
     try {
-      String currentUserId = _auth.currentUser!.uid; // Declare currentUserId here
 
       await _auth.currentUser!.updateDisplayName(user.fullName);
       DocumentReference userRef =
