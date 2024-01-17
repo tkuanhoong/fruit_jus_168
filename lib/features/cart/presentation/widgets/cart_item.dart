@@ -5,13 +5,13 @@ import 'package:fruit_jus_168/features/cart/presentation/widgets/item_image.dart
 
 class CartItem extends StatelessWidget {
   final CartProduct product;
-  final VoidCallback onEditPressed;
-  final VoidCallback onDeletePressed;
+  final VoidCallback? onEditPressed;
+  final VoidCallback? onDeletePressed;
   const CartItem({
     super.key,
     required this.product,
-    required this.onEditPressed,
-    required this.onDeletePressed,
+    this.onEditPressed,
+    this.onDeletePressed,
   });
 
   @override
@@ -49,14 +49,16 @@ class CartItem extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const Spacer(),
-                  IconButton(
-                    onPressed: onEditPressed,
-                    icon: const Icon(Icons.edit),
-                  ),
-                  IconButton(
-                    onPressed: onDeletePressed,
-                    icon: const Icon(Icons.delete),
-                  ),
+                  if (onEditPressed != null)
+                    IconButton(
+                      onPressed: onEditPressed,
+                      icon: const Icon(Icons.edit),
+                    ),
+                  if (onDeletePressed != null)
+                    IconButton(
+                      onPressed: onDeletePressed,
+                      icon: const Icon(Icons.delete),
+                    ),
                 ],
               ),
             ],

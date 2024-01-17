@@ -9,15 +9,19 @@ class BeverageDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      desc,
-      overflow: showFullDescription ? null : TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: 14,
-        color:
-            showFullDescription ? Colors.black : Colors.black.withOpacity(0.5),
+    return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
+      child: Text(
+        desc,
+        overflow: showFullDescription ? null : TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 12,
+          color: showFullDescription
+              ? Colors.black
+              : Colors.black.withOpacity(0.5),
+        ),
+        textAlign: TextAlign.center,
       ),
-      textAlign: TextAlign.center,
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fruit_jus_168/features/reward/domain/entities/voucher.dart';
 
-class FirestoreService {
+class GetVoucherFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<VoucherEntity>> getVoucher() async {
@@ -11,7 +11,10 @@ class FirestoreService {
     try {
       CollectionReference userVoucherRef =
           _firestore.collection('users').doc(user?.uid).collection('vouchers');
-      QuerySnapshot<Object?> querySnapshot = await userVoucherRef.get();
+      QuerySnapshot<Object?> querySnapshot =
+          await userVoucherRef.where("isUsed", isNotEqualTo: true).get();
+
+      //QuerySnapshot<Object?> querySnapshot = await userVoucherRef.get();
 
       List<VoucherEntity> voucher = querySnapshot.docs.map((doc) {
         // Convert timestamp to DateTime

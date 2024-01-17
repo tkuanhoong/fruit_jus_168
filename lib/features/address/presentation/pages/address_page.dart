@@ -121,11 +121,12 @@ class _AddressPageState extends State<AddressPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Row(
+                        const Row(
                           children: [
                             Text(
-                              'Saved Addresses  [${state.addresses.length}]',
-                              style: const TextStyle(
+                              // 'Saved Addresses  [${state.addresses.length}]',
+                              'Saved Addresses',
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -145,90 +146,103 @@ class _AddressPageState extends State<AddressPage> {
                             return Column(
                               children: [
                                 const SizedBox(height: 8),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  leading: Radio(
-                                    value: index,
-                                    groupValue: selectedAddressIndex,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        selectedAddressIndex = value ?? -1;
-                                        BlocProvider.of<AddressBloc>(context)
-                                            .add(
-                                          UpdateDefaultAddress(
-                                              addressId: address.id!),
-                                        );
-                                      });
-                                    },
-                                  ),
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${address.name}',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                                GestureDetector(
+                                  onTap: () {
+                                    // Trigger onChanged when the user taps on the radio or the ListTile
+                                    setState(() {
+                                      selectedAddressIndex = index;
+                                    });
+                                    BlocProvider.of<AddressBloc>(context).add(
+                                      UpdateDefaultAddress(
+                                          addressId: address.id!),
+                                    );
+                                  },
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: Radio(
+                                      value: index,
+                                      groupValue: selectedAddressIndex,
+                                      onChanged: (int? value) {
+                                        setState(() {
+                                          selectedAddressIndex = value ?? -1;
+                                          BlocProvider.of<AddressBloc>(context)
+                                              .add(
+                                            UpdateDefaultAddress(
+                                                addressId: address.id!),
+                                          );
+                                        });
+                                      },
+                                    ),
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${address.name}',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        address.fullAddress,
-                                        style: const TextStyle(
-                                            fontSize: 11, color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                  trailing: PopupMenuButton<String>(
-                                    onSelected: (String result) {
-                                      if (result == 'edit') {
-                                        BlocProvider.of<AddressBloc>(context)
-                                            .add(GetAddresses(
-                                                addressId: address.id!));
-                                        GoRouter.of(context)
-                                            .push('/edit-address');
-                                      } else if (result == 'delete') {
-                                        BlocProvider.of<AddressBloc>(context)
-                                            .add(DeleteAddress(
-                                                addressId: address.id!));
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('Success'),
-                                              content: const Text(
-                                                  'Address deleted successfully.'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () {
-                                                    GoRouter.of(context).pop();
-                                                  },
-                                                  child: const Text('OK'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      }
-                                    },
-                                    itemBuilder: (BuildContext context) =>
-                                        <PopupMenuEntry<String>>[
-                                      const PopupMenuItem<String>(
-                                        value: 'edit',
-                                        child: ListTile(
-                                          leading: Icon(Icons.edit),
-                                          title: Text('Edit'),
+                                        Text(
+                                          address.fullAddress,
+                                          style: const TextStyle(
+                                              fontSize: 11, color: Colors.grey),
                                         ),
-                                      ),
-                                      const PopupMenuItem<String>(
-                                        value: 'delete',
-                                        child: ListTile(
-                                          leading: Icon(Icons.delete),
-                                          title: Text('Delete'),
+                                      ],
+                                    ),
+                                    trailing: PopupMenuButton<String>(
+                                      onSelected: (String result) {
+                                        if (result == 'edit') {
+                                          BlocProvider.of<AddressBloc>(context)
+                                              .add(GetAddresses(
+                                                  addressId: address.id!));
+                                          GoRouter.of(context)
+                                              .push('/edit-address');
+                                        } else if (result == 'delete') {
+                                          BlocProvider.of<AddressBloc>(context)
+                                              .add(DeleteAddress(
+                                                  addressId: address.id!));
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('Success'),
+                                                content: const Text(
+                                                    'Address deleted successfully.'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      GoRouter.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text('OK'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry<String>>[
+                                        const PopupMenuItem<String>(
+                                          value: 'edit',
+                                          child: ListTile(
+                                            leading: Icon(Icons.edit),
+                                            title: Text('Edit'),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        const PopupMenuItem<String>(
+                                          value: 'delete',
+                                          child: ListTile(
+                                            leading: Icon(Icons.delete),
+                                            title: Text('Delete'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 8),

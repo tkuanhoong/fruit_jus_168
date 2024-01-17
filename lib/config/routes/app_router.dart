@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,8 +16,13 @@ import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
 import 'package:fruit_jus_168/features/cart/presentation/pages/order_confirmation_page.dart';
 import 'package:fruit_jus_168/features/menu_details/presentation/pages/beverage_details.dart';
 import 'package:fruit_jus_168/features/menu/presentation/pages/menu_page.dart';
+import 'package:fruit_jus_168/features/order_details/presentation/bloc/order_details_bloc.dart';
+import 'package:fruit_jus_168/features/order_details/presentation/pages/order_details.dart';
+import 'package:fruit_jus_168/features/order_history/presentation/bloc/order_history_bloc.dart';
+import 'package:fruit_jus_168/features/order_history/presentation/pages/order_history_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:fruit_jus_168/features/profile/presentation/pages/referral_code_page.dart';
+import 'package:fruit_jus_168/features/profile/presentation/pages/referral_history.dart';
 import 'package:fruit_jus_168/features/reward/presentation/pages/reward.dart';
 import 'package:fruit_jus_168/features/search/presentation/bloc/search_bloc.dart';
 import 'package:fruit_jus_168/features/search/presentation/pages/search_page.dart';
@@ -208,6 +213,17 @@ final router = GoRouter(
       },
     ),
     GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.orderHistoryRouteName,
+      path: '/order-history',
+      builder: (context, state) {
+        return BlocProvider(
+          create: (_) => sl<OrderHistoryBloc>()..add(OrderHistoryRequested()),
+          child: const OrderHistoryPage(),
+        );
+      },
+    ),
+    GoRoute(
       name: AppRouterConstants.searchRouteName,
       path: '/search',
       pageBuilder: (context, state) {
@@ -246,5 +262,32 @@ final router = GoRouter(
         );
       },
     ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.orderHistoryDetailsRouteName,
+      path: '/order-history-details/:orderId',
+      builder: (context, state) {
+        return BlocProvider<OrderDetailsBloc>(
+          create: (context) => sl<OrderDetailsBloc>()
+            ..add(OrderDetailsRequested(
+              orderId: state.pathParameters['orderId']!,
+            )),
+          child: const OrderDetailsPage(),
+        );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      name: AppRouterConstants.referralHistoryRouteName,
+      path: '/referral-history',
+      builder: (context, state) {
+        final referralHistoryString = state.uri.queryParameters['referralHistory'] ?? '[]';
+        final referralHistory = List<Map<String, dynamic>>.from(jsonDecode(referralHistoryString));
+        return ReferralHistoryPage(referralHistory: referralHistory);
+      },
+    ),
+
+
+
   ],
 );

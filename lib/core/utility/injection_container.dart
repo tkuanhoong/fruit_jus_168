@@ -16,11 +16,14 @@ import 'package:fruit_jus_168/features/auth/data/repositories/auth_repository_im
 import 'package:fruit_jus_168/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/log_out.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/save_user_info.dart';
+import 'package:fruit_jus_168/features/auth/domain/usecases/update_user_info.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/verify_otp.dart';
 import 'package:fruit_jus_168/features/auth/domain/usecases/verify_phone.dart';
 import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/cart/cart_injection_container.dart';
 import 'package:fruit_jus_168/features/menu/menu_injection_container.dart';
+import 'package:fruit_jus_168/features/order_details/order_details_injection_container.dart';
+import 'package:fruit_jus_168/features/order_history/order_history_injection_container.dart';
 import 'package:fruit_jus_168/features/profile/domain/usecases/upload_avatar.dart';
 import 'package:fruit_jus_168/features/search/search_injection_container.dart';
 import 'package:get_it/get_it.dart';
@@ -63,6 +66,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<VerifyPhoneUseCase>(VerifyPhoneUseCase(sl()));
   sl.registerSingleton<VerifyOtpUseCase>(VerifyOtpUseCase(sl()));
   sl.registerSingleton<LogOutUseCase>(LogOutUseCase(sl()));
+  sl.registerSingleton<UpdateUserInfoUseCase>(UpdateUserInfoUseCase(sl()));
   sl.registerSingleton<GetProfileUseCase>(
     GetProfileUseCase(sl()),
   );
@@ -89,7 +93,7 @@ Future<void> initializeDependencies() async {
   );
 
   // Blocs
-  sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl(), sl()));
+  sl.registerFactory<AuthBloc>(() => AuthBloc(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory<ProfileBloc>(
       () => ProfileBloc(getProfileUseCase: sl(), uploadAvatarUseCase: sl()));
   sl.registerFactory<AddressBloc>(() => AddressBloc(
@@ -102,4 +106,6 @@ Future<void> initializeDependencies() async {
   await searchInjectionContainer();
   await cartInjectionContainer();
   await menuInjectionContainer();
+  await orderHistoryInjectionContainer();
+  await orderDetailsInjectionContainer();
 }

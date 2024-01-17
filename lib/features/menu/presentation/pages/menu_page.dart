@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_jus_168/core/components/image_placeholder.dart';
 import 'package:fruit_jus_168/core/utility/dialog_display.dart';
 import 'package:fruit_jus_168/core/utility/price_converter.dart';
 import 'package:fruit_jus_168/features/menu/presentation/bloc/menu_bloc.dart';
@@ -225,6 +226,9 @@ class _MenuPageState extends State<MenuPage>
                             );
                           }),
                     ),
+                    const VerticalDivider(
+                      thickness: 1,
+                    ),
                     Flexible(
                       flex: 4,
                       child: CustomScrollView(
@@ -306,7 +310,7 @@ class _MenuPageState extends State<MenuPage>
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 fontFamily: 'Mulish',
-                color: Color.fromARGB(255, 19, 88, 17)),
+                color: AppColors.darkTextColor),
           ),
         ),
       ),
@@ -335,7 +339,7 @@ class _MenuPageState extends State<MenuPage>
                     alignment: Alignment.bottomCenter,
                     children: [
                       Positioned(
-                        bottom: 10,
+                        bottom: 20,
                         child: Container(
                           height: 130,
                           width: 130,
@@ -351,27 +355,8 @@ class _MenuPageState extends State<MenuPage>
                         child: FittedBox(
                             fit: BoxFit.contain,
                             child: CachedNetworkImage(
-                              placeholder: (context, url) => const Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                        height: 0.5,
-                                        width: 15,
-                                        child: LinearProgressIndicator(
-                                          backgroundColor: Colors.grey,
-                                          color:
-                                              Color.fromARGB(255, 81, 81, 81),
-                                        )),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              placeholder: (context, url) =>
+                                  const ImagePlaceholder(),
                               imageUrl: "${product.imageUrl}",
                             )),
                       )
@@ -383,10 +368,12 @@ class _MenuPageState extends State<MenuPage>
                 height: 15,
               ),
               Text(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 "${product.name}",
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: 14,
+                  fontSize: 13,
                   fontFamily: 'Mulish',
                 ),
               ),

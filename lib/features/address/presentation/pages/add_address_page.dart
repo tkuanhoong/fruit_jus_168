@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddAddressPage extends StatefulWidget {
   // final String? streetName;
@@ -181,6 +182,26 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     Container(
                       height: 1,
                       color: Colors.grey,
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 200, // Adjust the height as needed
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(widget.latitude!, widget.longitude!),
+                          zoom: 16.0,
+                        ),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId('selected_location'),
+                            position:
+                                LatLng(widget.latitude!, widget.longitude!),
+                          ),
+                        },
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        zoomControlsEnabled: false,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     _buildTextField("Name*", nameController,

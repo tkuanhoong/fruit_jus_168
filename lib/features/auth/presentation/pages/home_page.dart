@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fruit_jus_168/config/address/pickup_address_constant.dart';
 import 'package:fruit_jus_168/config/enum/direction.dart';
 import 'package:fruit_jus_168/config/routes/app_router_constants.dart';
 import 'package:fruit_jus_168/core/utility/dialog_display.dart';
@@ -9,7 +8,6 @@ import 'package:fruit_jus_168/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fruit_jus_168/features/auth/presentation/widgets/fulfillment_card.dart';
 import 'package:fruit_jus_168/features/auth/presentation/widgets/home_card.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fruit_jus_168/features/cart/presentation/bloc/cart_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required String title}) : super(key: key);
@@ -50,9 +48,7 @@ class _HomePageState extends State<HomePage> {
               Stack(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      print(currentIndex);
-                    },
+                    onTap: () {},
                     child: ClipPath(
                       clipper: MyCustomClipper(),
                       child: CarouselSlider(
@@ -113,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               Text(
-                "${getGreeting()}, ${context.read<AuthBloc>().state.firebaseUser!.displayName!.split(' ')[0]}!",
+                "${getGreeting()}, ${context.watch<AuthBloc>().state.firebaseUser!.displayName!.split(' ')[0]}!",
                 style:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
@@ -131,19 +127,26 @@ class _HomePageState extends State<HomePage> {
                     heading: 'Invite',
                     subHeading: 'Friends',
                     icon: Icons.person_add,
-                    onTap: () {},
+                    onTap: () {
+                      context.pushNamed(
+                          AppRouterConstants.referralCodePageRouteName);
+                    },
                   ),
                   HomeCard(
                     heading: 'Stamps',
-                    subHeading: '0/10',
+                    subHeading: 'Collected',
                     icon: Icons.local_drink,
-                    onTap: () {},
+                    onTap: () {
+                      context.goNamed(AppRouterConstants.rewardsRouteName);
+                    },
                   ),
                   HomeCard(
                     heading: 'Vouchers',
-                    subHeading: '0',
+                    subHeading: 'Collected',
                     icon: Icons.loyalty,
-                    onTap: () {},
+                    onTap: () {
+                      context.goNamed(AppRouterConstants.rewardsRouteName);
+                    },
                   ),
                 ],
               ),
@@ -175,7 +178,7 @@ class _HomePageState extends State<HomePage> {
             child: FullfillmentCard(
               direction: Direction.vertical,
               text: "PICKUP",
-              imagePath: 'assets/images/delivery.png',
+              imagePath: 'assets/images/pickup.png',
               onTap: () {
                 displayPickupLocationDialog(context);
               },

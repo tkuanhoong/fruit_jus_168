@@ -33,7 +33,7 @@ displayDeliveryPickUpDialog(BuildContext context) {
           width: MediaQuery.of(context).size.width * 0.7,
           child: FullfillmentCard(
             text: "SELF\nPICKUP",
-            imagePath: "assets/images/delivery.png",
+            imagePath: "assets/images/pickup.png",
             direction: Direction.horizontal,
             onTap: () {
               Navigator.of(context).pop();

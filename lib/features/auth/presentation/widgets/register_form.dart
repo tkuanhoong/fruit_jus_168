@@ -8,12 +8,16 @@ class RegisterForm extends StatefulWidget {
   final TextEditingController fullNameController;
   final TextEditingController emailController;
   final TextEditingController dobController;
+  final TextEditingController referralCodeController;
   const RegisterForm(
       {super.key,
       required this.formKey,
       required this.fullNameController,
       required this.emailController,
-      required this.dobController});
+      required this.dobController,
+      required this.referralCodeController
+      }
+    );
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -61,6 +65,11 @@ class _RegisterFormState extends State<RegisterForm> {
             readOnly: true,
             prefixIcon: Icons.cake_outlined,
             validator: TextFieldValidator.dob,
+          ),
+          CustomTextField(
+            controller: widget.referralCodeController,
+            labelText: "Referral Code",
+            prefixIcon: Icons.discount_outlined,
           ),
         ],
       ),

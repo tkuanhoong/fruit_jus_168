@@ -6,4 +6,5 @@ abstract class AuthRepository {
   Future<void> verifyOtp(
       {required String verificationId, required String smsCode});
   Future<void> logOut();
+  Future<void> updateUserInfo(String fullName);
 }

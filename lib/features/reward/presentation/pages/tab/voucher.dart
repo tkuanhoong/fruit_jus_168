@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:fruit_jus_168/core/utility/date_format_generator.dart';
 import 'package:fruit_jus_168/features/reward/data/datasources/get_voucher.dart';
 import 'package:fruit_jus_168/features/reward/domain/entities/voucher.dart';
-import 'package:fruit_jus_168/features/reward/presentation/pages/coupondetail.dart';
+import 'package:fruit_jus_168/features/reward/presentation/pages/voucherdetail.dart';
 
-class CouponTab extends StatefulWidget {
-  CouponTab({super.key});
+class VoucherTab extends StatefulWidget {
+  const VoucherTab({super.key});
 
   @override
-  _CouponTabState createState() => _CouponTabState();
+  _VoucherTabState createState() => _VoucherTabState();
 }
 
-class _CouponTabState extends State<CouponTab> {
+class _VoucherTabState extends State<VoucherTab> {
+  //function
   late Future<List<VoucherEntity>> _voucherListFuture;
-  final FirestoreService _firestoreService = FirestoreService();
+  //call the function from the class
+  final GetVoucherFirestoreService _firestoreService =
+      GetVoucherFirestoreService();
 
   @override
   void initState() {
@@ -27,11 +30,11 @@ class _CouponTabState extends State<CouponTab> {
       future: _voucherListFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: const CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('No vouchers found');
+          return const Text('No vouchers found');
         } else {
           List<VoucherEntity> vouchers = snapshot.data!;
           return ListView.builder(
@@ -47,7 +50,7 @@ class _CouponTabState extends State<CouponTab> {
                   Card(
                     shape: const RoundedRectangleBorder(
                       side: BorderSide(
-                        color: Color(0XFF20941C),
+                        color: Color.fromARGB(255, 20, 175, 14),
                       ),
                     ),
                     elevation: 5,
@@ -58,7 +61,7 @@ class _CouponTabState extends State<CouponTab> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CouponDetailPage(),
+                            builder: (context) => const VoucherDetailPage(),
                             settings: RouteSettings(
                               arguments: vouchers[index],
                             ),

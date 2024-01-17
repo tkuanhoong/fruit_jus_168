@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_jus_168/features/address/presentation/bloc/address_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EditAddressPage extends StatefulWidget {
   const EditAddressPage({super.key});
@@ -54,23 +55,55 @@ class _EditAddressPageState extends State<EditAddressPage> {
                       color: Colors.grey,
                     ),
                     const SizedBox(height: 24),
+                    SizedBox(
+                      height: 200, // Adjust the height as needed
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(state.address!.latitude!,
+                              state.address!.longitude!),
+                          zoom: 16.0,
+                        ),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId('selected_location'),
+                            position: LatLng(state.address!.latitude!,
+                                state.address!.longitude!),
+                          ),
+                        },
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        zoomControlsEnabled: false,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       padding: const EdgeInsets.all(16.0),
-                      child: ListTile(
-                        leading: const Icon(Icons.location_on_outlined),
-                        title: Text(
-                          // '${state.address!.unit}, ${state.address!.streetName}, ${state.address!.city}, ${state.address!.postalCode}, ${state.address!.state}, ${state.address!.country}',
-                          '${state.address!.address}, ${state.address!.city}, ${state.address!.postalCode}, ${state.address!.state}, ${state.address!.country}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 32.0,
+                            child: Center(
+                              child: Icon(Icons.location_on_outlined),
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                '${state.address!.address}, ${state.address!.city}, ${state.address!.postalCode}, ${state.address!.state}, ${state.address!.country}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 24),

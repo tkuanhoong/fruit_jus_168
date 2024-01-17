@@ -11,8 +11,10 @@ class UserModel extends UserEntity {
     super.dateOfBirth,
     super.userReferralCode,
     super.stamp,
+    this.referrerHistory,
   });
 
+  final List<String>? referrerHistory;
   // Fetching data from Firebase
   // DB -> JSON -> json.decode(JSON) -> Map -> UserModel.fromMap(Map) -> UserModel -> App
 
@@ -28,6 +30,7 @@ class UserModel extends UserEntity {
     DateTime? dateOfBirth,
     String? userReferralCode,
     int? stamp,
+    List<String>? referrerHistory,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -37,6 +40,7 @@ class UserModel extends UserEntity {
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       userReferralCode: userReferralCode ?? this.userReferralCode,
       stamp: stamp ?? this.stamp,
+      referrerHistory: referrerHistory ?? this.referrerHistory,
     );
   }
 
@@ -50,6 +54,7 @@ class UserModel extends UserEntity {
       'dateOfBirth': dateOfBirth?.millisecondsSinceEpoch,
       'userRefferalCode': userReferralCode,
       'stamp': stamp,
+      'referrerHistory': referrerHistory,
     };
   }
 

@@ -9,7 +9,7 @@ class VoucherModel extends VoucherEntity {
     required super.expiryDate,
     required super.imageURL,
     required super.minItem,
-    required super.isUsed,
+    super.isUsed,
   });
 
   VoucherModel copyWith({
@@ -18,7 +18,7 @@ class VoucherModel extends VoucherEntity {
     required DateTime expiryDate,
     required String imageURL,
     required int minItem,
-    required bool isUsed,
+    bool? isUsed,
   }) {
     return VoucherModel(
       voucherCode: voucherCode,
@@ -33,7 +33,7 @@ class VoucherModel extends VoucherEntity {
   // Convert UserModel to Map
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'voucherCode': voucherCode,
+      'code': voucherCode,
       'expiryDate': expiryDate,
       'discount': discount,
       'imageURL': imageURL,
@@ -46,13 +46,13 @@ class VoucherModel extends VoucherEntity {
   // Use the [factory] keyword when implementing a constructor that doesn’t always create a new instance of its class.
   factory VoucherModel.fromMap(Map<String, dynamic> map) {
     return VoucherModel(
-      voucherCode: map['voucherCode'],
+      voucherCode: map['code'],
       expiryDate: map['expiryDate'],
       discount: map['discount'],
       imageURL: map['imageURL'],
       minItem: map['minItem'],
       isUsed: map['isUsed'],
-    );  
+    );
   }
 
   //Convert VoucherModel to JSON

@@ -54,7 +54,7 @@ class AddressEntity extends Equatable {
     ];
   }
 
-  String get fullAddress => '$name, $address, $city, $postalCode, $state, $country';
+  String get fullAddress => '$address, $city, $postalCode, $state, $country';
 
   @override
   bool get stringify => true;

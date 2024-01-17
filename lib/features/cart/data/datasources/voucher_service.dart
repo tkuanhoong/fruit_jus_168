@@ -21,7 +21,7 @@ class _VoucherService implements VoucherApiService {
         throw Exception('Voucher not found!');
       }
       final voucher = SelectedVoucherModel.fromMap(snapshot.docs.first.data());
-      if(voucher.isUsed){
+      if (voucher.isUsed!) {
         throw Exception('Voucher has been used!');
       }
       if (voucher.expiryDate.isBefore(DateTime.now())) {

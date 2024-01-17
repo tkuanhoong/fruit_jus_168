@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 BoxDecoration highlighted_category() {
-  return BoxDecoration(
+  return const BoxDecoration(
     border: Border(
       left: BorderSide(
         color: Color(0XFF20941C),
